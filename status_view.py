@@ -35,14 +35,12 @@ class StatusView(QWidget):
         # Start time
         self.start_label = QLabel("--:--:--")
         self.start_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.start_label.setStyleSheet("padding: 5px;")
         grid_layout.addWidget(QLabel("Start:"), 3, 0)
         grid_layout.addWidget(self.start_label, 3, 1)
 
         # Stop time
         self.stop_label = QLabel("--:--:--")
         self.stop_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.stop_label.setStyleSheet("padding: 5px;")
         grid_layout.addWidget(QLabel("Stop:"), 3, 2)
         grid_layout.addWidget(self.stop_label, 3, 3)
 
