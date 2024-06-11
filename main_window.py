@@ -8,7 +8,6 @@ from macro_view import MacroView
 from preset_buttons_view import PresetButtonsView
 from status_view import StatusView
 from custom_command_view import CustomCommandView
-from sequence_view import SequenceView
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -38,16 +37,8 @@ class MainWindow(QMainWindow):
         control_layout.addWidget(preset_buttons_frame)
         control_layout.addWidget(custom_command_frame)
 
-        # Center frame and layout
-        feedback_frame = QFrame()
-        feedback_layout = QVBoxLayout(feedback_frame)
-
+        # Status view frame
         status_view = StatusView()
-        sequence_frame = SequenceView()
-
-        # Adding widgets to the center layout
-        feedback_layout.addWidget(status_view)
-        feedback_layout.addWidget(sequence_frame)
 
         # Log display frame
         log_display_frame = QFrame()
@@ -58,8 +49,8 @@ class MainWindow(QMainWindow):
         log_display_layout.addWidget(log_display)
 
         # Adding frames to the main layout
-        main_layout.addWidget(feedback_frame)
         main_layout.addWidget(control_frame)
+        main_layout.addWidget(status_view)
         main_layout.addWidget(log_display_frame)
 
         self.setWindowTitle("Main Window")
