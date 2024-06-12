@@ -34,7 +34,7 @@ class CustomCommandView(QWidget):
         self.clear_button = QPushButton("Clear")
         layout.addWidget(self.send_button, 3, 0, 1, 2)
         layout.addWidget(self.clear_button, 3, 2, 1, 2)
- 
+
         # Custom command widgets
         self.start_bit_checkbox = QCheckBox("Start Bit")
         self.start_bit_checkbox.setChecked(True)
