@@ -24,11 +24,11 @@ class CustomCommandView(QWidget):
         layout.addWidget(self.btn_preset4, 1, 2, 1, 2)
 
         self.command_line_edit = QLineEdit("$")
-        layout.addWidget(self.command_line_edit, 2, 0, 1, 3)
+        layout.addWidget(self.command_line_edit, 2, 0, 1, 2)
 
         self.checksum_edit = QLineEdit()
         self.checksum_edit.setReadOnly(True)
-        layout.addWidget(self.checksum_edit, 2, 3, 1, 1)
+        layout.addWidget(self.checksum_edit, 2, 2, 1, 2)
 
         self.send_button = QPushButton("Send")
         self.clear_button = QPushButton("Clear")
