@@ -65,7 +65,7 @@ class CustomCommandController:
         # Calculate the checksum excluding the first character if it is $
         if command_text.startswith("$"):
             command_text = command_text[1:]
-        if not command_text:  # If command_text is empty, return '00'
+        if not command_text:  # If command_text is empty, return 00
             return "00"
         total_sum = sum(ord(char) for char in command_text)
         checksum = f"{total_sum:02X}"[-2:]  # Ensure the checksum is always two digits
