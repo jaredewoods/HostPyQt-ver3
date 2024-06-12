@@ -2,10 +2,9 @@
 from PyQt6.QtWidgets import QLabel, QApplication, QMainWindow, QVBoxLayout, QHBoxLayout, QWidget, QTabWidget, QFrame, QTextEdit
 import sys
 
-from serial_view import SerialView
-from tcp_view import TCPView
-from macro_view import MacroView
-from preset_buttons_view import PresetButtonsView
+from serial_tab import SerialView
+from tcp_tab import TCPView
+from macro_tab import MacroView
 from status_view import StatusView
 from custom_command_view import CustomCommandView
 
@@ -29,12 +28,10 @@ class MainWindow(QMainWindow):
         tab_widget.addTab(TCPView(), "TCP/IP")
         tab_widget.addTab(MacroView(), "Macro")
 
-        preset_buttons_frame = PresetButtonsView("Preset 1", "Preset 2", "Preset 3", "Preset 4")
-        custom_command_frame = CustomCommandView()
+        custom_command_frame = CustomCommandView("Preset 1", "Preset 2", "Preset 3", "Preset 4")
 
         # Adding widgets to the left layout
         control_layout.addWidget(tab_widget)
-        control_layout.addWidget(preset_buttons_frame)
         control_layout.addWidget(custom_command_frame)
 
         # Status view frame
