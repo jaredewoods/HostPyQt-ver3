@@ -23,7 +23,7 @@ class CustomCommandView(QWidget):
         self.btn_preset4.setEnabled(False)
         layout.addWidget(self.btn_preset4, 1, 2, 1, 2)
 
-        self.command_line_edit = QLineEdit()
+        self.command_line_edit = QLineEdit('$')
         layout.addWidget(self.command_line_edit, 2, 0, 1, 4)
 
         self.send_button = QPushButton("Send")
@@ -43,4 +43,3 @@ class CustomCommandView(QWidget):
         layout.addWidget(self.carriage_return_checkbox, 4, 2, 1, 1)
 
         # Checkbox Connections
-        self.start_bit_checkbox.toggled.connect(self.on_start_bit_toggled)
