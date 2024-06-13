@@ -85,21 +85,32 @@ class CommandCompilerView(QWidget):
         self.main_layout.addLayout(display_layout)
 
     def setup_control_buttons_layout(self):
-        buttons_layout = QGridLayout()
-        self.button_start = QPushButton("Start")
-        self.button_stop = QPushButton("Stop")
+        buttons_layout = QHBoxLayout()
+
+        self.button_send = QPushButton("Send")
         self.button_clear = QPushButton("Clear")
-        self.button_reset = QPushButton("Reset")
-        buttons_layout.addWidget(self.button_start, 0, 0, 1, 2)
-        buttons_layout.addWidget(self.button_stop, 0, 2, 1, 2)
-        buttons_layout.addWidget(self.button_clear, 1, 0, 1, 2)
-        buttons_layout.addWidget(self.button_reset, 1, 2, 1, 2)
+        buttons_layout.addWidget(self.button_send)
+        buttons_layout.addWidget(self.button_clear)
+
         self.main_layout.addLayout(buttons_layout)
 
     def setup_macro_display(self):
-        macro_display_layout = QVBoxLayout()
+        self.macro_display_layout = QVBoxLayout()
+
         self.macro_sequence_display = QTextEdit()
         self.macro_sequence_display.setReadOnly(True)
-        macro_display_layout.addWidget(QLabel("Macro Sequence"))
-        macro_display_layout.addWidget(self.macro_sequence_display)
-        self.main_layout.addLayout(macro_display_layout)
+        self.macro_display_layout.addWidget(QLabel("Macro Sequence"))
+        self.macro_display_layout.addWidget(self.macro_sequence_display)
+
+        buttons_layout = QGridLayout()
+        self.button_send = QPushButton("Start")
+        self.button_stop = QPushButton("Stop")
+        self.button_clear = QPushButton("Clear")
+        self.button_reset = QPushButton("Reset")
+        buttons_layout.addWidget(self.button_send, 0, 0, 1, 2)
+        buttons_layout.addWidget(self.button_stop, 0, 2, 1, 2)
+        buttons_layout.addWidget(self.button_clear, 1, 0, 1, 2)
+        buttons_layout.addWidget(self.button_reset, 1, 2, 1, 2)
+        self.macro_display_layout.addLayout(buttons_layout)
+
+        self.main_layout.addLayout(self.macro_display_layout)
