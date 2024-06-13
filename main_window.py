@@ -8,9 +8,9 @@ from serial_service.serial_controller import SerialController
 from tcp_service.tcp_view import TCPView
 from macro_service.macro_view import MacroView
 from status_view import StatusView
-from custom_command_service.custom_command_model import CustomCommandModel
-from custom_command_service.custom_command_view import CustomCommandView
-from custom_command_service.custom_command_controller import CustomCommandController
+from command_compiler_service.command_compiler_model import CommandCompilerModel
+from command_compiler_service.command_compiler_view import CommandCompilerView
+from command_compiler_service.command_compiler_controller import CommandCompilerController
 
 
 class MainWindow(QMainWindow):
@@ -42,10 +42,10 @@ class MainWindow(QMainWindow):
         self.tcp_view = TCPView()
         self.macro_view = MacroView()
 
-        # Initialize custom_command_service
-        self.custom_command_model = CustomCommandModel()
-        self.custom_command_view = CustomCommandView("Preset 1", "Preset 2", "Preset 3", "Preset 4")
-        self.custom_command_controller = CustomCommandController(self.custom_command_model, self.custom_command_view)
+        # Initialize command_compiler_service
+        self.command_compiler_model = CommandCompilerModel()
+        self.command_compiler_view = CommandCompilerView("Preset 1", "Preset 2", "Preset 3", "Preset 4")
+        self.command_compiler_controller = CommandCompilerController(self.command_compiler_model, self.command_compiler_view)
 
         # Initialize status_view
         self.status_view = StatusView()
@@ -58,7 +58,7 @@ class MainWindow(QMainWindow):
 
         # Adding to the Control layout
         self.control_layout.addWidget(self.tab_widget)
-        self.control_layout.addWidget(self.custom_command_view)
+        self.control_layout.addWidget(self.command_compiler_view)
         self.control_layout.addWidget(self.status_view)
 
         # Adding to the main layout
