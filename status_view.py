@@ -1,52 +1,53 @@
-from PyQt6.QtWidgets import QWidget, QGridLayout, QLabel, QTextEdit
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QTextEdit, QHBoxLayout
 from PyQt6.QtCore import Qt
 
 class StatusView(QWidget):
     def __init__(self):
         super().__init__()
 
-        # Create grid layout
-        grid_layout = QGridLayout(self)
+        self.main_layout = QVBoxLayout()
 
-        # Serial status
+        self.create_status_connection_layout()
+        self.create_status_time_layout()
+
+        self.setLayout(self.main_layout)
+
+    def create_status_connection_layout(self):
+        status_connection_layout = QHBoxLayout()
+
         self.serial_status_label = QLabel("SERIAL")
         self.serial_status_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.serial_status_label.setStyleSheet("background-color: #CCCCCC; color: #666666; padding: 5px;")
-        grid_layout.addWidget(self.serial_status_label, 0, 0, 1, 2)
+        status_connection_layout.addWidget(self.serial_status_label)
 
-        # TCP status
         self.tcp_status_label = QLabel(" TCP ")
         self.tcp_status_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.tcp_status_label.setStyleSheet("background-color: #CCCCCC; color: #666666; padding: 5px;")
-        grid_layout.addWidget(self.tcp_status_label, 0, 2, 1, 2)
+        status_connection_layout.addWidget(self.tcp_status_label)
 
-        # Macro status
         self.macro_status_label = QLabel("MACRO")
         self.macro_status_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.macro_status_label.setStyleSheet("background-color: #CCCCCC; color: #666666; padding: 5px;")
-        grid_layout.addWidget(self.macro_status_label, 1, 0, 1, 2)
+        status_connection_layout.addWidget(self.macro_status_label)
 
-        # Macro status
-        self.elapsed_time_label = QLabel("--:--:--")
-        self.elapsed_time_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.elapsed_time_label.setStyleSheet("background-color: #CCCCCC; color: #666666; padding: 5px;")
-        grid_layout.addWidget(self.elapsed_time_label, 1, 2, 1, 2)
+        self.main_layout.addLayout(status_connection_layout)
 
-        # Start time
+    def create_status_time_layout(self):
+        status_time_layout = QHBoxLayout()
+
         self.start_label = QLabel("--:--:--")
         self.start_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        grid_layout.addWidget(QLabel("Start:"), 3, 0)
-        grid_layout.addWidget(self.start_label, 3, 1)
+        status_time_layout.addWidget(QLabel("Start:"))
+        status_time_layout.addWidget(self.start_label)
 
-        # Stop time
+        self.run_label = QLabel("--:--:--")
+        self.run_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        status_time_layout.addWidget(QLabel("Run"))
+        status_time_layout.addWidget(self.run_label)
+
         self.stop_label = QLabel("--:--:--")
         self.stop_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        grid_layout.addWidget(QLabel("Stop:"), 3, 2)
-        grid_layout.addWidget(self.stop_label, 3, 3)
+        status_time_layout.addWidget(QLabel("Stop:"))
+        status_time_layout.addWidget(self.stop_label)
 
-        # Macro sequence display
-        self.sequence_display = QTextEdit()
-        self.sequence_display.setReadOnly(True)
-        grid_layout.addWidget(self.sequence_display, 6, 0, 1, 4)
-
-        self.setLayout(grid_layout)
+        self.main_layout.addLayout(status_time_layout)
