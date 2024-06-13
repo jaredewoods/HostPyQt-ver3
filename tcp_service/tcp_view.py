@@ -10,11 +10,13 @@ class TCPView(QWidget):
         # IP Address selection
         layout.addWidget(QLabel("TCP/IP Address"), 0, 0)
         self.ip_address_combo = QComboBox()
+        self.ip_address_combo.addItems(["192.168.0.10", "127.0.0.1", "192.168.1.1"])
         layout.addWidget(self.ip_address_combo, 1, 0)
 
         # IP Port selectino
         layout.addWidget(QLabel("Port"), 0, 1)
         self.port_combo = QComboBox()
+        self.port_combo.addItems(["8500", "80", "8080"])
         layout.addWidget(self.port_combo, 1, 1)
 
         self.tcp_connect_btn = QPushButton("Connect")
