@@ -81,9 +81,9 @@ class CommandCompilerView(QWidget):
         display_layout = QHBoxLayout()
         self.display_command = QLabel()
         self.display_command.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.display_command.setStyleSheet("""color: blue;
-                                           font-family: Monaco;
-                                           font-size: 16px;
+        self.display_command.setStyleSheet("""color: white;
+                                           font-family: Arial;
+                                           font-size: 18px;
                                            padding: 5px""")
         display_layout.addWidget(self.display_command)
         self.main_layout.addLayout(display_layout)

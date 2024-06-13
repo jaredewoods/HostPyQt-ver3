@@ -10,5 +10,7 @@ class SerialModel:
     @staticmethod
     def get_available_ports():
         ports = list_ports.comports()
-        return [port.device for port in ports]
+        port_list = [port.device for port in ports]
+        port_list = [""] + port_list
+        return port_list
     

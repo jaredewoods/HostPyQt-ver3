@@ -23,7 +23,8 @@ class CommandCompilerModel:
             command += "\r"
         return command
 
-    def calculate_checksum(self, command):
+    @staticmethod
+    def calculate_checksum(command):
         if command.startswith("$"):
             command = command[1:]
         if not command:

@@ -17,7 +17,7 @@ class SerialView(QWidget):
         self.baud_combo = QComboBox()
         layout.addWidget(QLabel("Baud Rate"), 0, 1)
         layout.addWidget(self.baud_combo, 1, 1)
-        self.baud_combo.addItems(["9600", "19200"])
+        self.baud_combo.addItems(["", "9600", "19200"])
 
         # serial connection buttons
         self.serial_connect_btn = QPushButton("Connect")
