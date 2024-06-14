@@ -50,14 +50,15 @@ class CommandCompilerView(QWidget):
     def setup_dropdowns_and_parameters(self):
         dropdowns_layout = QHBoxLayout()
         self.dropdown_unit_no = QComboBox()
-        self.dropdown_unit_no.addItems(["1", "2"])
+        self.dropdown_unit_no.addItems(["", "1", "2"])
         self.dropdown_code = QComboBox()
         self.dropdown_code.setEditable(True)
         dropdowns_layout.addWidget(QLabel("UnitNo"))
         dropdowns_layout.addWidget(self.dropdown_unit_no)
         dropdowns_layout.addWidget(QLabel("Cmnd"))
 
-        # Load commands into the dropdown
+        # Add a blank item then the commands into the dropdown
+        self.dropdown_code.addItem("")
         for command in commands.keys():
             self.dropdown_code.addItem(command)
 
@@ -101,7 +102,7 @@ class CommandCompilerView(QWidget):
     def setup_macro_display(self):
         self.macro_display_layout = QVBoxLayout()
 
-        self.macro_sequence_display = QTextEdit()
+        self.macro_sequence_display = QTextEdit("no macro loaded")
         self.macro_sequence_display.setReadOnly(True)
         self.macro_display_layout.addWidget(QLabel("Macro Sequence"))
         self.macro_display_layout.addWidget(self.macro_sequence_display)

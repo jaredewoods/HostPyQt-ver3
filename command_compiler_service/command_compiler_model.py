@@ -3,7 +3,7 @@
 class CommandCompilerModel:
     def __init__(self):
         self.start_bit_checked = True
-        self.unit_no = "1"
+        self.unit_no = ""
         self.command_code = ""
         self.parameters = ""
         self.checksum_checked = True

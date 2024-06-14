@@ -1,5 +1,5 @@
 # macro_view.py
-from PyQt6.QtWidgets import QWidget, QGridLayout, QLabel, QComboBox, QPushButton
+from PyQt6.QtWidgets import QWidget, QGridLayout, QLabel, QComboBox, QPushButton, QLineEdit
 
 
 class MacroView(QWidget):
@@ -15,8 +15,8 @@ class MacroView(QWidget):
 
         # Cycle Count Entry
         layout.addWidget(QLabel("Total Cycles"), 0, 1)
-        self.macro_total_cycles_combo = QComboBox()
-        layout.addWidget(self.macro_total_cycles_combo, 1, 1)
+        self.macro_total_cycles_label = QLineEdit("2000")
+        layout.addWidget(self.macro_total_cycles_label, 1, 1)
 
         # Macro Control Buttons
         self.macro_start_btn = QPushButton("Start")
@@ -26,3 +26,8 @@ class MacroView(QWidget):
         self.macro_stop_btn = QPushButton("Stop")
         self.macro_stop_btn.setEnabled(False)
         layout.addWidget(self.macro_stop_btn, 2, 1)
+
+    def populate_macro_select_combo(self, macro_files):
+        self.macro_select_combo.clear()
+        self.macro_select_combo.addItem("")
+        self.macro_select_combo.addItems(macro_files)

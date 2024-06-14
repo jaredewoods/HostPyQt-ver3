@@ -6,7 +6,9 @@ from serial_service.serial_model import SerialModel
 from serial_service.serial_view import SerialView
 from serial_service.serial_controller import SerialController
 from tcp_service.tcp_view import TCPView
+from macro_service.macro_model import MacroModel
 from macro_service.macro_view import MacroView
+from macro_service.macro_controller import MacroController
 from status_view import StatusView
 from command_compiler_service.command_compiler_model import CommandCompilerModel
 from command_compiler_service.command_compiler_view import CommandCompilerView
@@ -40,7 +42,10 @@ class MainWindow(QMainWindow):
         self.serial_view = SerialView()
         self.serial_controller = SerialController(self.serial_model, self.serial_view)
         self.tcp_view = TCPView()
+
+        self.macro_model = MacroModel()
         self.macro_view = MacroView()
+        self.macro_controller = MacroController(self.macro_model, self.macro_view)
 
         # Initialize command_compiler_service
         self.command_compiler_model = CommandCompilerModel()
@@ -53,7 +58,7 @@ class MainWindow(QMainWindow):
         # Create QTabWidget
         self.tab_widget = QTabWidget()
         self.tab_widget.addTab(self.serial_view, "Serial")
-        self.tab_widget.addTab(self.tcp_view, "TCP/IP")
+        self.tab_widget.addTab(self.tcp_view, "TCP / IP")
         self.tab_widget.addTab(self.macro_view, "Macro")
 
         # Adding to the Control layout
