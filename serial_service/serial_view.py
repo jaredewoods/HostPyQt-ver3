@@ -1,7 +1,6 @@
 # serial_view.py
 from PyQt6.QtWidgets import QWidget, QGridLayout, QLabel, QComboBox, QPushButton
 
-
 class SerialView(QWidget):
     def __init__(self):
         super().__init__()
@@ -38,4 +37,18 @@ class SerialView(QWidget):
             self.serial_connect_btn.setEnabled(False)
 
     def set_ports(self, ports):
+        self.serial_port_cbx.clear()
         self.serial_port_cbx.addItems(ports)
+
+    def update_connection_status(self, success, port):
+        if success:
+            print(f"Connected to {port}")
+            self.serial_connect_btn.setEnabled(False)
+            self.serial_close_btn.setEnabled(True)
+        else:
+            print(f"Failed to connect to {port}")
+
+    def update_disconnection_status(self):
+        print("Disconnected")
+        self.serial_connect_btn.setEnabled(True)
+        self.serial_close_btn.setEnabled(False)

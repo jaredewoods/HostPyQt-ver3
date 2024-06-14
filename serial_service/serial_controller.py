@@ -7,7 +7,7 @@ class SerialController:
         self.populate_ports()
 
         self.view.serial_connect_btn.clicked.connect(self.connect_serial)
-        # self.view.serial_close_button.clicked.connect(self.close_serial)
+        self.view.serial_close_btn.clicked.connect(self.disconnect_serial)
 
     def populate_ports(self):
         ports = self.model.get_available_ports()
@@ -18,8 +18,11 @@ class SerialController:
         baudrate = int(self.view.baud_combo.currentText())
         success = self.model.connect(port, baudrate)
         if success:
-            print(f"Connected to {port}")
-
+            self.view.update_connection_status(True, port)
         else:
-            print(f"Failed to connect to {port}")
-            self.view.update_serial_connection_status(False)
+            self.view.update_connection_status(False, port)
+
+    def disconnect_serial(self):
+        success = self.model.disconnect()
+        if success:
+            self.view.update_disconnection_status()

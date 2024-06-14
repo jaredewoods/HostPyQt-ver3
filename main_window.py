@@ -10,9 +10,9 @@ from macro_service.macro_model import MacroModel
 from macro_service.macro_view import MacroView
 from macro_service.macro_controller import MacroController
 from status_view import StatusView
-from command_compiler_service.command_compiler_model import CommandCompilerModel
-from command_compiler_service.command_compiler_view import CommandCompilerView
-from command_compiler_service.command_compiler_controller import CommandCompilerController
+from command_service.command_model import CommandCompilerModel
+from command_service.command_view import CommandCompilerView
+from command_service.command_controller import CommandCompilerController
 
 
 class MainWindow(QMainWindow):

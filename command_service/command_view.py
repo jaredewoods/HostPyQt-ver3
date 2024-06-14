@@ -58,7 +58,7 @@ class CommandCompilerView(QWidget):
         self.dropdown_code.setEditable(True)
         dropdowns_layout.addWidget(QLabel("UNo"))
         dropdowns_layout.addWidget(self.dropdown_unit_no)
-        dropdowns_layout.addWidget(QLabel("Cmnd"))
+        dropdowns_layout.addWidget(QLabel("CMND"))
 
         # Add a blank item then the commands into the dropdown
         self.dropdown_code.addItem("")
@@ -69,7 +69,7 @@ class CommandCompilerView(QWidget):
 
         self.entry_parameters = QLineEdit()
         self.entry_parameters.setFixedWidth(90)
-        dropdowns_layout.addWidget(QLabel("Prm"))
+        dropdowns_layout.addWidget(QLabel("PRM"))
         dropdowns_layout.addWidget(self.entry_parameters)
         self.main_layout.addLayout(dropdowns_layout)
 
@@ -85,7 +85,7 @@ class CommandCompilerView(QWidget):
         display_layout = QHBoxLayout()
         self.display_command = QLabel()
         self.display_command.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.display_command.setStyleSheet("""color: blue;
+        self.display_command.setStyleSheet("""color: white;
                                            font-family: Arial;
                                            font-size: 18px;
                                            padding: 8px""")
