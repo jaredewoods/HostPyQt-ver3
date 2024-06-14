@@ -26,3 +26,12 @@ class TCPView(QWidget):
         self.tcp_close_btn = QPushButton("Close")
         self.tcp_close_btn.setEnabled(False)
         layout.addWidget(self.tcp_close_btn, 2, 1)
+
+        self.ip_address_combo.currentIndexChanged.connect(self.check_selections)
+        self.port_combo.currentIndexChanged.connect(self.check_selections)
+
+    def check_selections(self):
+        if self.ip_address_combo.currentIndex() != -1 and self.port_combo.currentText() != "":
+            self.tcp_connect_btn.setEnabled(True)
+        else:
+            self.tcp_connect_btn.setEnabled(False)

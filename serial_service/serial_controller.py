@@ -14,7 +14,7 @@ class SerialController:
         self.view.set_ports(ports)
 
     def connect_serial(self):
-        port = self.view.serial_port_combo.currentText()
+        port = self.view.serial_port_cbx.currentText()
         baudrate = int(self.view.baud_combo.currentText())
         success = self.model.connect(port, baudrate)
         if success:

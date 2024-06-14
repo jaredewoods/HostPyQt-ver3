@@ -36,6 +36,9 @@ class CommandCompilerView(QWidget):
 
     def setup_checkboxes(self):
         checkboxes_layout = QHBoxLayout()
+        checkboxes_layout.setContentsMargins(20, 0, 0, 0)
+        checkboxes_layout.setSpacing(10)
+
         self.start_bit_checkbox = QCheckBox("Start Bit")
         self.checksum_checkbox = QCheckBox("Checksum")
         self.carriage_return_checkbox = QCheckBox("<CR>")
@@ -53,7 +56,7 @@ class CommandCompilerView(QWidget):
         self.dropdown_unit_no.addItems(["", "1", "2"])
         self.dropdown_code = QComboBox()
         self.dropdown_code.setEditable(True)
-        dropdowns_layout.addWidget(QLabel("UnitNo"))
+        dropdowns_layout.addWidget(QLabel("UNo"))
         dropdowns_layout.addWidget(self.dropdown_unit_no)
         dropdowns_layout.addWidget(QLabel("Cmnd"))
 
@@ -82,7 +85,7 @@ class CommandCompilerView(QWidget):
         display_layout = QHBoxLayout()
         self.display_command = QLabel()
         self.display_command.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.display_command.setStyleSheet("""color: white;
+        self.display_command.setStyleSheet("""color: blue;
                                            font-family: Arial;
                                            font-size: 18px;
                                            padding: 8px""")
@@ -92,10 +95,10 @@ class CommandCompilerView(QWidget):
     def setup_control_buttons_layout(self):
         buttons_layout = QHBoxLayout()
 
-        self.button_send = QPushButton("Send")
-        self.button_clear = QPushButton("Clear")
-        buttons_layout.addWidget(self.button_send)
-        buttons_layout.addWidget(self.button_clear)
+        self.send_btn = QPushButton("Send")
+        self.clear_btn = QPushButton("Clear")
+        buttons_layout.addWidget(self.send_btn)
+        buttons_layout.addWidget(self.clear_btn)
 
         self.main_layout.addLayout(buttons_layout)
 
@@ -108,14 +111,14 @@ class CommandCompilerView(QWidget):
         self.macro_display_layout.addWidget(self.macro_sequence_display)
 
         buttons_layout = QGridLayout()
-        self.button_send = QPushButton("Start")
-        self.button_stop = QPushButton("Stop")
-        self.button_clear = QPushButton("Clear")
-        self.button_reset = QPushButton("Reset")
-        buttons_layout.addWidget(self.button_send, 0, 0, 1, 2)
-        buttons_layout.addWidget(self.button_stop, 0, 2, 1, 2)
-        buttons_layout.addWidget(self.button_clear, 1, 0, 1, 2)
-        buttons_layout.addWidget(self.button_reset, 1, 2, 1, 2)
+        self.send_btn = QPushButton("Start")
+        self.stop_btn = QPushButton("Stop")
+        self.clear_btn = QPushButton("Clear")
+        self.reset_btn = QPushButton("Reset")
+        buttons_layout.addWidget(self.send_btn, 0, 0, 1, 2)
+        buttons_layout.addWidget(self.stop_btn, 0, 2, 1, 2)
+        buttons_layout.addWidget(self.clear_btn, 1, 0, 1, 2)
+        buttons_layout.addWidget(self.reset_btn, 1, 2, 1, 2)
         self.macro_display_layout.addLayout(buttons_layout)
 
         self.main_layout.addLayout(self.macro_display_layout)
