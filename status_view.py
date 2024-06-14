@@ -7,10 +7,27 @@ class StatusView(QWidget):
 
         self.main_layout = QVBoxLayout()
 
-        self.create_status_connection_layout()
         self.create_status_time_layout()
+        self.create_status_connection_layout()
 
         self.setLayout(self.main_layout)
+
+    def create_status_time_layout(self):
+        status_time_layout = QHBoxLayout()
+
+        self.start_label = QLabel("--:--:--")
+        status_time_layout.addWidget(QLabel("Start:"))
+        status_time_layout.addWidget(self.start_label)
+
+        self.run_label = QLabel("--:--:--")
+        status_time_layout.addWidget(QLabel("Run"))
+        status_time_layout.addWidget(self.run_label)
+
+        self.stop_label = QLabel("--:--:--")
+        status_time_layout.addWidget(QLabel("Stop:"))
+        status_time_layout.addWidget(self.stop_label)
+
+        self.main_layout.addLayout(status_time_layout)
 
     def create_status_connection_layout(self):
         status_connection_layout = QHBoxLayout()
@@ -31,23 +48,3 @@ class StatusView(QWidget):
         status_connection_layout.addWidget(self.macro_status_label)
 
         self.main_layout.addLayout(status_connection_layout)
-
-    def create_status_time_layout(self):
-        status_time_layout = QHBoxLayout()
-
-        self.start_label = QLabel("--:--:--")
-        self.start_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        status_time_layout.addWidget(QLabel("Start:"))
-        status_time_layout.addWidget(self.start_label)
-
-        self.run_label = QLabel("--:--:--")
-        self.run_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        status_time_layout.addWidget(QLabel("Run"))
-        status_time_layout.addWidget(self.run_label)
-
-        self.stop_label = QLabel("--:--:--")
-        self.stop_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        status_time_layout.addWidget(QLabel("Stop:"))
-        status_time_layout.addWidget(self.stop_label)
-
-        self.main_layout.addLayout(status_time_layout)

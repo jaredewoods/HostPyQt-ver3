@@ -85,7 +85,7 @@ class CommandCompilerView(QWidget):
         self.display_command.setStyleSheet("""color: white;
                                            font-family: Arial;
                                            font-size: 18px;
-                                           padding: 5px""")
+                                           padding: 8px""")
         display_layout.addWidget(self.display_command)
         self.main_layout.addLayout(display_layout)
 
