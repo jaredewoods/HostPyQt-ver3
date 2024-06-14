@@ -20,4 +20,3 @@ class MacroController(QObject):
         macro_directory = os.path.join(main_dir, 'resources', 'macro_sequences')
         macro_files = self.model.get_macro_filenames(macro_directory)
         self.view.populate_macro_select_combo(macro_files)
-        print("macro_controller1")
