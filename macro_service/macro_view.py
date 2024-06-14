@@ -27,6 +27,7 @@ class MacroView(QWidget):
         layout.addWidget(self.macro_stop_btn, 2, 1)
         layout.setColumnStretch(0, 1)
         layout.setColumnStretch(1, 1)
+
     def populate_macro_select_combo(self, macro_files):
         self.macro_select_combo.clear()
         self.macro_select_combo.addItem("")
