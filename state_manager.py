@@ -20,21 +20,21 @@ class StateManager(QObject):
         self.display_timestamp = False
 
     @pyqtSlot(str, bool, str)
-    def update_state(self, flag_name, value, update_condition):
+    def update_state(self, flag_name, value, condition):
         if not hasattr(self, flag_name):
             print(f"Unknown flag: {flag_name}")
             return
 
         current_value = getattr(self, flag_name)
 
-        if update_condition == 'update':
+        if condition == 'update':
             setattr(self, flag_name, value)
-        elif update_condition == 'conditional_update' and current_value != value:
+        elif condition == 'validate' and current_value != value:
             setattr(self, flag_name, value)
-        elif update_condition == 'toggle':
+        elif condition == 'toggle':
             setattr(self, flag_name, not current_value)
 
-        self.state_updated.emit(flag_name, getattr(self, flag_name), update_condition)
+        self.state_updated.emit(flag_name, getattr(self, flag_name), condition)
         print(f"Updated {flag_name} to {getattr(self, flag_name)}")
 
 class StateManagerView(QMainWindow):
