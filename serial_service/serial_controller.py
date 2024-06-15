@@ -4,7 +4,7 @@ class SerialController:
     def __init__(self, model, view, flag_state_manager):
         self.model = model
         self.view = view
-        self.state_manager = flag_state_manager
+        self.flag_state_manager = flag_state_manager
         self.populate_ports()
 
         self.view.serial_connect_btn.clicked.connect(self.connect_serial)
@@ -19,13 +19,18 @@ class SerialController:
         baudrate = int(self.view.baud_combo.currentText())
         success = self.model.connect(port, baudrate)
         if success:
-            self.view.update_connection_state_for_serial_buttons(True, port)
-            self.state_manager.update_state('serial_connected', True, 'validate')
+            self.update_connection_state(True, port)
+            self.flag_state_manager.update_state('serial_connected', True, 'update')
         else:
-            self.view.update_connection_state_for_serial_buttons(False, port)
+            self.update_connection_state(False, port)
 
     def disconnect_serial(self):
         success = self.model.disconnect()
         if success:
-            self.view.update_disconnection_state_for_serial_buttons()
-            self.state_manager.update_state('serial_connected', False, 'update')
+            self.update_connection_state(False)
+            self.flag_state_manager.update_state('serial_connected', False, 'update')
+
+    def update_connection_state(self, connected, port=None):
+        # self.view.update_connection_status(connected, port)
+        self.view.serial_connect_btn.setEnabled(not connected)
+        self.view.serial_close_btn.setEnabled(connected)

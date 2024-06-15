@@ -26,7 +26,6 @@ class MainWindow(QMainWindow):
 
         # Initialize SignalDistributor and FlagStateManager
         self.signal_distributor = SignalDistributor()
-        # TODO not sure about this signal_distributor below
         self.flag_state_manager = FlagStateManager(self.signal_distributor)
         self.flag_state_manager.state_updated.connect(self.on_state_changed)
 
@@ -102,13 +101,12 @@ class MainWindow(QMainWindow):
 
     def handle_serial_connected(self, value):
         self.log_display.append(f"Serial connection status: {value}")
-        self.serial_view.serial_connect_btn.setEnabled(not value)
-        self.serial_view.serial_close_btn.setEnabled(value)
+        self.serial_controller.update_connection_state(value)
 
     def handle_tcp_connected(self, value):
         self.log_display.append(f"TCP connection status: {value}")
-        self.tcp_connect_btn.setEnabled(not value)
-        self.tcp_close_btn.setEnabled(value)
+        self.tcp_controller.update_connection_state(value)
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

@@ -14,13 +14,15 @@ class TCPController:
         port = self.view.port_combo.currentText()
         success = self.model.connect(ip_address, port)
         if success:
-            self.view.update_connection_state_for_tcp_buttons(True, ip_address, port)
             self.state_manager.update_state('tcp_connected', True, 'validate')
         else:
-            self.view.update_connection_state_for_tcp_buttons(False, ip_address, port)
+            self.state_manager.update_state('tcp_connected', False, 'update')
 
     def disconnect_tcp(self):
         success = self.model.disconnect()
         if success:
-            self.view.update_disconnection_state_for_tcp_buttons()
             self.state_manager.update_state('tcp_connected', False, 'update')
+
+    def update_connection_state(self, connected):
+        self.view.tcp_connect_btn.setEnabled(not connected)
+        self.view.tcp_close_btn.setEnabled(connected)
