@@ -10,13 +10,13 @@ class MacroController(QObject):
         self.model = model
 
         # Connect the combo box selection change to a method
-        self.view.macro_select_combo.currentIndexChanged.connect(self.on_macro_selection_changed)
+        self.view.macro_select_cbx.currentIndexChanged.connect(self.on_macro_selection_changed)
 
         # Populate the macro ComboBox
         self.populate_macro_combobox()
 
     def on_macro_selection_changed(self):
-        selected_file = self.view.macro_select_combo.currentText()
+        selected_file = self.view.macro_select_cbx.currentText()
         if selected_file:
             macro_sequence_file_path = os.path.join(self.get_macro_directory(), selected_file)
             self.load_macro_file(macro_sequence_file_path)

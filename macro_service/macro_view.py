@@ -9,13 +9,13 @@ class MacroView(QWidget):
 
         # Macro Sequence Selection
         layout.addWidget(QLabel("Macro Sequence"), 0, 0)
-        self.macro_select_combo = QComboBox()
-        layout.addWidget(self.macro_select_combo, 1, 0)
+        self.macro_select_cbx = QComboBox()
+        layout.addWidget(self.macro_select_cbx, 1, 0)
 
         # Cycle Count Entry
         layout.addWidget(QLabel("Total Cycles"), 0, 1)
-        self.macro_total_cycles_label = QLineEdit("")
-        layout.addWidget(self.macro_total_cycles_label, 1, 1)
+        self.macro_total_cycles_lbl = QLineEdit("")
+        layout.addWidget(self.macro_total_cycles_lbl, 1, 1)
 
         # Macro Control Buttons
         self.macro_start_btn = QPushButton("Start")
@@ -29,9 +29,9 @@ class MacroView(QWidget):
         layout.setColumnStretch(1, 1)
 
     def populate_macro_select_combo(self, macro_files):
-        self.macro_select_combo.clear()
-        self.macro_select_combo.addItem("")
-        self.macro_select_combo.addItems(macro_files)
+        self.macro_select_cbx.clear()
+        self.macro_select_cbx.addItem("")
+        self.macro_select_cbx.addItems(macro_files)
 
     def update_total_cycles(self, cycles):
-        self.macro_total_cycles_label.setText(str(cycles))
+        self.macro_total_cycles_lbl.setText(str(cycles))

@@ -1,6 +1,6 @@
 # command_compiler_model.py
 
-class CommandCompilerModel:
+class CommandModel:
     def __init__(self):
         self.start_bit_checked = True
         self.unit_no = ""

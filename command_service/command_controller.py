@@ -1,6 +1,6 @@
-# command_compiler_controller.py
+# command_controller.py
 
-class CommandCompilerController:
+class CommandController:
     def __init__(self, model, view):
         self.model = model
         self.view = view

@@ -1,6 +1,5 @@
 from PyQt6.QtWidgets import QWidget, QGridLayout, QLabel, QComboBox, QPushButton
 
-
 class TCPView(QWidget):
     def __init__(self):
         super().__init__()
@@ -13,7 +12,7 @@ class TCPView(QWidget):
         self.ip_address_combo.addItems(["", "192.168.0.10", "127.0.0.1", "192.168.1.1"])
         layout.addWidget(self.ip_address_combo, 1, 0)
 
-        # IP Port selectino
+        # Port selection
         layout.addWidget(QLabel("Port"), 0, 1)
         self.port_combo = QComboBox()
         self.port_combo.addItems(["", "8500", "80", "8080"])
@@ -35,3 +34,16 @@ class TCPView(QWidget):
             self.tcp_connect_btn.setEnabled(True)
         else:
             self.tcp_connect_btn.setEnabled(False)
+
+    def update_connection_status(self, success, ip_address, port):
+        if success:
+            print(f"Connected to {ip_address}:{port}")
+            self.tcp_connect_btn.setEnabled(False)
+            self.tcp_close_btn.setEnabled(True)
+        else:
+            print(f"Failed to connect to {ip_address}:{port}")
+
+    def update_disconnection_status(self):
+        print("Disconnected")
+        self.tcp_connect_btn.setEnabled(True)
+        self.tcp_close_btn.setEnabled(False)

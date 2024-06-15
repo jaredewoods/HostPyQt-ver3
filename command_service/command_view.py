@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QGridLayout, QChe
 from PyQt6.QtCore import Qt
 from resources.command_dictionary import commands
 
-class CommandCompilerView(QWidget):
+class CommandView(QWidget):
     def __init__(self, btn_preset1_name, btn_preset2_name, btn_preset3_name, btn_preset4_name):
         super().__init__()
 
@@ -86,9 +86,12 @@ class CommandCompilerView(QWidget):
         self.display_command = QLabel()
         self.display_command.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.display_command.setStyleSheet("""color: white;
-                                           font-family: Arial;
-                                           font-size: 18px;
-                                           padding: 8px""")
+                                          font-family: Arial;
+                                          font-size: 18px;
+                                          padding: 8px;
+                                          border-style: solid;
+                                          border-width: 1px;
+                                          border-color: black;""")
         display_layout.addWidget(self.display_command)
         self.main_layout.addLayout(display_layout)
 
