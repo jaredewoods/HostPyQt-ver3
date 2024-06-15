@@ -1,11 +1,14 @@
 from PyQt6.QtWidgets import QMainWindow, QTableWidget, QTableWidgetItem, QApplication
 from PyQt6.QtCore import pyqtSlot, pyqtSignal, QObject
 
-class StateManager(QObject):
+class FlagStateManager(QObject):
+    # This is used for the state manager view
     state_updated = pyqtSignal(str, bool, str)
 
-    def __init__(self):
+    def __init__(self, signal_distributor=None):
         super().__init__()
+        self.signal_distributor = signal_distributor
+
         self.serial_connected = False
         self.tcp_connected = False
         self.macro_ready_to_run = False
@@ -37,10 +40,10 @@ class StateManager(QObject):
         self.state_updated.emit(flag_name, getattr(self, flag_name), condition)
         print(f"Updated {flag_name} to {getattr(self, flag_name)}")
 
-class StateManagerView(QMainWindow):
-    def __init__(self, state_manager):
+class FlagStateView(QMainWindow):
+    def __init__(self, flag_state_manager):
         super().__init__()
-        self.state_manager = state_manager
+        self.flag_state_manager = flag_state_manager
 
         self.setWindowTitle("State Manager")
         self.setGeometry(100, 100, 400, 300)
@@ -52,7 +55,7 @@ class StateManagerView(QMainWindow):
         self.table_widget.setHorizontalHeaderLabels(["Flag", "Value", "Condition"])
         self.populate_table()
 
-        self.state_manager.state_updated.connect(self.update_table)
+        self.flag_state_manager.state_updated.connect(self.update_table)
 
     def populate_table(self):
         flags = [
@@ -63,10 +66,10 @@ class StateManagerView(QMainWindow):
 
         self.table_widget.setRowCount(len(flags))
         for row, flag in enumerate(flags):
-            value = getattr(self.state_manager, flag)
+            value = getattr(self.flag_state_manager, flag)
             self.table_widget.setItem(row, 0, QTableWidgetItem(flag))
             self.table_widget.setItem(row, 1, QTableWidgetItem(str(value)))
-            self.table_widget.setItem(row, 2, QTableWidgetItem("N/A"))  # Initially, condition is not applicable
+            self.table_widget.setItem(row, 2, QTableWidgetItem("Inactive"))
 
     def update_table(self, flag_name, value, update_condition):
         for row in range(self.table_widget.rowCount()):
@@ -79,12 +82,11 @@ if __name__ == "__main__":
     import sys
     app = QApplication(sys.argv)
 
-    state_manager = StateManager()
-    window = StateManagerView(state_manager)
+    state_manager = FlagStateManager()
+    window = FlagStateView(state_manager)
     window.show()
 
     # Example updates
-    # state_manager.update_state("serial_ready_to_connect", True, "update")
     # state_manager.update_state("tcp_connected", True, "conditional_update")
     # state_manager.update_state("macro_running", True, "toggle")
 
