@@ -73,8 +73,8 @@ class MainWindow(QMainWindow):
         # Create QTabWidget
         self.tab_widget = QTabWidget()
         self.tab_widget.addTab(self.serial_view, "Serial")
-        self.tab_widget.addTab(self.tcp_view, "TCP / IP")
         self.tab_widget.addTab(self.macro_view, "Macro")
+        self.tab_widget.addTab(self.tcp_view, "TCP / IP")
 
         # Adding to the Control layout
         self.control_layout.addWidget(self.tab_widget)
