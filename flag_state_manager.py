@@ -50,10 +50,8 @@ class FlagStateView(QMainWindow):
 
         self.setWindowTitle("State Manager")
         self.setGeometry(100, 100, 400, 300)
-
         self.table_widget = QTableWidget()
         self.setCentralWidget(self.table_widget)
-
         self.table_widget.setColumnCount(3)
         self.table_widget.setHorizontalHeaderLabels(["Flag", "Value", "Condition"])
         self.populate_table()
@@ -88,9 +86,5 @@ if __name__ == "__main__":
     state_manager = FlagStateManager()
     window = FlagStateView(state_manager)
     window.show()
-
-    # Example updates
-    # state_manager.update_state("tcp_connected", True, "conditional_update")
-    # state_manager.update_state("macro_running", True, "toggle")
 
     sys.exit(app.exec())

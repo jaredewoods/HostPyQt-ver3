@@ -51,10 +51,12 @@ class MainWindow(QMainWindow):
         self.serial_model = SerialModel()
         self.serial_view = SerialView()
         self.serial_controller = SerialController(self.serial_model, self.serial_view, self.signal_distributor)
+        self.serial_controller.log_message.connect(self.update_log_display)  # Connect the log_message signal to the slot
 
         self.tcp_model = TCPModel()
         self.tcp_view = TCPView()
         self.tcp_controller = TCPController(self.tcp_model, self.tcp_view, self.signal_distributor)
+        self.tcp_controller.log_message.connect(self.update_log_display)  # Connect the log_message signal to the slot
 
         self.macro_model = MacroModel()
         self.macro_view = MacroView()
@@ -146,6 +148,9 @@ class MainWindow(QMainWindow):
     def handle_display_timestamp(self, value):
         self.log_display.append(f"Display timestamp status: {value}")
         # Add your handling code here
+
+    def update_log_display(self, message):
+        self.log_display.append(message)
 
 
 if __name__ == "__main__":
