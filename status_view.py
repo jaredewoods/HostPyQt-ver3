@@ -1,5 +1,6 @@
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QTextEdit, QHBoxLayout
 from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QColor
 
 class StatusView(QWidget):
     def __init__(self):
@@ -48,3 +49,18 @@ class StatusView(QWidget):
         status_connection_layout.addWidget(self.macro_status_label)
 
         self.main_layout.addLayout(status_connection_layout)
+
+    def update_label_color(self, label, value):
+        if value:
+            label.setStyleSheet("background-color: darkGreen; color: white;")
+        else:
+            label.setStyleSheet("background-color: darkRed; color: white;")
+
+    def update_serial_status(self, value):
+        self.update_label_color(self.serial_status_label, value)
+
+    def update_tcp_status(self, value):
+        self.update_label_color(self.tcp_status_label, value)
+
+    def update_macro_status(self, value):
+        self.update_label_color(self.macro_status_label, value)

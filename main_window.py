@@ -103,15 +103,17 @@ class MainWindow(QMainWindow):
     def handle_serial_connected(self, value):
         self.log_display.append(f"Serial connection status: {value}")
         self.serial_controller.update_connection_state(value)
+        self.status_view.update_serial_status(value)  # Update serial status label
 
     def handle_tcp_connected(self, value):
         self.log_display.append(f"TCP connection status: {value}")
         self.tcp_controller.update_connection_state(value)
+        self.status_view.update_tcp_status(value)  # Update TCP status label
 
     # Example additional handlers
     def handle_macro_ready_to_run(self, value):
         self.log_display.append(f"Macro ready to run status: {value}")
-        # Add your handling code here
+        self.status_view.update_macro_status(value)  # Update macro status label
 
     def handle_macro_running(self, value):
         self.log_display.append(f"Macro running status: {value}")
