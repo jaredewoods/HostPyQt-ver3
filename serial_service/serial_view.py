@@ -43,12 +43,12 @@ class SerialView(QWidget):
     def update_connection_state_for_serial_buttons(self, success, port):
         if success:
             print(f"Connected to {port}")
-            self.serial_connect_btn.setEnabled(False)
-            self.serial_close_btn.setEnabled(True)
+            # self.serial_connect_btn.setEnabled(False)
+            # self.serial_close_btn.setEnabled(True)
         else:
             print(f"Failed to connect to {port}")
 
     def update_disconnection_state_for_serial_buttons(self):
         print("Disconnected")
-        self.serial_connect_btn.setEnabled(True)
-        self.serial_close_btn.setEnabled(False)
+        # self.serial_connect_btn.setEnabled(True)
+        # self.serial_close_btn.setEnabled(False)
