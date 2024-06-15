@@ -110,7 +110,7 @@ class CommandView(QWidget):
 
         self.macro_sequence_display = QTextEdit("no macro loaded")
         self.macro_sequence_display.setReadOnly(True)
-        self.macro_display_layout.addWidget(QLabel("Macro Sequence"))
+        # self.macro_display_layout.addWidget(QLabel("Macro Sequence"))
         self.macro_display_layout.addWidget(self.macro_sequence_display)
 
         buttons_layout = QGridLayout()

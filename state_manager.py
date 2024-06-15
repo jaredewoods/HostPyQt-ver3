@@ -1,24 +1,23 @@
-# state_manager.py
-"""Define the state flags.
-Implement the slot to update the state based on the signal."""
+from PyQt6.QtWidgets import QMainWindow, QTableWidget, QTableWidgetItem, QApplication
+from PyQt6.QtCore import pyqtSlot, pyqtSignal, QObject
 
-class StateManager:
+class StateManager(QObject):
+    state_updated = pyqtSignal(str, bool, str)
 
     def __init__(self):
-        self.serial_ready_to_connect = False  # Indicates if the serial port and baud rate are selected, and the serial connection is ready to be established.
-        self.serial_connected = False         # Indicates if the serial port is currently connected.
-        self.tcp_ready_to_connect = False     # Indicates if the TCP/IP address and port are selected, and the TCP/IP connection is ready to be established.
-        self.tcp_connected = False            # Indicates if the TCP/IP connection is currently established.
-        self.macro_ready_to_run = False       # Indicates if both the serial and TCP connections are established, a sequence is selected, and a valid number is set for the total cycles, making the macro ready to run.
-        self.macro_running = False            # Indicates if a macro is currently running.
-        self.macro_stopped = False            # Indicates if a macro execution is stopped.
-        self.macro_completed = False          # Indicates if a macro has completed its execution.
-        self.waiting_for_response = False     # Indicates if the system is waiting for a response after sending a command.
-        self.response_received = False        # Indicates if a response has been received for a command.
-        self.completion_received = False      # Indicates if a completion signal has been received after a command.
-        self.alarm_received = False           # Indicates if an alarm signal has been received.
-        self.debug_mode = False               # Indicates if the system is currently in debug mode.
-        self.display_timestamp = False        # Indicates if timestamps should be displayed in the log display; timestamps are always logged regardless.
+        super().__init__()
+        self.serial_connected = False
+        self.tcp_connected = False
+        self.macro_ready_to_run = False
+        self.macro_running = False
+        self.macro_stopped = False
+        self.macro_completed = False
+        self.waiting_for_response = False
+        self.response_received = False
+        self.completion_received = False
+        self.alarm_received = False
+        self.debug_mode = False
+        self.display_timestamp = False
 
     @pyqtSlot(str, bool, str)
     def update_state(self, flag_name, value, update_condition):
@@ -35,4 +34,58 @@ class StateManager:
         elif update_condition == 'toggle':
             setattr(self, flag_name, not current_value)
 
+        self.state_updated.emit(flag_name, getattr(self, flag_name), update_condition)
         print(f"Updated {flag_name} to {getattr(self, flag_name)}")
+
+class StateManagerView(QMainWindow):
+    def __init__(self, state_manager):
+        super().__init__()
+        self.state_manager = state_manager
+
+        self.setWindowTitle("State Manager")
+        self.setGeometry(100, 100, 400, 300)
+
+        self.table_widget = QTableWidget()
+        self.setCentralWidget(self.table_widget)
+
+        self.table_widget.setColumnCount(3)
+        self.table_widget.setHorizontalHeaderLabels(["Flag", "Value", "Condition"])
+        self.populate_table()
+
+        self.state_manager.state_updated.connect(self.update_table)
+
+    def populate_table(self):
+        flags = [
+            "serial_connected", "tcp_connected", "macro_ready_to_run", "macro_running",
+            "macro_stopped", "macro_completed", "waiting_for_response", "response_received",
+            "completion_received", "alarm_received", "debug_mode", "display_timestamp"
+        ]
+
+        self.table_widget.setRowCount(len(flags))
+        for row, flag in enumerate(flags):
+            value = getattr(self.state_manager, flag)
+            self.table_widget.setItem(row, 0, QTableWidgetItem(flag))
+            self.table_widget.setItem(row, 1, QTableWidgetItem(str(value)))
+            self.table_widget.setItem(row, 2, QTableWidgetItem("N/A"))  # Initially, condition is not applicable
+
+    def update_table(self, flag_name, value, update_condition):
+        for row in range(self.table_widget.rowCount()):
+            if self.table_widget.item(row, 0).text() == flag_name:
+                self.table_widget.setItem(row, 1, QTableWidgetItem(str(value)))
+                self.table_widget.setItem(row, 2, QTableWidgetItem(update_condition))
+                break
+
+if __name__ == "__main__":
+    import sys
+    app = QApplication(sys.argv)
+
+    state_manager = StateManager()
+    window = StateManagerView(state_manager)
+    window.show()
+
+    # Example updates
+    # state_manager.update_state("serial_ready_to_connect", True, "update")
+    # state_manager.update_state("tcp_connected", True, "conditional_update")
+    # state_manager.update_state("macro_running", True, "toggle")
+
+    sys.exit(app.exec())
