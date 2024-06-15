@@ -19,13 +19,13 @@ class StatusView(QWidget):
         status_time_layout.addWidget(QLabel("Start:"))
         status_time_layout.addWidget(self.start_label)
 
-        self.run_label = QLabel("--:--:--")
-        status_time_layout.addWidget(QLabel("Run"))
-        status_time_layout.addWidget(self.run_label)
-
         self.stop_label = QLabel("--:--:--")
         status_time_layout.addWidget(QLabel("Stop:"))
         status_time_layout.addWidget(self.stop_label)
+
+        self.run_label = QLabel("--:--:--")
+        status_time_layout.addWidget(QLabel("Run"))
+        status_time_layout.addWidget(self.run_label)
 
         self.main_layout.addLayout(status_time_layout)
 
