@@ -22,6 +22,9 @@ class FlagStateManager(QObject):
         self.debug_mode = False
         self.display_timestamp = False
 
+        # Connect signal_distributor signal to the update_state method
+        self.signal_distributor.state_changed.connect(self.update_state)
+
     @pyqtSlot(str, bool, str)
     def update_state(self, flag_name, value, condition):
         if not hasattr(self, flag_name):

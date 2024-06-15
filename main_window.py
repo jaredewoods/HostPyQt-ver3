@@ -50,11 +50,11 @@ class MainWindow(QMainWindow):
         # Initialize MVC components
         self.serial_model = SerialModel()
         self.serial_view = SerialView()
-        self.serial_controller = SerialController(self.serial_model, self.serial_view, self.flag_state_manager)
+        self.serial_controller = SerialController(self.serial_model, self.serial_view, self.signal_distributor)
 
         self.tcp_model = TCPModel()
         self.tcp_view = TCPView()
-        self.tcp_controller = TCPController(self.tcp_model, self.tcp_view, self.flag_state_manager)
+        self.tcp_controller = TCPController(self.tcp_model, self.tcp_view, self.signal_distributor)
 
         self.macro_model = MacroModel()
         self.macro_view = MacroView()
@@ -89,7 +89,7 @@ class MainWindow(QMainWindow):
         self.flag_state_view = FlagStateView(self.flag_state_manager)
         self.flag_state_view.show()
 
-    def on_state_changed(self, flag_name, value, update_condition):
+    def on_state_changed(self, flag_name, value):
         # Log all state changes
         self.log_display.append(f"State changed: {flag_name} -> {value}")
 

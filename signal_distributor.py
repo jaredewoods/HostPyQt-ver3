@@ -10,3 +10,6 @@ class SignalDistributor(QObject):
 
     def __init__(self):
         super().__init__()
+
+    def emit_state_change(self, flag_name, value, update_condition):
+        self.state_changed.emit(flag_name, value, update_condition)
