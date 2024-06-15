@@ -20,16 +20,16 @@ class SerialController:
         success = self.model.connect(port, baudrate)
         if success:
             self.update_connection_state(True, port)
-            self.signal_distributor.emit_state_change('serial_connected', True, 'validate')
+            self.signal_distributor.state_changed.emit('serial_connected', True, 'validate')
         else:
             self.update_connection_state(False, port)
-            self.signal_distributor.emit_state_change('serial_connected', False, 'validate')
+            self.signal_distributor.state_changed.emit('serial_connected', False, 'validate')
 
     def disconnect_serial(self):
         success = self.model.disconnect()
         if success:
             self.update_connection_state(False)
-            self.signal_distributor.emit_state_change('serial_connected', False, 'update')
+            self.signal_distributor.state_changed.emit('serial_connected', False, 'update')
 
     def update_connection_state(self, connected, port=None):
         self.view.serial_connect_btn.setEnabled(not connected)

@@ -5,7 +5,7 @@ class FlagStateManager(QObject):
     # This is used for the state manager view
     state_updated = pyqtSignal(str, bool, str)
 
-    def __init__(self, signal_distributor=None):
+    def __init__(self, signal_distributor):
         super().__init__()
         self.signal_distributor = signal_distributor
 

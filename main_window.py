@@ -89,15 +89,14 @@ class MainWindow(QMainWindow):
         self.flag_state_view = FlagStateView(self.flag_state_manager)
         self.flag_state_view.show()
 
-    def on_state_changed(self, flag_name, value):
+    def on_state_changed(self, flag_name, value, update_condition):
         # Log all state changes
         self.log_display.append(f"State changed: {flag_name} -> {value}")
 
         # Handle specific state changes locally
-        if flag_name == 'serial_connected':
-            self.handle_serial_connected(value)
-        elif flag_name == 'tcp_connected':
-            self.handle_tcp_connected(value)
+        handler = getattr(self, f"handle_{flag_name}", None)
+        if handler:
+            handler(value)
 
     def handle_serial_connected(self, value):
         self.log_display.append(f"Serial connection status: {value}")
@@ -106,6 +105,47 @@ class MainWindow(QMainWindow):
     def handle_tcp_connected(self, value):
         self.log_display.append(f"TCP connection status: {value}")
         self.tcp_controller.update_connection_state(value)
+
+    # Example additional handlers
+    def handle_macro_ready_to_run(self, value):
+        self.log_display.append(f"Macro ready to run status: {value}")
+        # Add your handling code here
+
+    def handle_macro_running(self, value):
+        self.log_display.append(f"Macro running status: {value}")
+        # Add your handling code here
+
+    def handle_macro_stopped(self, value):
+        self.log_display.append(f"Macro stopped status: {value}")
+        # Add your handling code here
+
+    def handle_macro_completed(self, value):
+        self.log_display.append(f"Macro completed status: {value}")
+        # Add your handling code here
+
+    def handle_waiting_for_response(self, value):
+        self.log_display.append(f"Waiting for response status: {value}")
+        # Add your handling code here
+
+    def handle_response_received(self, value):
+        self.log_display.append(f"Response received status: {value}")
+        # Add your handling code here
+
+    def handle_completion_received(self, value):
+        self.log_display.append(f"Completion received status: {value}")
+        # Add your handling code here
+
+    def handle_alarm_received(self, value):
+        self.log_display.append(f"Alarm received status: {value}")
+        # Add your handling code here
+
+    def handle_debug_mode(self, value):
+        self.log_display.append(f"Debug mode status: {value}")
+        # Add your handling code here
+
+    def handle_display_timestamp(self, value):
+        self.log_display.append(f"Display timestamp status: {value}")
+        # Add your handling code here
 
 
 if __name__ == "__main__":
