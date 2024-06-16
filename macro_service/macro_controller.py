@@ -13,6 +13,9 @@ class MacroController(QObject):
         self.flag_state_manager = flag_state_manager
         self.view.macro_select_cbx.activated.connect(self.on_macro_dropdown_activated)
 
+        # Connect the itemSelected signal from CommandView
+        self.command_view.itemSelected.connect(self.load_macro_sequence_line)
+
         self.populate_macro_combobox()
 
     @staticmethod
@@ -42,7 +45,7 @@ class MacroController(QObject):
         self.load_macro_file(macro_sequence_file_path)
         self.view.macro_start_btn.setEnabled(True)
         self.update_macro_ready_state()
-        self.load_macro_sequence_line(0)  # Initialize the first command
+        self.load_macro_sequence_line()  # Initialize the first command without arguments
 
     def read_macro_file(self, file_path):
         with open(file_path, 'r') as file:
@@ -90,11 +93,14 @@ class MacroController(QObject):
 
         return suggested_cycles, macro_commands
 
-    def load_macro_sequence_line(self, line_number):
-        if hasattr(self, 'macro_commands') and line_number < len(self.macro_commands):
-            command_with_unit = self.macro_commands[line_number]
-            unit_number = command_with_unit[1]
-            full_command = command_with_unit[0]
+    def load_macro_sequence_line(self):
+        selected_item = self.command_view.macro_sequence_display.currentItem()
+        if selected_item:
+            full_command_with_unit = selected_item.text()
+
+            # Assuming the format is [unit_number + full_command]
+            unit_number = full_command_with_unit[0]
+            full_command = full_command_with_unit[1:]
 
             # Assuming command format is COMMAND + PARAMETERS
             command = full_command[:4]
@@ -104,7 +110,7 @@ class MacroController(QObject):
             self.load_command_into_view(command, unit_number, parameters)
             return full_command
         else:
-            print("Command not found")  # Debug statement
+            print("No item selected")  # Debug statement
             return None
 
     def load_command_into_view(self, command, unit, parameters):

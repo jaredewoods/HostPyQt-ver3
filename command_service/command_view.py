@@ -1,18 +1,22 @@
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QGridLayout, QCheckBox, QComboBox, QLineEdit, QLabel, QPushButton, QTextEdit
+from PyQt6.QtCore import pyqtSignal
+from PyQt6.QtWidgets import QWidget, QListWidget, QVBoxLayout, QHBoxLayout, QGridLayout, QCheckBox, QComboBox, QLineEdit, QLabel, QPushButton, QListWidgetItem
 from PyQt6.QtCore import Qt
 from resources.command_dictionary import commands
 
 class CommandView(QWidget):
+    itemSelected = pyqtSignal()  # Signal to emit when an item is selected
+
     def __init__(self, btn_preset1_name, btn_preset2_name, btn_preset3_name, btn_preset4_name):
         super().__init__()
 
         self.main_layout = QVBoxLayout()
+        self.is_editing = False  # Track the editing state
 
         # Initialize UI components
-        self.setup_display_line()
         self.setup_dropdowns_and_parameters()
         self.setup_checkboxes()
         self.setup_control_buttons_layout()
+        self.setup_display_line()
         self.setup_macro_display()
 
         self.setLayout(self.main_layout)
@@ -95,16 +99,11 @@ class CommandView(QWidget):
         self.main_layout.addLayout(display_layout)
 
     def setup_control_buttons_layout(self):
-        buttons_layout = QGridLayout()
-        self.previous_btn = QPushButton("Previous")
-        self.next_btn = QPushButton("Next")
-        self.execute_btn = QPushButton("Execute")
+        buttons_layout = QHBoxLayout()
+        self.single_shot_btn = QPushButton("Single Shot")
         self.clear_btn = QPushButton("Clear")
-        buttons_layout.addWidget(self.previous_btn, 0, 0)
-        buttons_layout.addWidget(self.next_btn, 0, 1)
-        buttons_layout.addWidget(self.execute_btn, 1, 0)
-        buttons_layout.addWidget(self.clear_btn, 1, 1)
-
+        buttons_layout.addWidget(self.single_shot_btn)
+        buttons_layout.addWidget(self.clear_btn)
         self.main_layout.addLayout(buttons_layout)
 
         self.clear_btn.clicked.connect(self.clear_fields)
@@ -112,25 +111,37 @@ class CommandView(QWidget):
     def setup_macro_display(self):
         self.macro_display_layout = QVBoxLayout()
 
-        self.macro_sequence_display = QTextEdit("no macro loaded")
-        self.macro_sequence_display.setReadOnly(False)
+        self.macro_sequence_display = QListWidget()
+        self.macro_sequence_display.setDisabled(True)  # Initial state is read-only
+        self.macro_sequence_display.itemSelectionChanged.connect(self.emit_item_selected)  # Connect the selection change event
         self.macro_display_layout.addWidget(self.macro_sequence_display)
 
         buttons_layout = QGridLayout()
-        self.execute_btn = QPushButton("Start")
+        self.single_shot_btn = QPushButton("Start")
         self.stop_btn = QPushButton("Stop")
-        self.clear_btn = QPushButton("Clear")
+        self.edit_btn = QPushButton("Edit")
         self.reset_btn = QPushButton("Reset")
-        buttons_layout.addWidget(self.execute_btn, 0, 0, 1, 2)
+        buttons_layout.addWidget(self.single_shot_btn, 0, 0, 1, 2)
         buttons_layout.addWidget(self.stop_btn, 0, 2, 1, 2)
-        buttons_layout.addWidget(self.clear_btn, 1, 0, 1, 2)
+        buttons_layout.addWidget(self.edit_btn, 1, 0, 1, 2)
+        self.edit_btn.clicked.connect(self.edit_macro_sequence)
         buttons_layout.addWidget(self.reset_btn, 1, 2, 1, 2)
         self.macro_display_layout.addLayout(buttons_layout)
 
         self.main_layout.addLayout(self.macro_display_layout)
 
+    def emit_item_selected(self):
+        self.itemSelected.emit()
+
     def update_macro_sequence(self, sequence):
-        self.macro_sequence_display.setPlainText(sequence)
+        self.macro_sequence_display.clear()
+        for item in sequence.split('\n'):
+            self.macro_sequence_display.addItem(QListWidgetItem(item))
+
+    def edit_macro_sequence(self):
+        self.is_editing = not self.is_editing
+        self.macro_sequence_display.setDisabled(not self.is_editing)
+        self.edit_btn.setText("Commit" if self.is_editing else "Edit")
 
     def set_command(self, command):
         print(f"Command set: {command}")  # Debug statement

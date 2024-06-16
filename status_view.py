@@ -38,7 +38,7 @@ class StatusView(QWidget):
         self.serial_status_label.setStyleSheet("background-color: #CCCCCC; color: #666666; padding: 5px;")
         status_connection_layout.addWidget(self.serial_status_label)
 
-        self.tcp_status_label = QLabel(" TCP ")
+        self.tcp_status_label = QLabel(" TCP / IP ")
         self.tcp_status_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.tcp_status_label.setStyleSheet("background-color: #CCCCCC; color: #666666; padding: 5px;")
         status_connection_layout.addWidget(self.tcp_status_label)
