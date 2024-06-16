@@ -34,16 +34,3 @@ class TCPView(QWidget):
             self.tcp_connect_btn.setEnabled(True)
         else:
             self.tcp_connect_btn.setEnabled(False)
-
-    def update_connection_state_for_tcp_buttons(self, success, ip_address, port):
-        if success:
-            print(f"Connected to {ip_address}:{port}")
-            self.tcp_connect_btn.setEnabled(False)
-            self.tcp_close_btn.setEnabled(True)
-        else:
-            print(f"Failed to connect to {ip_address}:{port}")
-
-    def update_disconnection_state_for_tcp_buttons(self):
-        print("Disconnected")
-        self.tcp_connect_btn.setEnabled(True)
-        self.tcp_close_btn.setEnabled(False)

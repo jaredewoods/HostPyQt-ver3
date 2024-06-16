@@ -21,6 +21,7 @@ class MacroController(QObject):
         if selected_file:
             macro_sequence_file_path = os.path.join(self.get_macro_directory(), selected_file)
             self.load_macro_file(macro_sequence_file_path)
+            self.view.macro_start_btn.setEnabled(True)
 
     def get_macro_directory(self):
         current_dir = os.path.dirname(os.path.abspath(__file__))
