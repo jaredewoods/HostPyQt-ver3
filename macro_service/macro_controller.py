@@ -34,6 +34,10 @@ class MacroController(QObject):
         print(f"Dropdown activated: {selected_file}")  # Debug statement
         if selected_file:
             self.handle_macro_file_selection(selected_file)
+            self.command_view.clear_fields()  # Clear fields in CommandView
+        # Select the first item in the QListWidget
+        if self.command_view.macro_sequence_display.count() > 0:
+            self.command_view.macro_sequence_display.setCurrentRow(0)
 
     def update_macro_ready_state(self):
         serial_connected = self.flag_state_manager.get_flag_status('serial_connected')
