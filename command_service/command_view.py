@@ -15,7 +15,6 @@ class CommandView(QWidget):
         # Initialize UI components
         self.setup_dropdowns_and_parameters()
         self.setup_checkboxes()
-        self.setup_control_buttons_layout()
         self.setup_display_line()
         self.setup_macro_display()
 
@@ -98,36 +97,30 @@ class CommandView(QWidget):
         display_layout.addWidget(self.display_command)
         self.main_layout.addLayout(display_layout)
 
-    def setup_control_buttons_layout(self):
-        buttons_layout = QHBoxLayout()
-        self.single_shot_btn = QPushButton("Single Shot")
-        self.clear_btn = QPushButton("Clear")
-        buttons_layout.addWidget(self.single_shot_btn)
-        buttons_layout.addWidget(self.clear_btn)
-        self.main_layout.addLayout(buttons_layout)
-
-        self.clear_btn.clicked.connect(self.clear_fields)
-
     def setup_macro_display(self):
         self.macro_display_layout = QVBoxLayout()
 
         self.macro_sequence_display = QListWidget()
-        self.macro_sequence_display.setDisabled(True)  # Initial state is read-only
+        self.macro_sequence_display.setDisabled(True)  #
         self.macro_sequence_display.itemSelectionChanged.connect(self.emit_item_selected)  # Connect the selection change event
         self.macro_display_layout.addWidget(self.macro_sequence_display)
 
         buttons_layout = QGridLayout()
-        self.single_shot_btn = QPushButton("Start")
-        self.stop_btn = QPushButton("Stop")
+        self.single_shot_btn = QPushButton("Single Shot")
+        self.reset_btn = QPushButton("Reset Sequence")
         self.edit_btn = QPushButton("Edit")
-        self.reset_btn = QPushButton("Reset")
+        self.clear_btn = QPushButton("Clear")
+
         buttons_layout.addWidget(self.single_shot_btn, 0, 0, 1, 2)
-        buttons_layout.addWidget(self.stop_btn, 0, 2, 1, 2)
+        # TODO: link to method
+        buttons_layout.addWidget(self.reset_btn, 0, 2, 1, 2)
+        # TODO: link to method
         buttons_layout.addWidget(self.edit_btn, 1, 0, 1, 2)
         self.edit_btn.clicked.connect(self.edit_macro_sequence)
-        buttons_layout.addWidget(self.reset_btn, 1, 2, 1, 2)
-        self.macro_display_layout.addLayout(buttons_layout)
+        buttons_layout.addWidget(self.clear_btn, 1, 2, 1, 2)
+        self.clear_btn.clicked.connect(self.clear_fields)
 
+        self.macro_display_layout.addLayout(buttons_layout)
         self.main_layout.addLayout(self.macro_display_layout)
 
     def emit_item_selected(self):
