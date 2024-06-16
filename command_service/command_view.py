@@ -95,11 +95,16 @@ class CommandView(QWidget):
         self.main_layout.addLayout(display_layout)
 
     def setup_control_buttons_layout(self):
-        buttons_layout = QHBoxLayout()
-        self.send_btn = QPushButton("Send")
+        buttons_layout = QGridLayout()
+        self.previous_btn = QPushButton("Previous")
+        self.next_btn = QPushButton("Next")
+        self.execute_btn = QPushButton("Execute")
         self.clear_btn = QPushButton("Clear")
-        buttons_layout.addWidget(self.send_btn)
-        buttons_layout.addWidget(self.clear_btn)
+        buttons_layout.addWidget(self.previous_btn, 0, 0)
+        buttons_layout.addWidget(self.next_btn, 0, 1)
+        buttons_layout.addWidget(self.execute_btn, 1, 0)
+        buttons_layout.addWidget(self.clear_btn, 1, 1)
+
         self.main_layout.addLayout(buttons_layout)
 
         self.clear_btn.clicked.connect(self.clear_fields)
@@ -112,11 +117,11 @@ class CommandView(QWidget):
         self.macro_display_layout.addWidget(self.macro_sequence_display)
 
         buttons_layout = QGridLayout()
-        self.send_btn = QPushButton("Start")
+        self.execute_btn = QPushButton("Start")
         self.stop_btn = QPushButton("Stop")
         self.clear_btn = QPushButton("Clear")
         self.reset_btn = QPushButton("Reset")
-        buttons_layout.addWidget(self.send_btn, 0, 0, 1, 2)
+        buttons_layout.addWidget(self.execute_btn, 0, 0, 1, 2)
         buttons_layout.addWidget(self.stop_btn, 0, 2, 1, 2)
         buttons_layout.addWidget(self.clear_btn, 1, 0, 1, 2)
         buttons_layout.addWidget(self.reset_btn, 1, 2, 1, 2)
