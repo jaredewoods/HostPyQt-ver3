@@ -60,7 +60,6 @@ class CommandView(QWidget):
         dropdowns_layout.addWidget(self.dropdown_unit_no)
         dropdowns_layout.addWidget(QLabel("CMND"))
 
-        # Add a blank item then the commands into the dropdown
         self.dropdown_code.addItem("")
         for command in commands.keys():
             self.dropdown_code.addItem(command)
@@ -127,3 +126,17 @@ class CommandView(QWidget):
 
     def update_macro_sequence(self, sequence):
         self.macro_sequence_display.setPlainText(sequence)
+
+    def set_command(self, command):
+        print(f"Command set: {command}")  # Debug statement
+        self.display_command.setText(command)
+
+    def set_unit_number(self, unit_number):
+        print(f"Unit number set: {unit_number}")  # Debug statement
+        index = self.dropdown_unit_no.findText(str(unit_number))
+        if index != -1:
+            self.dropdown_unit_no.setCurrentIndex(index)
+
+    def set_parameters(self, parameters):
+        print(f"Parameters set: {parameters}")  # Debug statement
+        self.entry_parameters.setText(parameters)

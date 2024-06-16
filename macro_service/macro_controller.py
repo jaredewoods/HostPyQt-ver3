@@ -13,7 +13,6 @@ class MacroController(QObject):
         self.flag_state_manager = flag_state_manager
         self.view.macro_select_cbx.activated.connect(self.on_macro_dropdown_activated)
 
-        # Populate the macro ComboBox
         self.populate_macro_combobox()
 
     @staticmethod
@@ -29,6 +28,7 @@ class MacroController(QObject):
 
     def on_macro_dropdown_activated(self, index):
         selected_file = self.view.macro_select_cbx.currentText()
+        print(f"Dropdown activated: {selected_file}")  # Debug statement
         if selected_file:
             self.handle_macro_file_selection(selected_file)
 
@@ -42,6 +42,7 @@ class MacroController(QObject):
         self.load_macro_file(macro_sequence_file_path)
         self.view.macro_start_btn.setEnabled(True)
         self.update_macro_ready_state()
+        self.load_macro_sequence_line(0)  # Initialize the first command
 
     def read_macro_file(self, file_path):
         with open(file_path, 'r') as file:
@@ -50,19 +51,28 @@ class MacroController(QObject):
     def parse_macro_file_content(self, lines):
         suggested_cycles = 0
         macro_commands = []
+        current_unit = None
         for line in lines:
             line = line.strip()
+            print(f"Parsing line: {line}")  # Debug statement
             if line.startswith("SUGGESTED_CYCLES"):
                 suggested_cycles = int(line.split(':')[1].strip())
-            elif line.startswith("[unit") or line.endswith("end]") or line == "":
-                continue
-            else:
-                macro_commands.append(line)
+                print(f"Found suggested cycles: {suggested_cycles}")  # Debug statement
+            elif line.startswith("[unit") and "start" in line:
+                current_unit = int(line.split("unit")[1].split()[0])
+                print(f"Entering unit: {current_unit}")  # Debug statement
+            elif line.startswith("unit") and "end" in line:
+                print(f"Exiting unit: {current_unit}")  # Debug statement
+                current_unit = None
+            elif current_unit is not None and line:
+                macro_commands.append((line, current_unit))
+                print(f"Added command: {line} (Unit {current_unit})")  # Debug statement
         return suggested_cycles, macro_commands
 
     def update_ui_with_macro_data(self, suggested_cycles, macro_commands):
         self.view.update_total_cycles(suggested_cycles)
-        self.command_view.update_macro_sequence('\n'.join(macro_commands))
+        formatted_commands = [f"{unit}{command}" for command, unit in macro_commands]
+        self.command_view.update_macro_sequence('\n'.join(formatted_commands))
 
     def load_macro_file(self, file_name):
         macro_directory = self.get_macro_directory()
@@ -73,11 +83,32 @@ class MacroController(QObject):
 
         self.update_ui_with_macro_data(suggested_cycles, macro_commands)
 
-        # For testing purposes, print the parsed results
         print("Suggested Cycles:", suggested_cycles)
         print("Macro Commands:", macro_commands)
 
+        self.macro_commands = macro_commands
+
         return suggested_cycles, macro_commands
 
+    def load_macro_sequence_line(self, line_number):
+        if hasattr(self, 'macro_commands') and line_number < len(self.macro_commands):
+            command_with_unit = self.macro_commands[line_number]
+            unit_number = command_with_unit[1]
+            full_command = command_with_unit[0]
 
+            # Assuming command format is COMMAND + PARAMETERS
+            command = full_command[:4]
+            parameters = full_command[4:]
 
+            print(f"Loading command: {command}, unit: {unit_number}, parameters: {parameters}")  # Debug statement
+            self.load_command_into_view(command, unit_number, parameters)
+            return full_command
+        else:
+            print("Command not found")  # Debug statement
+            return None
+
+    def load_command_into_view(self, command, unit, parameters):
+        print(f"Setting command: {command}, unit: {unit}, parameters: {parameters}")  # Debug statement
+        self.command_view.set_command(command)
+        self.command_view.set_unit_number(unit)
+        self.command_view.set_parameters(parameters)
