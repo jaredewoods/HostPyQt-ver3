@@ -96,13 +96,13 @@ class CommandView(QWidget):
 
     def setup_control_buttons_layout(self):
         buttons_layout = QHBoxLayout()
-
         self.send_btn = QPushButton("Send")
         self.clear_btn = QPushButton("Clear")
         buttons_layout.addWidget(self.send_btn)
         buttons_layout.addWidget(self.clear_btn)
-
         self.main_layout.addLayout(buttons_layout)
+
+        self.clear_btn.clicked.connect(self.clear_fields)
 
     def setup_macro_display(self):
         self.macro_display_layout = QVBoxLayout()
@@ -148,3 +148,8 @@ class CommandView(QWidget):
             self.dropdown_code.setCurrentIndex(index)
         else:
             self.dropdown_code.setCurrentText(code)
+
+    def clear_fields(self):
+        self.set_unit_number("")
+        self.set_code("")
+        self.set_parameters("")
