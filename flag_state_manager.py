@@ -73,25 +73,24 @@ class FlagStateView(QMainWindow):
             self.table_widget.setItem(row, 1, QTableWidgetItem(str(value)))
             self.table_widget.setItem(row, 2, QTableWidgetItem("Inactive"))
 
-    def update_table(self, flag_name, value):
+    @pyqtSlot(str, bool, str)
+    def update_table(self, flag_name, value, update_condition):
         for row in range(self.table_widget.rowCount()):
             if self.table_widget.item(row, 0).text() == flag_name:
-                for column in range(self.table_widget.columnCount()):  # Iterate over columns
-                    item = QTableWidgetItem(self.table_widget.item(row, column).text())
+                self.table_widget.setItem(row, 1, QTableWidgetItem(str(value)))
+                condition_item = self.table_widget.item(row, 2)
+                condition_item.setText(update_condition)
+                for column in range(self.table_widget.columnCount()):
+                    item = self.table_widget.item(row, column)
 
                     # Set font color and background based on value
                     if value:
                         item.setForeground(QColor('white'))
                         item.setBackground(QColor('darkGreen'))
-                    elif not value:
+                    else:
                         item.setForeground(QColor('white'))
                         item.setBackground(QColor('darkRed'))
-                    else:
-                        pass
-
-                    self.table_widget.setItem(row, column, item)
                 break
-
 
 if __name__ == "__main__":
     import sys

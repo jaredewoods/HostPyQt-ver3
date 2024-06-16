@@ -125,3 +125,6 @@ class CommandView(QWidget):
         self.macro_display_layout.addLayout(buttons_layout)
 
         self.main_layout.addLayout(self.macro_display_layout)
+
+    def update_macro_sequence(self, sequence):
+        self.macro_sequence_display.setPlainText(sequence)

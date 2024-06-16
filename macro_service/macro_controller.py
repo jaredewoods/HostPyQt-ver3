@@ -4,11 +4,12 @@ import os
 from PyQt6.QtCore import QObject
 
 class MacroController(QObject):
-    def __init__(self, model, view):
+    def __init__(self, model, view, command_view, signal_distributor):
         super().__init__()
         self.view = view
         self.model = model
-
+        self.command_view = command_view
+        self.signal_distributor = signal_distributor
         # Connect the combo box selection change to a method
         self.view.macro_select_cbx.currentIndexChanged.connect(self.on_macro_selection_changed)
 
@@ -38,10 +39,14 @@ class MacroController(QObject):
             line = line.strip()
             if line.startswith("SUGGESTED_CYCLES"):
                 suggested_cycles = int(line.split(':')[1].strip())
-            elif line.startswith("[unit") or line == "":
+            elif line.startswith("[unit") or line.endswith("end]") or line == "":
                 continue
             else:
                 macro_commands.append(line)
+
+        # Update the UI elements
+        self.view.update_total_cycles(suggested_cycles)
+        self.command_view.update_macro_sequence('\n'.join(macro_commands))
 
         # For testing purposes, print the parsed results
         print("Suggested Cycles:", suggested_cycles)
