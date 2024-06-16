@@ -140,3 +140,11 @@ class CommandView(QWidget):
     def set_parameters(self, parameters):
         print(f"Parameters set: {parameters}")  # Debug statement
         self.entry_parameters.setText(parameters)
+
+    def set_code(self, code):
+        print(f"Code set: {code}")  # Debug statement
+        index = self.dropdown_code.findText(code)
+        if index != -1:
+            self.dropdown_code.setCurrentIndex(index)
+        else:
+            self.dropdown_code.setCurrentText(code)

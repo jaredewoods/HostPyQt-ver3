@@ -112,3 +112,4 @@ class MacroController(QObject):
         self.command_view.set_command(command)
         self.command_view.set_unit_number(unit)
         self.command_view.set_parameters(parameters)
+        self.command_view.set_code(command)
