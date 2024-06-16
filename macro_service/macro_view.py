@@ -35,3 +35,4 @@ class MacroView(QWidget):
 
     def update_total_cycles(self, cycles):
         self.macro_total_cycles_lbl.setText(str(cycles))
+
