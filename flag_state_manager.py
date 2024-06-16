@@ -44,6 +44,12 @@ class FlagStateManager(QObject):
         self.state_updated.emit(flag_name, getattr(self, flag_name), condition)
         print(f"Updated {flag_name} to {getattr(self, flag_name)}")
 
+    def get_flag_status(self, flag_name):
+        if hasattr(self, flag_name):
+            return getattr(self, flag_name)
+        else:
+            raise AttributeError(f"Flag '{flag_name}' does not exist.")
+
 class FlagStateView(QMainWindow):
     def __init__(self, flag_state_manager):
         super().__init__()

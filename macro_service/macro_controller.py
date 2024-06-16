@@ -4,13 +4,13 @@ import os
 from PyQt6.QtCore import QObject
 
 class MacroController(QObject):
-    def __init__(self, model, view, command_view, signal_distributor):
+    def __init__(self, model, view, command_view, signal_distributor, flag_state_manager):
         super().__init__()
         self.view = view
         self.model = model
         self.command_view = command_view
         self.signal_distributor = signal_distributor
-        # Connect the combo box selection change to a method
+        self.flag_state_manager = flag_state_manager
         self.view.macro_select_cbx.currentIndexChanged.connect(self.on_macro_selection_changed)
 
         # Populate the macro ComboBox
@@ -22,6 +22,12 @@ class MacroController(QObject):
             macro_sequence_file_path = os.path.join(self.get_macro_directory(), selected_file)
             self.load_macro_file(macro_sequence_file_path)
             self.view.macro_start_btn.setEnabled(True)
+
+            serial_connected = self.flag_state_manager.get_flag_status('serial_connected')
+            if serial_connected:
+                self.signal_distributor.state_changed.emit('macro_ready_to_run', True, 'update')
+            else:
+                self.signal_distributor.state_changed.emit('macro_ready_to_run', False, 'update')
 
     @staticmethod
     def get_macro_directory():

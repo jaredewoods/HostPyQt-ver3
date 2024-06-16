@@ -61,7 +61,7 @@ class MainWindow(QMainWindow):
         self.macro_model = MacroModel()
         self.macro_view = MacroView()
         self.command_view = CommandView("Preset 1", "Preset 2", "Preset 3", "Preset 4")
-        self.macro_controller = MacroController(self.macro_model, self.macro_view, self.command_view, self.signal_distributor)
+        self.macro_controller = MacroController(self.macro_model, self.macro_view, self.command_view, self.signal_distributor, self.flag_state_manager)
 
         # Initialize command_compiler_service
         self.command_model = CommandModel()
@@ -113,11 +113,10 @@ class MainWindow(QMainWindow):
     # Example additional handlers
     def handle_macro_ready_to_run(self, value):
         self.log_display.append(f"Macro ready to run status: {value}")
-        self.status_view.update_macro_status(value)  # Update macro status label
 
     def handle_macro_running(self, value):
         self.log_display.append(f"Macro running status: {value}")
-        # Add your handling code here
+        self.status_view.update_macro_status(value)  # Update macro status label
 
     def handle_macro_stopped(self, value):
         self.log_display.append(f"Macro stopped status: {value}")
