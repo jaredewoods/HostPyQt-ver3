@@ -19,7 +19,8 @@ class MacroModel:
     def get_recommended_cycles(self):
         return self.recommended_cycles
 
-    def _parse_macro_commands(self, lines):
+    @staticmethod
+    def _parse_macro_commands(lines):
         macro_commands = {}
         current_unit = 1
 

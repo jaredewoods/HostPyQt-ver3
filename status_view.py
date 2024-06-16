@@ -50,7 +50,8 @@ class StatusView(QWidget):
 
         self.main_layout.addLayout(status_connection_layout)
 
-    def update_label_color(self, label, value):
+    @staticmethod
+    def update_label_color(label, value):
         if value:
             label.setStyleSheet("background-color: darkGreen; color: white;")
         else:

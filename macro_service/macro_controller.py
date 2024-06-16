@@ -23,7 +23,8 @@ class MacroController(QObject):
             self.load_macro_file(macro_sequence_file_path)
             self.view.macro_start_btn.setEnabled(True)
 
-    def get_macro_directory(self):
+    @staticmethod
+    def get_macro_directory():
         current_dir = os.path.dirname(os.path.abspath(__file__))
         main_dir = os.path.dirname(current_dir)
         return os.path.join(main_dir, 'resources', 'macro_sequences')
@@ -59,4 +60,3 @@ class MacroController(QObject):
         macro_directory = self.get_macro_directory()
         macro_files = self.model.get_macro_filenames(macro_directory)
         self.view.populate_macro_select_combo(macro_files)
-

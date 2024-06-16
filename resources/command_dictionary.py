@@ -1,5 +1,6 @@
 # command_dictionary.py
 
+# noinspection SpellCheckingInspection
 commands = {
     "MHOM": {
         "description": "Move to HOME Position.",
