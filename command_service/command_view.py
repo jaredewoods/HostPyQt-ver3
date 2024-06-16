@@ -9,9 +9,9 @@ class CommandView(QWidget):
         self.main_layout = QVBoxLayout()
 
         # Initialize UI components
-        self.setup_checkboxes()
-        self.setup_dropdowns_and_parameters()
         self.setup_display_line()
+        self.setup_dropdowns_and_parameters()
+        self.setup_checkboxes()
         self.setup_control_buttons_layout()
         self.setup_macro_display()
 
