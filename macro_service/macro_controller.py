@@ -11,23 +11,26 @@ class MacroController(QObject):
         self.command_view = command_view
         self.signal_distributor = signal_distributor
         self.flag_state_manager = flag_state_manager
-        self.view.macro_select_cbx.currentIndexChanged.connect(self.on_macro_selection_changed)
+        self.view.macro_select_cbx.activated.connect(self.on_macro_dropdown_activated)
 
         # Populate the macro ComboBox
         self.populate_macro_combobox()
 
-    def on_macro_selection_changed(self):
+    def on_macro_dropdown_activated(self, index):
         selected_file = self.view.macro_select_cbx.currentText()
         if selected_file:
-            macro_sequence_file_path = os.path.join(self.get_macro_directory(), selected_file)
-            self.load_macro_file(macro_sequence_file_path)
-            self.view.macro_start_btn.setEnabled(True)
+            self.handle_macro_file_selection(selected_file)
 
-            serial_connected = self.flag_state_manager.get_flag_status('serial_connected')
-            if serial_connected:
-                self.signal_distributor.state_changed.emit('macro_ready_to_run', True, 'update')
-            else:
-                self.signal_distributor.state_changed.emit('macro_ready_to_run', False, 'update')
+    def handle_macro_file_selection(self, selected_file):
+        macro_sequence_file_path = os.path.join(self.get_macro_directory(), selected_file)
+        self.load_macro_file(macro_sequence_file_path)
+        self.view.macro_start_btn.setEnabled(True)
+        self.update_macro_ready_state()
+
+    def update_macro_ready_state(self):
+        serial_connected = self.flag_state_manager.get_flag_status('serial_connected')
+        macro_ready = serial_connected
+        self.signal_distributor.state_changed.emit('macro_ready_to_run', macro_ready, 'update')
 
     @staticmethod
     def get_macro_directory():
