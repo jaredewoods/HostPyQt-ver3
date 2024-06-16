@@ -1,3 +1,9 @@
 SUGGESTED_CYCLES: 2000
+[unit1 start
+unit1 end]
+[unit2 start
+
 MALN1018000
 WAIT1000
+
+unit2 end]

@@ -26,12 +26,31 @@ class MacroController(QObject):
         main_dir = os.path.dirname(current_dir)
         return os.path.join(main_dir, 'resources', 'macro_sequences')
 
-    def load_macro_file(self, macro_sequence_file_path):
-        self.model.load_macro_file(macro_sequence_file_path)
-        recommended_cycles = self.model.get_recommended_cycles()
-        self.view.update_total_cycles(recommended_cycles)
+    def load_macro_file(self, file_name):
+        macro_directory = self.get_macro_directory()
+        file_path = os.path.join(macro_directory, file_name)
+        with open(file_path, 'r') as file:
+            lines = file.readlines()
+
+        suggested_cycles = 0
+        macro_commands = []
+        for line in lines:
+            line = line.strip()
+            if line.startswith("SUGGESTED_CYCLES"):
+                suggested_cycles = int(line.split(':')[1].strip())
+            elif line.startswith("[unit") or line == "":
+                continue
+            else:
+                macro_commands.append(line)
+
+        # For testing purposes, print the parsed results
+        print("Suggested Cycles:", suggested_cycles)
+        print("Macro Commands:", macro_commands)
+
+        return suggested_cycles, macro_commands
 
     def populate_macro_combobox(self):
         macro_directory = self.get_macro_directory()
         macro_files = self.model.get_macro_filenames(macro_directory)
         self.view.populate_macro_select_combo(macro_files)
+
