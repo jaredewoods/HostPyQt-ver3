@@ -56,7 +56,7 @@ class FlagStateView(QMainWindow):
         self.flag_state_manager = flag_state_manager
 
         self.setWindowTitle("State Manager")
-        self.setGeometry(100, 100, 400, 300)
+        self.setGeometry(100, 100, 300, 450)
         self.table_widget = QTableWidget()
         self.setCentralWidget(self.table_widget)
         self.table_widget.setColumnCount(3)
