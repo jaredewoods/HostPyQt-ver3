@@ -87,7 +87,7 @@ class CommandView(QWidget):
         display_layout = QHBoxLayout()
         self.display_command = QLabel()
         self.display_command.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.display_command.setStyleSheet("""color: white;
+        self.display_command.setStyleSheet("""color: blue;
                                           font-family: Arial;
                                           font-size: 18px;
                                           padding: 8px;
@@ -108,11 +108,11 @@ class CommandView(QWidget):
         buttons_layout = QGridLayout()
         self.single_shot_btn = QPushButton("Single Shot")
         self.reset_btn = QPushButton("Reset Sequence")
-        self.edit_btn = QPushButton("Edit")
-        self.clear_btn = QPushButton("Clear")
+        self.edit_btn = QPushButton("Edit Macro")
+        self.clear_btn = QPushButton("Clear Command")
 
         buttons_layout.addWidget(self.single_shot_btn, 0, 0, 1, 2)
-        # TODO: link to method
+        self.single_shot_btn.clicked.connect(self.send_display_command)
         buttons_layout.addWidget(self.reset_btn, 0, 2, 1, 2)
         # TODO: link to method
         buttons_layout.addWidget(self.edit_btn, 1, 0, 1, 2)
