@@ -21,7 +21,7 @@ class SerialModel:
             print(f"Error connecting to {port}: {e}")
             return False
 
-    def disconnect(self):
+    def disconnect_serial(self):
         if self.serial_port and self.serial_port.is_open:
             self.serial_port.close()
             return True

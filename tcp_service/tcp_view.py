@@ -26,10 +26,14 @@ class TCPView(QWidget):
         self.tcp_close_btn.setEnabled(False)
         layout.addWidget(self.tcp_close_btn, 2, 1)
 
-        self.ip_address_combo.currentIndexChanged.connect(self.check_selections)
-        self.port_combo.currentIndexChanged.connect(self.check_selections)
+        self.ip_address_combo.currentIndexChanged.connect(self._check_selections)
+        self.port_combo.currentIndexChanged.connect(self._check_selections)
 
-    def check_selections(self):
+    def _check_selections(self):
+        """
+        Check the selections of the IP address combo box and port combo box.
+        Enables the tcp_connect_btn.
+        """
         if self.ip_address_combo.currentIndex() != -1 and self.port_combo.currentText() != "":
             self.tcp_connect_btn.setEnabled(True)
         else:

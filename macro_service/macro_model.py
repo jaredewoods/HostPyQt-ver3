@@ -3,6 +3,36 @@
 import os
 
 class MacroModel:
+    """
+    MacroModel Class
+    ~~~~~~~~~~~~~~~~
+    This class represents a macro model that can load and parse macro commands from a file.
+
+    Attributes:
+    -----------
+    macro_sequence : dict
+        A dictionary that maps unit numbers to a list of macro commands for each unit.
+
+    recommended_cycles : int
+        The recommended number of cycles to execute the macro commands.
+
+    Methods:
+    --------
+    __init__()
+        Initializes a new instance of the MacroModel class.
+
+    load_macro_file(macro_sequence_file_path)
+        Loads macro commands from a file and stores them in the macro_sequence attribute.
+
+    get_recommended_cycles()
+        Returns the recommended number of cycles.
+
+    _parse_macro_commands(lines)
+        Parses the given lines of macro commands and returns a dictionary representation.
+
+    get_macro_filenames(directory)
+        Returns a list of macro filenames in the specified directory.
+    """
     def __init__(self):
         self.macro_sequence = {}
         self.recommended_cycles = 0

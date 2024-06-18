@@ -3,6 +3,55 @@ from PyQt6.QtGui import QColor
 from PyQt6.QtCore import pyqtSlot, pyqtSignal, QObject
 
 class FlagStateManager(QObject):
+    """
+    Flag State Manager Class
+    ========================
+
+    This class manages the state of various flags used in the application. It provides methods to update and retrieve the status of flags.
+
+    Signals
+    -------
+    state_updated : PyQtSignal(str, bool, str)
+        Signal emitted when a flag is updated. The parameters are flag_name (str), value (bool), and condition (str).
+
+    Attributes
+    ----------
+    serial_connected : bool
+        Indicates whether the serial connection is active.
+    tcp_connected : bool
+        Indicates whether the TCP connection is active.
+    macro_ready_to_run : bool
+        Indicates whether the macro is ready to run.
+    macro_running : bool
+        Indicates whether the macro is currently running.
+    macro_stopped : bool
+        Indicates whether the macro is stopped.
+    macro_completed : bool
+        Indicates whether the macro is completed.
+    waiting_for_response : bool
+        Indicates whether the system is waiting for a response.
+    response_received : bool
+        Indicates whether a response has been received.
+    completion_received : bool
+        Indicates whether a completion signal has been received.
+    alarm_received : bool
+        Indicates whether an alarm has been received.
+    debug_mode : bool
+        Indicates whether debug mode is enabled.
+    display_timestamp : bool
+        Indicates whether timestamp should be displayed.
+
+    Methods
+    -------
+    __init__(signal_distributor: QObject)
+        Initializes the FlagStateManager. Connects the `state_changed` signal of `signal_distributor` to the `update_state` method.
+
+    update_state(flag_name: str, value: bool, condition: str)
+        Updates the state of a flag based on the given `flag_name`, `value`, and `condition`. Emits the `state_updated` signal with the updated flag information.
+
+    get_flag_status(flag_name: str) -> bool
+        Retrieves the status of the flag with the given `flag_name`. Raises an AttributeError if the flag does not exist.
+    """
     # This is used for the state manager view
     state_updated = pyqtSignal(str, bool, str)
 
@@ -51,6 +100,17 @@ class FlagStateManager(QObject):
             raise AttributeError(f"Flag '{flag_name}' does not exist.")
 
 class FlagStateView(QMainWindow):
+    """
+    A class representing a view for the flag state manager.
+
+    Attributes:
+        flag_state_manager (FlagStateManager): The flag state manager object.
+        table_widget (QTableWidget): The table widget to display the flag states.
+
+    Signals:
+        state_updated: Signal emitted when the state is updated.
+
+    """
     def __init__(self, flag_state_manager):
         super().__init__()
         self.flag_state_manager = flag_state_manager

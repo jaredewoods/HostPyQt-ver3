@@ -2,6 +2,18 @@
 from PyQt6.QtCore import QObject, pyqtSignal
 
 class SerialController(QObject):
+    """
+    Class responsible for communication between the model, view, and signal distributor.
+
+    Attributes:
+        model (Model): The model object.
+        view (View): The view object.
+        signal_distributor (SignalDistributor): The signal distributor object.
+
+    Signals:
+        log_message: A signal emitted to display log messages.
+
+    """
     log_message = pyqtSignal(str)  # Define a signal to emit log messages
 
     def __init__(self, model, view, signal_distributor):
@@ -9,35 +21,52 @@ class SerialController(QObject):
         self.model = model
         self.view = view
         self.signal_distributor = signal_distributor
-        self.populate_ports()
+        self._populate_ports()
 
         self.view.serial_connect_btn.clicked.connect(self.connect_serial)
         self.view.serial_close_btn.clicked.connect(self.disconnect_serial)
 
-    def populate_ports(self):
+    def _populate_ports(self):
+        """
+        MVC Populates the ports in the view.
+
+        """
         ports = self.model.get_available_ports()
         self.view.set_ports(ports)
 
     def connect_serial(self):
+        """
+        Responds directly to view.serial_connect_btn.
+        Connects to the serial port
+        Updates 'serial_connected' via signal_distributor
+        log_message
+
+        """
         port = self.view.serial_port_cbx.currentText()
         baudrate = int(self.view.baud_combo.currentText())
         success = self.model.connect(port, baudrate)
         if success:
-            self.update_connection_state(True, port)
+            self._update_connection_state(True)
             self.signal_distributor.state_changed.emit('serial_connected', True, 'validate')
             self.log_message.emit(f"Connected to {port} at {baudrate} baudrate")
         else:
-            self.update_connection_state(False, port)
+            self._update_connection_state(False)
             self.signal_distributor.state_changed.emit('serial_connected', False, 'validate')
             self.log_message.emit(f"Failed to connect to {port}")
 
     def disconnect_serial(self):
-        success = self.model.disconnect()
+        """
+        Responds directly to view.serial_close_btn.
+        Disconnects the serial port.
+        state_change
+        log_message
+        """
+        success = self.model.disconnect_serial()
         if success:
-            self.update_connection_state(False)
+            self._update_connection_state(False)
             self.signal_distributor.state_changed.emit('serial_connected', False, 'update')
             self.log_message.emit("Disconnected from serial port")
 
-    def update_connection_state(self, connected, port=None):
+    def _update_connection_state(self, connected):
         self.view.serial_connect_btn.setEnabled(not connected)
         self.view.serial_close_btn.setEnabled(connected)

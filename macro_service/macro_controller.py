@@ -4,6 +4,15 @@ import os
 from PyQt6.QtCore import QObject
 
 class MacroController(QObject):
+    """The MacroController class handles the logic for loading, parsing, and displaying macro commands.
+
+    Args:
+        model (Model): The model object.
+        view (View): The view object.
+        command_view (CommandView): The command view object.
+        signal_distributor (SignalDistributor): The signal distributor object.
+        flag_state_manager (FlagStateManager): The flag state manager object.
+    """
     def __init__(self, model, view, command_view, signal_distributor, flag_state_manager):
         super().__init__()
         self.view = view

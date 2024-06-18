@@ -2,6 +2,27 @@
 from PyQt6.QtWidgets import QWidget, QGridLayout, QLabel, QComboBox, QPushButton, QLineEdit
 
 class MacroView(QWidget):
+    """
+    MacroView Class
+
+    This class represents a view for macro sequence selection and control.
+
+    Constructor:
+        MacroView()
+
+    Methods:
+        - populate_macro_select_combo(macro_files)
+            - Populates the macro sequence selection combobox with the given macro files.
+            - Parameters:
+                - macro_files: List[str] - A list of macro file names.
+            - Returns: None
+
+        - update_total_cycles(cycles)
+            - Updates the total cycles label with the given cycles value.
+            - Parameters:
+                - cycles: int - The total number of cycles.
+            - Returns: None
+    """
     def __init__(self):
         super().__init__()
         layout = QGridLayout()
