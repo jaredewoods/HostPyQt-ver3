@@ -112,7 +112,7 @@ class CommandView(QWidget):
         self.clear_btn = QPushButton("Clear Command")
 
         buttons_layout.addWidget(self.single_shot_btn, 0, 0, 1, 2)
-        self.single_shot_btn.clicked.connect(self.send_display_command)
+        # self.single_shot_btn.clicked.connect(self.send_display_command)
         buttons_layout.addWidget(self.reset_btn, 0, 2, 1, 2)
         # TODO: link to method
         buttons_layout.addWidget(self.edit_btn, 1, 0, 1, 2)
