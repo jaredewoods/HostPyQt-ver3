@@ -1,11 +1,10 @@
 # command_controller.py
 
 class CommandController:
-    def __init__(self, model, view, serial_controller, signal_distributor):
+    def __init__(self, model, view, serial_controller):
         self.model = model
         self.view = view
         self.serial_controller = serial_controller
-        self.signal_distributor = signal_distributor
         # Connect the view's signals to the controller's methods
         self.view.start_bit_checkbox.toggled.connect(self.update_model)
         self.view.checksum_checkbox.toggled.connect(self.update_model)

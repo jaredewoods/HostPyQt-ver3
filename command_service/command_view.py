@@ -5,6 +5,7 @@ from resources.command_dictionary import commands
 
 class CommandView(QWidget):
     itemSelected = pyqtSignal()  # Signal to emit when an item is selected
+    single_shot_btn_clicked = pyqtSignal()
 
     def __init__(self, btn_preset1_name, btn_preset2_name, btn_preset3_name, btn_preset4_name):
         super().__init__()
@@ -112,18 +113,18 @@ class CommandView(QWidget):
         self.clear_btn = QPushButton("Clear Command")
 
         buttons_layout.addWidget(self.single_shot_btn, 0, 0, 1, 2)
-        # self.single_shot_btn.clicked.connect(self.send_display_command)
+        self.single_shot_btn.clicked.connect(self.on_single_shot_btn_clicked)
         buttons_layout.addWidget(self.reset_btn, 0, 2, 1, 2)
         # TODO: link to method
         buttons_layout.addWidget(self.edit_btn, 1, 0, 1, 2)
         self.edit_btn.clicked.connect(self.edit_macro_sequence)
         buttons_layout.addWidget(self.clear_btn, 1, 2, 1, 2)
-        self.single_shot_btn.clicked.connect(self.emit_single_shot_btn_clicked)
+        self.clear_btn.clicked.connect(self.clear_fields)
 
         self.macro_display_layout.addLayout(buttons_layout)
         self.main_layout.addLayout(self.macro_display_layout)
 
-    def emit_single_shot_btn_clicked(self):
+    def on_single_shot_btn_clicked(self):
         self.single_shot_btn_clicked.emit()
 
     def emit_item_selected(self):
