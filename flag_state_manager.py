@@ -28,7 +28,7 @@ class FlagStateManager(QObject):
         Indicates whether the macro is stopped.
     macro_completed : bool
         Indicates whether the macro is completed.
-    waiting_for_response : bool
+    waiting_for_completion : bool
         Indicates whether the system is waiting for a response.
     response_received : bool
         Indicates whether a response has been received.
@@ -65,7 +65,7 @@ class FlagStateManager(QObject):
         self.macro_running = False
         self.macro_stopped = False
         self.macro_completed = False
-        self.waiting_for_response = False
+        self.waiting_for_completion = False
         self.response_received = False
         self.completion_received = False
         self.alarm_received = False
@@ -128,7 +128,7 @@ class FlagStateView(QMainWindow):
     def populate_table(self):
         flags = [
             "serial_connected", "tcp_connected", "macro_ready_to_run", "macro_running",
-            "macro_stopped", "macro_completed", "waiting_for_response", "response_received",
+            "macro_stopped", "macro_completed", "waiting_for_completion", "response_received",
             "completion_received", "alarm_received", "debug_mode", "display_timestamp"
         ]
 

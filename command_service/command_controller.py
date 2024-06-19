@@ -1,10 +1,11 @@
 # command_controller.py
 
 class CommandController:
-    def __init__(self, model, view):
+    def __init__(self, model, view, serial_controller, signal_distributor):
         self.model = model
         self.view = view
-
+        self.serial_controller = serial_controller
+        self.signal_distributor = signal_distributor
         # Connect the view's signals to the controller's methods
         self.view.start_bit_checkbox.toggled.connect(self.update_model)
         self.view.checksum_checkbox.toggled.connect(self.update_model)
@@ -12,6 +13,7 @@ class CommandController:
         self.view.dropdown_unit_no.currentTextChanged.connect(self.update_model)
         self.view.dropdown_code.currentTextChanged.connect(self.update_model)
         self.view.entry_parameters.textChanged.connect(self.update_model)
+        self.view.single_shot_btn_clicked.connect(self.send_command)
         self.update_view()
 
     def update_model(self):
@@ -32,3 +34,7 @@ class CommandController:
 
     def handle_text_changed(self):
         self.update_view()
+
+    def send_command(self):
+        command = self.model.construct_command()
+        self.serial_controller.send_command(command)

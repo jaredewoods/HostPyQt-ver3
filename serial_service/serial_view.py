@@ -46,7 +46,6 @@ class SerialView(QWidget):
 
         If both the serial port and baud rate combo boxes have selected values,
         the serial connect button will be enabled. Otherwise, it will be disabled.
-
         """
         if self.serial_port_cbx.currentIndex() != -1 and self.baud_combo.currentText() != "":
             self.serial_connect_btn.setEnabled(True)
@@ -55,9 +54,10 @@ class SerialView(QWidget):
 
     def set_ports(self, ports):
         """
-        Param ports:
+        Sets the available serial ports in the combo box.
 
-        A list of serial ports to be set.
+        Parameters:
+            ports (list): A list of serial ports to be set.
         """
         self.serial_port_cbx.clear()
         self.serial_port_cbx.addItems(ports)

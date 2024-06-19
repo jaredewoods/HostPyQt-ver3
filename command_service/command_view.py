@@ -118,10 +118,13 @@ class CommandView(QWidget):
         buttons_layout.addWidget(self.edit_btn, 1, 0, 1, 2)
         self.edit_btn.clicked.connect(self.edit_macro_sequence)
         buttons_layout.addWidget(self.clear_btn, 1, 2, 1, 2)
-        self.clear_btn.clicked.connect(self.clear_fields)
+        self.single_shot_btn.clicked.connect(self.emit_single_shot_btn_clicked)
 
         self.macro_display_layout.addLayout(buttons_layout)
         self.main_layout.addLayout(self.macro_display_layout)
+
+    def emit_single_shot_btn_clicked(self):
+        self.single_shot_btn_clicked.emit()
 
     def emit_item_selected(self):
         self.itemSelected.emit()

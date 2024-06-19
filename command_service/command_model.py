@@ -1,4 +1,4 @@
-# command_compiler_model.py
+# command_model.py
 
 class CommandModel:
     def __init__(self):

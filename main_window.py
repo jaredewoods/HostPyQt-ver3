@@ -65,7 +65,7 @@ class MainWindow(QMainWindow):
 
         # Initialize command_compiler_service
         self.command_model = CommandModel()
-        self.command_controller = CommandController(self.command_model, self.command_view)
+        self.command_controller = CommandController(self.command_model, self.command_view, self.serial_controller, self.signal_distributor)
 
         # Initialize status_view
         self.status_view = StatusView()

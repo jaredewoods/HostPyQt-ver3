@@ -25,6 +25,8 @@ class SerialController(QObject):
 
         self.view.serial_connect_btn.clicked.connect(self.connect_serial)
         self.view.serial_close_btn.clicked.connect(self.disconnect_serial)
+        self.model.data_received.connect(self.on_data_received)
+        self.model.error_occurred.connect(self.on_error_occurred)
 
     def _populate_ports(self):
         """
@@ -67,6 +69,18 @@ class SerialController(QObject):
             self.signal_distributor.state_changed.emit('serial_connected', False, 'update')
             self.log_message.emit("Disconnected from serial port")
 
+    def send_command(self, command):
+        """
+        Sends a command through the serial port.
+        """
+        self.model.send_command(command)
+
     def _update_connection_state(self, connected):
         self.view.serial_connect_btn.setEnabled(not connected)
         self.view.serial_close_btn.setEnabled(connected)
+
+    def on_data_received(self, data):
+        print(f"Data received: {data}")
+
+    def on_error_occurred(self, error):
+        print(f"Error occurred: {error}")
