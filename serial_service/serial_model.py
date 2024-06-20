@@ -16,7 +16,6 @@ class SerialModel(QObject):
     data_received = pyqtSignal(str)
     error_occurred = pyqtSignal(str)
     log_message = pyqtSignal(str)
-    timeout_occurred = pyqtSignal(str)
     valid_response_received = pyqtSignal(str)  # Signal for valid response
 
     def __init__(self):
@@ -38,7 +37,6 @@ class SerialModel(QObject):
             self.reader_thread.data_received.connect(self.data_received.emit)
             self.reader_thread.error_occurred.connect(self.error_occurred.emit)
             self.reader_thread.log_message.connect(self.log_message.emit)
-            self.reader_thread.timeout_occurred.connect(self.timeout_occurred.emit)
             self.reader_thread.valid_response_received.connect(self.valid_response_received.emit)
             self.reader_thread.start()
             self.log_message.emit(f"Connected to {port} at {baudrate} baudrate")
@@ -58,13 +56,12 @@ class SerialModel(QObject):
         self.error_occurred.emit("Failed to disconnect: Serial port not open")
         return False
 
-    def _send_command(self, command):
+    def write_command(self, command):
         if self.serial_port and self.serial_port.is_open:
             try:
                 self.serial_port.write(command.encode())
                 self.log_message.emit(f"Command written to serial port: {command}")
                 self.reader_thread.expecting_response = True
-                self.reader_thread.timer.start(self.reader_thread.timeout * 1000)  # Start the response timer
             except serial.SerialException as e:
                 self.error_occurred.emit(f"Failed to send command: {e}")
         else:

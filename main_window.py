@@ -51,7 +51,6 @@ class MainWindow(QMainWindow):
         self.serial_view = SerialView()
         self.serial_controller = SerialController(self.serial_model, self.serial_view, self.signal_distributor)
         self.serial_controller.log_message.connect(self.update_log_display)
-        self.serial_controller.timeout_occurred.connect(self.update_log_display)  # Connect the timeout signal
 
         self.tcp_model = TCPModel()
         self.tcp_view = TCPView()

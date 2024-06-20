@@ -3,7 +3,6 @@ from PyQt6.QtCore import QObject, pyqtSignal
 
 class SerialController(QObject):
     log_message = pyqtSignal(str)
-    timeout_occurred = pyqtSignal(str)  # Define a signal for timeout
 
     def __init__(self, model, view, signal_distributor):
         super().__init__()
@@ -19,7 +18,6 @@ class SerialController(QObject):
         self.model.data_received.connect(self.log_message.emit)
         self.model.error_occurred.connect(self.log_message.emit)
         self.model.log_message.connect(self.log_message.emit)
-        self.model.timeout_occurred.connect(self.timeout_occurred.emit)  # Pass the timeout signal
 
     def _populate_ports(self):
         """
@@ -66,7 +64,7 @@ class SerialController(QObject):
         """
         Sends a command through the serial port.
         """
-        self.model._send_command(command)
+        self.model.write_command(command)
 
     def _update_connection_state(self, connected):
         self.view.serial_connect_btn.setEnabled(not connected)
