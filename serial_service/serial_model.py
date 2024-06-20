@@ -58,10 +58,12 @@ class SerialModel(QObject):
         if self.serial_port and self.serial_port.is_open:
             try:
                 self.serial_port.write(command.encode())
-                self.log_message.emit(f"Command written to serial port: {command}")
+                cleaned_command = command.replace('\r', '').replace('\n', '')
+                self.log_message.emit(f"Command written to serial port: {cleaned_command}")
                 self.reader_thread.expecting_response = True
             except serial.SerialException as e:
                 self.error_occurred.emit(f"Failed to send command: {e}")
         else:
             self.error_occurred.emit("Failed to send command: Serial port not open")
+
 
