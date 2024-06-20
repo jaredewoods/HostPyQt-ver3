@@ -2,19 +2,8 @@
 from PyQt6.QtCore import QObject, pyqtSignal
 
 class SerialController(QObject):
-    """
-    Class responsible for communication between the model, view, and signal distributor.
-
-    Attributes:
-        model (Model): The model object.
-        view (View): The view object.
-        signal_distributor (SignalDistributor): The signal distributor object.
-
-    Signals:
-        log_message: A signal emitted to display log messages.
-
-    """
-    log_message = pyqtSignal(str)  # Define a signal to emit log messages
+    log_message = pyqtSignal(str)
+    timeout_occurred = pyqtSignal(str)  # Define a signal for timeout
 
     def __init__(self, model, view, signal_distributor):
         super().__init__()
@@ -25,9 +14,12 @@ class SerialController(QObject):
 
         self.view.serial_connect_btn.clicked.connect(self.connect_serial)
         self.view.serial_close_btn.clicked.connect(self.disconnect_serial)
-        self.model.data_received.connect(self.on_data_received)
-        self.model.error_occurred.connect(self.on_error_occurred)
+
+        # Connect model signals to the controller's signals
+        self.model.data_received.connect(self.log_message.emit)
+        self.model.error_occurred.connect(self.log_message.emit)
         self.model.log_message.connect(self.log_message.emit)
+        self.model.timeout_occurred.connect(self.timeout_occurred.emit)  # Pass the timeout signal
 
     def _populate_ports(self):
         """

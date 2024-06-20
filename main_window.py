@@ -50,7 +50,8 @@ class MainWindow(QMainWindow):
         self.serial_model = SerialModel()
         self.serial_view = SerialView()
         self.serial_controller = SerialController(self.serial_model, self.serial_view, self.signal_distributor)
-        self.serial_controller.log_message.connect(self.update_log_display)  # Connect the log_message signal to the slot
+        self.serial_controller.log_message.connect(self.update_log_display)
+        self.serial_controller.timeout_occurred.connect(self.update_log_display)  # Connect the timeout signal
 
         self.tcp_model = TCPModel()
         self.tcp_view = TCPView()
@@ -65,6 +66,7 @@ class MainWindow(QMainWindow):
         # Initialize command_compiler_service
         self.command_model = CommandModel()
         self.command_controller = CommandController(self.command_model, self.command_view, self.serial_controller)
+        self.command_controller.log_message.connect(self.update_log_display)  # Connect the command controller log messages to the main window
 
         # Initialize status_view
         self.status_view = StatusView()

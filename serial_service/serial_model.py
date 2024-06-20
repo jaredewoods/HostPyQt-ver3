@@ -2,7 +2,8 @@
 import serial
 from serial.tools import list_ports
 from PyQt6.QtCore import QObject, pyqtSignal
-# TODO: fix delay and command sent logging
+from serial_service.serial_reader import SerialReader
+
 class SerialModel(QObject):
     """
     Model responsible for managing the serial connection and communication.
@@ -15,10 +16,12 @@ class SerialModel(QObject):
     data_received = pyqtSignal(str)
     error_occurred = pyqtSignal(str)
     log_message = pyqtSignal(str)
+    timeout_occurred = pyqtSignal(str)
 
     def __init__(self):
         super().__init__()
         self.serial_port = None
+        self.reader_thread = None
 
     @staticmethod
     def get_available_ports():
@@ -30,6 +33,12 @@ class SerialModel(QObject):
     def connect(self, port, baudrate=9600):
         try:
             self.serial_port = serial.Serial(port, baudrate, timeout=1)
+            self.reader_thread = SerialReader(self.serial_port)
+            self.reader_thread.data_received.connect(self.data_received.emit)
+            self.reader_thread.error_occurred.connect(self.error_occurred.emit)
+            self.reader_thread.log_message.connect(self.log_message.emit)
+            self.reader_thread.timeout_occurred.connect(self.timeout_occurred.emit)
+            self.reader_thread.start()
             self.log_message.emit(f"Connected to {port} at {baudrate} baudrate")
             return True
         except serial.SerialException as e:
@@ -37,6 +46,9 @@ class SerialModel(QObject):
             return False
 
     def disconnect_serial(self):
+        if self.reader_thread:
+            self.reader_thread.stop()
+            self.reader_thread = None
         if self.serial_port and self.serial_port.is_open:
             self.serial_port.close()
             self.log_message.emit("Disconnected from serial port")
@@ -46,30 +58,11 @@ class SerialModel(QObject):
 
     def send_command(self, command):
         if self.serial_port and self.serial_port.is_open:
-            print(f"Command sent: {command}")
-            self.log_message.emit(f"Command sent: {command}")
             try:
                 self.serial_port.write(command.encode())
-                self.read_response()
+                self.log_message.emit(f"Command sent: {command}")
+                self.reader_thread.timer.start(self.reader_thread.timeout * 1000)  # Start the response timer
             except serial.SerialException as e:
                 self.error_occurred.emit(f"Failed to send command: {e}")
         else:
             self.error_occurred.emit("Failed to send command: Serial port not open")
-
-    def read_response(self):
-        if self.serial_port and self.serial_port.is_open:
-            try:
-                self.log_message.emit("Waiting for response...")
-                response = self.serial_port.read_until(b'\r')
-                response_str = response.decode().strip()
-                if response_str:
-                    self.data_received.emit(response_str)
-                    self.log_message.emit(f"Response received: {response_str}")
-                else:
-                    self.error_occurred.emit("Timeout: No response received.")
-                    self.log_message.emit("Timeout: No response received.")
-            except serial.SerialException as e:
-                self.error_occurred.emit(f"Failed to read response: {e}")
-                self.log_message.emit(f"Failed to read response: {e}")
-        else:
-            self.error_occurred.emit("Failed to read response: Serial port not open")

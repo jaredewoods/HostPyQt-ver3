@@ -1,7 +1,11 @@
 # command_controller.py
+from PyQt6.QtCore import QObject, pyqtSignal
 
-class CommandController:
+class CommandController(QObject):
+    log_message = pyqtSignal(str)  # Define a signal to emit log messages
+
     def __init__(self, model, view, serial_controller):
+        super().__init__()
         self.model = model
         self.view = view
         self.serial_controller = serial_controller
@@ -36,4 +40,5 @@ class CommandController:
 
     def send_command(self):
         command = self.model.construct_command()
+        print(f"Command sent: {command}")
         self.serial_controller.send_command(command)
