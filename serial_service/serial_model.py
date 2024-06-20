@@ -61,7 +61,6 @@ class SerialModel(QObject):
     def _send_command(self, command):
         if self.serial_port and self.serial_port.is_open:
             try:
-                self.log_message.emit(f"Writing command to serial port: {command}")
                 self.serial_port.write(command.encode())
                 self.log_message.emit(f"Command written to serial port: {command}")
                 self.reader_thread.expecting_response = True
