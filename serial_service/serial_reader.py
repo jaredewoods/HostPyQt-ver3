@@ -6,7 +6,6 @@ class SerialReader(QThread):
     data_received = pyqtSignal(str)
     error_occurred = pyqtSignal(str)
     log_message = pyqtSignal(str)
-    valid_response_received = pyqtSignal(str)  # Signal for valid response
 
     def __init__(self, serial_port):
         super().__init__()
@@ -23,7 +22,6 @@ class SerialReader(QThread):
                     if data:
                         # self.log_message.emit(f"Raw data received: {data}")
                         if self.validate_response(data):
-                            self.valid_response_received.emit(data)
                             self.expecting_response = False
                             self.log_message.emit(f"Valid data received: {data}")
                         else:
