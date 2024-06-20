@@ -23,7 +23,7 @@ class SerialReader(QThread):
                 if self.serial_port.in_waiting:
                     data = self.serial_port.readline().decode('utf-8').strip()
                     if data:
-                        self.data_received.emit(data)
+                        self.data_received.emit(f"Received: {data}")
                         self.timer.stop()  # Stop the timer when data is received
                 else:
                     if not self.timer.isActive():
