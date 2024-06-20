@@ -19,7 +19,6 @@ from command_service.command_controller import CommandController
 from signal_distributor import SignalDistributor
 from flag_state_manager import FlagStateManager, FlagStateView
 
-
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()

@@ -27,6 +27,7 @@ class SerialController(QObject):
         self.view.serial_close_btn.clicked.connect(self.disconnect_serial)
         self.model.data_received.connect(self.on_data_received)
         self.model.error_occurred.connect(self.on_error_occurred)
+        self.model.log_message.connect(self.log_message.emit)
 
     def _populate_ports(self):
         """
