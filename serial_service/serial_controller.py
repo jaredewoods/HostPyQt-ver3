@@ -66,7 +66,7 @@ class SerialController(QObject):
         """
         Sends a command through the serial port.
         """
-        self.model.send_command(command)
+        self.model._send_command(command)
 
     def _update_connection_state(self, connected):
         self.view.serial_connect_btn.setEnabled(not connected)
