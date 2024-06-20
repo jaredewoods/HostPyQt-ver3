@@ -1,5 +1,4 @@
 # NXC100_simulator.py
-
 import tkinter as tk
 from tkinter import ttk, scrolledtext
 import serial
