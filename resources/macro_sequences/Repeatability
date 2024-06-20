@@ -1,6 +1,8 @@
 SUGGESTED_CYCLES: 105
 [unit1 start
+unit1 end]
+[unit2 start
 MTRSG100AL
 MALN1009000
 WAIT3000
-unit1 end]
+unit2 end]
