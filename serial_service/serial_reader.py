@@ -6,6 +6,7 @@ class SerialReader(QThread):
     data_received = pyqtSignal(str)
     error_occurred = pyqtSignal(str)
     log_message = pyqtSignal(str)
+    alarm_signal = pyqtSignal(str, str)
     state_changed = pyqtSignal()
 
     def __init__(self, serial_port, signal_distributor, flag_state_manager):
@@ -58,6 +59,7 @@ class SerialReader(QThread):
                 self.error_occurred.emit(f"Unexpected error: {e}")
                 self.running = False
         self.log_message.emit("SerialReader thread stopped")
+
     def stop(self):
         self.running = False
         self.wait()
@@ -74,6 +76,13 @@ class SerialReader(QThread):
                 self.signal_distributor.state_changed.emit('waiting_for_completion', True, 'update')
                 self.log_message.emit("Emitted state_changed signal: waiting_for_completion set to True")
                 return True
+            else:
+                self.signal_distributor.state_changed.emit('alarm_received', False, 'update')
+                alarm_code = response[4:8]
+                subcode = response[9:12]
+                self.alarm_signal.emit(alarm_code, subcode)
+                return False
+
         elif response[0] == '$':
             if response[4:8] == '0000':
                 self.signal_distributor.state_changed.emit('waiting_for_completion', False, 'update')
@@ -82,6 +91,12 @@ class SerialReader(QThread):
                     self.signal_distributor.state_changed.emit('macro_ready_to_run', True, 'update')
                 self.log_message.emit("Emitted state_changed signal: waiting_for_completion set to False")
                 return True
+            else:
+                self.signal_distributor.state_changed.emit('alarm_received', True, 'update')
+                alarm_code = response[4:8]
+                subcode = response[9:12]
+                self.alarm_signal.emit(alarm_code, subcode)
+                return False
 
         self.log_message.emit(f"Invalid response: {response}")
         return False

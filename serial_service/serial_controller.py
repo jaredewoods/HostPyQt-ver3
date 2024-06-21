@@ -3,6 +3,7 @@ from PyQt6.QtCore import QObject, pyqtSignal
 
 class SerialController(QObject):
     log_message = pyqtSignal(str)
+    alarm_signal = pyqtSignal(str, str)
 
     def __init__(self, model, view, signal_distributor, flag_state_manager):
         super().__init__()
@@ -22,6 +23,7 @@ class SerialController(QObject):
         self.model.data_received.connect(self.log_message.emit)
         self.model.error_occurred.connect(self.log_message.emit)
         self.model.log_message.connect(self.log_message.emit)
+        self.model.alarm_signal.connect(self.alarm_signal.emit)
 
     def _populate_ports(self):
         """

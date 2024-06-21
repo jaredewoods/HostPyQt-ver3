@@ -17,6 +17,7 @@ class SerialModel(QObject):
     data_received = pyqtSignal(str)
     error_occurred = pyqtSignal(str)
     log_message = pyqtSignal(str)
+    alarm_signal = pyqtSignal(str, str)
 
     def __init__(self, signal_distributor, flag_state_manager):
         super().__init__()
@@ -45,6 +46,7 @@ class SerialModel(QObject):
             self.reader_thread.error_occurred.connect(self.error_occurred.emit)
             # should this be outside the scope?vvvv
             self.reader_thread.log_message.connect(self.log_message.emit)
+            self.reader_thread.alarm_signal.connect(self.alarm_signal.emit)
             self.reader_thread.start()
             self.log_message.emit(f"Connected to {port} at {baudrate} baudrate")
             return True

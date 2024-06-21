@@ -51,6 +51,7 @@ class MainWindow(QMainWindow):
         self.serial_view = SerialView()
         self.serial_controller = SerialController(self.serial_model, self.serial_view, self.signal_distributor, self.flag_state_manager)
         self.serial_controller.log_message.connect(self.update_log_display)
+        self.serial_controller.alarm_signal.connect(self.show_alarm_messagebox)
 
         self.tcp_model = TCPModel()
         self.tcp_view = TCPView()
@@ -142,7 +143,6 @@ class MainWindow(QMainWindow):
 
     def handle_alarm_received(self, value):
         self.log_display.append(f"Alarm received status: {value}")
-        # Add your handling code here
 
     def handle_debug_mode(self, value):
         self.log_display.append(f"Debug mode status: {value}")
@@ -154,6 +154,11 @@ class MainWindow(QMainWindow):
 
     def update_log_display(self, message):
         self.log_display.append(message)
+
+    def show_alarm_messagebox(self, alarm_code, subcode):
+        print("attempting to open alarm message box")
+        from resources.alarm_message_box import AlarmMessageBox
+        AlarmMessageBox.show_alarm_messagebox(alarm_code, subcode)
 
 
 if __name__ == "__main__":
