@@ -131,15 +131,12 @@ class MainWindow(QMainWindow):
 
     def handle_waiting_for_response(self, value):
         self.log_display.append(f"Waiting for response status: {value}")
-        # Add your handling code here
 
     def handle_response_received(self, value):
         self.log_display.append(f"Response received status: {value}")
-        # Add your handling code here
 
     def handle_completion_received(self, value):
         self.log_display.append(f"Completion received status: {value}")
-        # Add your handling code here
 
     def handle_alarm_received(self, value):
         self.log_display.append(f"Alarm received status: {value}")
@@ -155,7 +152,8 @@ class MainWindow(QMainWindow):
     def update_log_display(self, message):
         self.log_display.append(message)
 
-    def show_alarm_messagebox(self, alarm_code, subcode):
+    @staticmethod
+    def show_alarm_messagebox(alarm_code, subcode):
         print("attempting to open alarm message box")
         from resources.alarm_message_box import AlarmMessageBox
         AlarmMessageBox.show_alarm_messagebox(alarm_code, subcode)
