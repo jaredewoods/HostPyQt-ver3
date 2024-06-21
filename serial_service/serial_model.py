@@ -35,7 +35,11 @@ class SerialModel(QObject):
 
     def connect(self, port, baudrate=9600):
         try:
-            self.serial_port = serial.Serial(port, baudrate)
+            self.serial_port = serial.Serial(port,
+                                             baudrate,
+                                             parity=serial.PARITY_NONE,
+                                             stopbits=serial.STOPBITS_ONE,
+                                             bytesize=serial.EIGHTBITS,)
             self.reader_thread = SerialReader(self.serial_port, self.signal_distributor, self.flag_state_manager)
             self.reader_thread.data_received.connect(self.data_received.emit)
             self.reader_thread.error_occurred.connect(self.error_occurred.emit)
