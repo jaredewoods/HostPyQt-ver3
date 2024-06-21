@@ -64,7 +64,10 @@ class SerialModel(QObject):
                 self.serial_port.write(command.encode())
                 cleaned_command = command.replace('\r', '').replace('\n', '')
                 self.log_message.emit(f"Command written to serial port: {cleaned_command}")
+                # I believe this is redundant, keep the state_changed
                 self.reader_thread.expecting_response = True
+                self.signal_distributor.state_changed.emit('completion_received', False, 'update')
+                self.signal_distributor.state_changed.emit('response_received', False, 'update')
             except serial.SerialException as e:
                 self.error_occurred.emit(f"Failed to send command: {e}")
         else:
