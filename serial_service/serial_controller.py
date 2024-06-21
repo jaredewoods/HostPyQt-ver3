@@ -10,7 +10,8 @@ class SerialController(QObject):
         self.view = view
         self.signal_distributor = signal_distributor
         self.flag_state_manager = flag_state_manager
-        print("SerialController initialized")
+        # TODO this is very incorrect just trying to reset
+        # self.command_view.log_message.connect(self.log_message.emit)
 
         self._populate_ports()
 

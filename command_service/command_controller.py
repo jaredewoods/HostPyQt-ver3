@@ -4,11 +4,12 @@ from PyQt6.QtCore import QObject, pyqtSignal
 class CommandController(QObject):
     log_message = pyqtSignal(str)  # Define a signal to emit log messages
 
-    def __init__(self, model, view, serial_controller):
+    def __init__(self, model, view, serial_controller, signal_distributor):
         super().__init__()
         self.model = model
         self.view = view
         self.serial_controller = serial_controller
+        self.signal_distributor = signal_distributor
         # Connect the view's signals to the controller's methods
         self.view.start_bit_checkbox.toggled.connect(self.update_model)
         self.view.checksum_checkbox.toggled.connect(self.update_model)
@@ -16,7 +17,7 @@ class CommandController(QObject):
         self.view.dropdown_unit_no.currentTextChanged.connect(self.update_model)
         self.view.dropdown_code.currentTextChanged.connect(self.update_model)
         self.view.entry_parameters.textChanged.connect(self.update_model)
-        self.view.single_shot_btn_clicked.connect(self.send_command)
+        self.view.single_shot_btn_clicked.connect(self.send_single_shot)
         self.update_view()
 
     def update_model(self):
@@ -37,6 +38,10 @@ class CommandController(QObject):
 
     def handle_text_changed(self):
         self.update_view()
+
+    def send_single_shot(self):
+        self.send_command()
+        self.signal_distributor.state_changed.emit('macro_ready_to_run', False, 'update')
 
     def send_command(self):
         command = self.model.construct_command()

@@ -6,6 +6,8 @@ from resources.command_dictionary import commands
 class CommandView(QWidget):
     itemSelected = pyqtSignal()  # Signal to emit when an item is selected
     single_shot_btn_clicked = pyqtSignal()
+    reset_btn_clicked = pyqtSignal()
+    log_message = pyqtSignal()
 
     def __init__(self, btn_preset1_name, btn_preset2_name, btn_preset3_name, btn_preset4_name):
         super().__init__()
@@ -109,13 +111,13 @@ class CommandView(QWidget):
         buttons_layout = QGridLayout()
         self.single_shot_btn = QPushButton("Single Shot")
         self.reset_btn = QPushButton("Reset Sequence")
-        self.edit_btn = QPushButton("Edit Macro")
+        self.edit_btn = QPushButton("Select Step")
         self.clear_btn = QPushButton("Clear Command")
 
         buttons_layout.addWidget(self.single_shot_btn, 0, 0, 1, 2)
         self.single_shot_btn.clicked.connect(self.on_single_shot_btn_clicked)
         buttons_layout.addWidget(self.reset_btn, 0, 2, 1, 2)
-        # TODO: link to method
+        self.reset_btn.clicked.connect(self.reset_macro)
         buttons_layout.addWidget(self.edit_btn, 1, 0, 1, 2)
         self.edit_btn.clicked.connect(self.edit_macro_sequence)
         buttons_layout.addWidget(self.clear_btn, 1, 2, 1, 2)
@@ -138,7 +140,7 @@ class CommandView(QWidget):
     def edit_macro_sequence(self):
         self.is_editing = not self.is_editing
         self.macro_sequence_display.setDisabled(not self.is_editing)
-        self.edit_btn.setText("Commit" if self.is_editing else "Edit")
+        self.edit_btn.setText("Commit" if self.is_editing else "Select Step")
 
     def set_command(self, command):
         print(f"Command set: {command}")  # Debug statement
@@ -166,3 +168,18 @@ class CommandView(QWidget):
         self.set_unit_number("")
         self.set_code("")
         self.set_parameters("")
+        # self.log_message.emit("Fields have been cleared")
+
+    def reset_flags(self):
+        print("command view needs signal_distributor")
+        # self.signal_distributor.state_changed.emit('waiting_for_completion', False, 'update')
+        # self.signal_distributor.state_changed.emit('macro_running', False, 'update')
+        # self.signal_distributor.state_changed.emit('response_received', False, 'update')
+        # self.signal_distributor.state_changed.emit('completion_received', False, 'update')
+        # self.log_message.emit("Flags have been reset")
+
+    def reset_macro(self):
+        self.clear_fields()
+        self.reset_flags()
+
+

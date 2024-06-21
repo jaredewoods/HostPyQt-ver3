@@ -64,7 +64,7 @@ class MainWindow(QMainWindow):
 
         # Initialize command_compiler_service
         self.command_model = CommandModel()
-        self.command_controller = CommandController(self.command_model, self.command_view, self.serial_controller)
+        self.command_controller = CommandController(self.command_model, self.command_view, self.serial_controller, self.signal_distributor)
         self.command_controller.log_message.connect(self.update_log_display)  # Connect the command controller log messages to the main window
 
         # Initialize status_view

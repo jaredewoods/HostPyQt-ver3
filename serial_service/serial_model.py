@@ -4,6 +4,7 @@ from serial.tools import list_ports
 from PyQt6.QtCore import QObject, pyqtSignal
 from serial_service.serial_reader import SerialReader
 
+
 class SerialModel(QObject):
     """
     Model responsible for managing the serial connection and communication.
@@ -68,6 +69,7 @@ class SerialModel(QObject):
                 self.reader_thread.expecting_response = True
                 self.signal_distributor.state_changed.emit('completion_received', False, 'update')
                 self.signal_distributor.state_changed.emit('response_received', False, 'update')
+
             except serial.SerialException as e:
                 self.error_occurred.emit(f"Failed to send command: {e}")
         else:
