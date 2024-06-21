@@ -17,10 +17,13 @@ class SerialModel(QObject):
     error_occurred = pyqtSignal(str)
     log_message = pyqtSignal(str)
 
-    def __init__(self):
+    def __init__(self, signal_distributor, flag_state_manager):
         super().__init__()
         self.serial_port = None
         self.reader_thread = None
+        self.signal_distributor = signal_distributor
+        self.flag_state_manager = flag_state_manager
+        print("SerialModel initialized")
 
     @staticmethod
     def get_available_ports():
@@ -32,9 +35,10 @@ class SerialModel(QObject):
     def connect(self, port, baudrate=9600):
         try:
             self.serial_port = serial.Serial(port, baudrate)
-            self.reader_thread = SerialReader(self.serial_port)
+            self.reader_thread = SerialReader(self.serial_port, self.signal_distributor, self.flag_state_manager)
             self.reader_thread.data_received.connect(self.data_received.emit)
             self.reader_thread.error_occurred.connect(self.error_occurred.emit)
+            # should this be outside the scope?vvvv
             self.reader_thread.log_message.connect(self.log_message.emit)
             self.reader_thread.start()
             self.log_message.emit(f"Connected to {port} at {baudrate} baudrate")

@@ -4,11 +4,14 @@ from PyQt6.QtCore import QObject, pyqtSignal
 class SerialController(QObject):
     log_message = pyqtSignal(str)
 
-    def __init__(self, model, view, signal_distributor):
+    def __init__(self, model, view, signal_distributor, flag_state_manager):
         super().__init__()
         self.model = model
         self.view = view
         self.signal_distributor = signal_distributor
+        self.flag_state_manager = flag_state_manager
+        print("SerialController initialized")
+
         self._populate_ports()
 
         self.view.serial_connect_btn.clicked.connect(self.connect_serial)

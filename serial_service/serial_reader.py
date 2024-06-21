@@ -6,10 +6,13 @@ class SerialReader(QThread):
     data_received = pyqtSignal(str)
     error_occurred = pyqtSignal(str)
     log_message = pyqtSignal(str)
+    state_changed = pyqtSignal
 
-    def __init__(self, serial_port):
+    def __init__(self, serial_port, signal_distributor, flag_state_manager):
         super().__init__()
         self.serial_port = serial_port
+        self.signal_distributor = signal_distributor
+        self.flag_state_manager = flag_state_manager
         self.running = True
         self.expecting_response = False
 
@@ -41,11 +44,18 @@ class SerialReader(QThread):
         self.wait()
 
     def validate_response(self, response):
-        # Validate if the response starts with '@' and bits 5, 6, 7, 8 are zeros
         if len(response) < 8:
             return False
-        if response[0] != '@':
-            return False
-        if response[4:8] != '0000':
-            return False
-        return True
+        if response[0] == '@':
+            if response[4:8] == '0000':
+                self.signal_distributor.state_changed.emit('waiting_for_completion', True, 'update')
+                print("Emitted state_changed signal: waiting_for_completion set to True")
+                return True
+        elif response[0] == '$':
+            if response[4:8] == '0000':
+                # Emit the state_changed signal for a valid command completion
+                self.signal_distributor.state_changed.emit('waiting_for_completion', False, 'update')
+                print("Emitted state_changed signal: waiting_for_completion set to False")
+                return True
+        return False
+

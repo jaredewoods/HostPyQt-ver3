@@ -47,9 +47,9 @@ class MainWindow(QMainWindow):
         self.log_display_layout.addWidget(self.log_display)
 
         # Initialize MVC components
-        self.serial_model = SerialModel()
+        self.serial_model = SerialModel(self.signal_distributor, self.flag_state_manager)
         self.serial_view = SerialView()
-        self.serial_controller = SerialController(self.serial_model, self.serial_view, self.signal_distributor)
+        self.serial_controller = SerialController(self.serial_model, self.serial_view, self.signal_distributor, self.flag_state_manager)
         self.serial_controller.log_message.connect(self.update_log_display)
 
         self.tcp_model = TCPModel()
@@ -90,6 +90,8 @@ class MainWindow(QMainWindow):
         # Open FlagStateView at startup
         self.flag_state_view = FlagStateView(self.flag_state_manager)
         self.flag_state_view.show()
+
+        print("MainWindow initialization complete")
 
     def on_state_changed(self, flag_name, value, update_condition):
         # Log all state changes
