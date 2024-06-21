@@ -1,9 +1,10 @@
 # macro_controller.py
 
 import os
-from PyQt6.QtCore import QObject
+from PyQt6.QtCore import QObject, pyqtSignal
 
 class MacroController(QObject):
+    start_signal = pyqtSignal()
     """The MacroController class handles the logic for loading, parsing, and displaying macro commands.
 
     Args:
@@ -21,11 +22,16 @@ class MacroController(QObject):
         self.signal_distributor = signal_distributor
         self.flag_state_manager = flag_state_manager
         self.view.macro_select_cbx.activated.connect(self.on_macro_dropdown_activated)
-
+        self.view.macro_start_btn.clicked.connect(self._start_macro)
         # Connect the itemSelected signal from CommandView
         self.command_view.itemSelected.connect(self.load_macro_sequence_line)
 
         self.populate_macro_combobox()
+
+    @staticmethod
+    def _start_macro():
+        print("sending runMacro to executor")
+        self.start_signal.emit()
 
     @staticmethod
     def get_macro_directory():
