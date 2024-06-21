@@ -56,7 +56,6 @@ class SerialReader(QThread):
             if response[4:8] == '0000':
                 # Emit the state_changed signal for a valid command completion
                 self.signal_distributor.state_changed.emit('waiting_for_completion', False, 'update')
-                self.signal_distributor.state_changed.emit('response_received', False, 'update')
                 self.signal_distributor.state_changed.emit('completion_received', True, 'update')
 
                 print("Emitted state_changed signal: waiting_for_completion set to False")
