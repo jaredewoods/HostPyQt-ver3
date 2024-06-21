@@ -116,12 +116,13 @@ class FlagStateView(QMainWindow):
         self.flag_state_manager = flag_state_manager
 
         self.setWindowTitle("State Manager")
-        self.setGeometry(100, 100, 300, 450)
+        self.setGeometry(100, 100, 300, 400)  # Adjusted size to better fit the content
         self.table_widget = QTableWidget()
         self.setCentralWidget(self.table_widget)
         self.table_widget.setColumnCount(3)
         self.table_widget.setHorizontalHeaderLabels(["Flag", "Value", "Condition"])
         self.populate_table()
+        self.table_widget.resizeColumnsToContents()  # Adjust columns to fit contents
 
         self.flag_state_manager.state_updated.connect(self.update_table)
 
