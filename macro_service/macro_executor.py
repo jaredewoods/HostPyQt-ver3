@@ -17,6 +17,9 @@ class MacroExecutor(QObject):
         self._update_flag_statuses()
         print(f"MacroExecutor INITIALIZED")
 
+        self.signal_distributor.macro_trigger_seq02.connect(self.seq02_waiting_for_completion)
+        self.signal_distributor.macro_trigger_seq03.connect(self.seq03_handling_command_completion)
+
     def _update_flag_statuses(self):
         self._FLAGS = self.flag_state_manager.get_all_flag_statuses()
         self._SERIAL_CONNECTED = self._FLAGS.get("serial_connected")

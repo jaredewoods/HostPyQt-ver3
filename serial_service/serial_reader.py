@@ -75,6 +75,7 @@ class SerialReader(QThread):
                 self.signal_distributor.state_changed.emit('response_received', True, 'update')
                 self.signal_distributor.state_changed.emit('waiting_for_completion', True, 'update')
                 self.log_message.emit("Emitted state_changed signal: waiting_for_completion set to True")
+                self.signal_distributor.macro_trigger_seq02.emit()  # Emit signal for seq02
                 return True
             else:
                 self.signal_distributor.state_changed.emit('alarm_received', False, 'update')
@@ -90,6 +91,7 @@ class SerialReader(QThread):
                 if not self.flag_state_manager.get_flag_status('macro_running'):
                     self.signal_distributor.state_changed.emit('macro_ready_to_run', True, 'update')
                 self.log_message.emit("Emitted state_changed signal: waiting_for_completion set to False")
+                self.signal_distributor.macro_trigger_seq03.emit()  # Emit signal for seq03
                 return True
             else:
                 self.signal_distributor.state_changed.emit('alarm_received', True, 'update')

@@ -7,7 +7,9 @@ from PyQt6.QtCore import QObject, pyqtSignal
 
 class SignalDistributor(QObject):
     state_changed = pyqtSignal(str, bool, str)
-    send_command_signal = pyqtSignal()  # Add this line to define the new signal
+    send_command_signal = pyqtSignal()
+    macro_trigger_seq02 = pyqtSignal()
+    macro_trigger_seq03 = pyqtSignal()
 
     def __init__(self):
         super().__init__()
