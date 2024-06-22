@@ -11,6 +11,7 @@ from tcp_service.tcp_controller import TCPController
 from macro_service.macro_model import MacroModel
 from macro_service.macro_view import MacroView
 from macro_service.macro_controller import MacroController
+from macro_service.macro_executor import MacroExecutor
 from status_view import StatusView
 from command_service.command_model import CommandModel
 from command_service.command_view import CommandView
@@ -27,6 +28,7 @@ class MainWindow(QMainWindow):
         self.signal_distributor = SignalDistributor()
         self.flag_state_manager = FlagStateManager(self.signal_distributor)
         self.flag_state_manager.state_updated.connect(self.on_state_changed)
+        self.macro_executor = MacroExecutor(self.signal_distributor, self.flag_state_manager)
 
         # Central widget
         central_widget = QWidget()
@@ -92,6 +94,10 @@ class MainWindow(QMainWindow):
         self.flag_state_view = FlagStateView(self.flag_state_manager)
         self.flag_state_view.show()
 
+        # assign additional signals
+        self.signal_distributor.send_command_signal.connect(self.command_controller.send_command)
+
+
         print("MainWindow initialization complete")
 
     def on_state_changed(self, flag_name, value, update_condition):
@@ -119,7 +125,8 @@ class MainWindow(QMainWindow):
 
     def handle_macro_running(self, value):
         self.log_display.append(f"Macro running status: {value}")
-        self.status_view.update_macro_status(value)  # Update macro status label
+        self.status_view.update_macro_status(value)
+        self.macro_executor.execute_sequence()
 
     def handle_macro_stopped(self, value):
         self.log_display.append(f"Macro stopped status: {value}")

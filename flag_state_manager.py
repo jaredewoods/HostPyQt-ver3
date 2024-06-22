@@ -99,6 +99,22 @@ class FlagStateManager(QObject):
         else:
             raise AttributeError(f"Flag '{flag_name}' does not exist.")
 
+    def get_all_flag_statuses(self):
+        return {
+            "serial_connected": self.serial_connected,
+            "tcp_connected": self.tcp_connected,
+            "macro_ready_to_run": self.macro_ready_to_run,
+            "macro_running": self.macro_running,
+            "macro_stopped": self.macro_stopped,
+            "macro_completed": self.macro_completed,
+            "waiting_for_completion": self.waiting_for_completion,
+            "response_received": self.response_received,
+            "completion_received": self.completion_received,
+            "alarm_received": self.alarm_received,
+            "debug_mode": self.debug_mode,
+            "display_timestamp": self.display_timestamp
+        }
+
 class FlagStateView(QMainWindow):
     """
     A class representing a view for the flag state manager.

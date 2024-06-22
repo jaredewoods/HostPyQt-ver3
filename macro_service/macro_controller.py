@@ -23,7 +23,6 @@ class MacroController(QObject):
         self.flag_state_manager = flag_state_manager
         self.view.macro_select_cbx.activated.connect(self.on_macro_dropdown_activated)
         self.view.macro_start_btn.clicked.connect(self.start_executor)
-        # Connect the itemSelected signal from CommandView
         self.command_view.itemSelected.connect(self.load_macro_sequence_line)
 
         self.populate_macro_combobox()
