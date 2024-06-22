@@ -88,7 +88,7 @@ class MacroExecutor(QObject):
         else:
             print(f"Flag violation 03: {self._FLAGS}")
 
-    # this will need to be triggerd by an event
+    # this will need to be triggerd by a completed command
     def seq03_handling_command_completion(self):
         self._update_flag_statuses()
         if (self._SERIAL_CONNECTED and
