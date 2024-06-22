@@ -1,53 +1,148 @@
-from PyQt6.QtCore import QObject, pyqtSignal
+from PyQt6.QtCore import QObject, pyqtSignal, QElapsedTimer
 
 
 class MacroExecutor(QObject):
-
     def __init__(self, signal_distributor, flag_state_manager):
         super().__init__()
+        print(f"Initializing MacroExecutor")
         self.signal_distributor = signal_distributor
         self.flag_state_manager = flag_state_manager
-        self.cycles_completed = 0
-        print(f"Current Cycle = {self.cycles_completed}")
+        self.command_duration_stopwatch = QElapsedTimer()  # Initialize QElapsedTimer
+        self.cycle_duration_stopwatch = QElapsedTimer()  # Initialize QElapsedTimer
+        self.sequence_duration_stopwatch = QElapsedTimer()  # Initialize QElapsedTimer
 
-    # uncertain if I need the individual flag
+        self._COMMANDS_COMPLETED = 0
+        self._CYCLES_COMPLETED = 0
+        self._SEQUENCES_COMPLETED = 0
+        self._update_flag_statuses()
+        print(f"MacroExecutor INITIALIZED")
+
+    def _update_flag_statuses(self):
+        self._FLAGS = self.flag_state_manager.get_all_flag_statuses()
+        self._SERIAL_CONNECTED = self._FLAGS.get("serial_connected")
+        self._TCP_CONNECTED = self._FLAGS.get("tcp_connect")
+        self._MACRO_READY_TO_RUN = self._FLAGS.get("macro_ready_to_run")
+        self._MACRO_RUNNING = self._FLAGS.get("macro_running")
+        self._MACRO_STOPPED = self._FLAGS.get("macro_stopped")
+        self._MACRO_COMPLETED = self._FLAGS.get("macro_completed")
+        self._WAITING_FOR_COMPLETION = self._FLAGS.get("waiting_for_completion")
+        self._RESPONSE_RECEIVED = self._FLAGS.get("response_received")
+        self._COMPLETION_RECEIVED = self._FLAGS.get("completion_received")
+        self._ALARM_RECEIVED = self._FLAGS.get("alarm_received")
+        self._DEBUG_MODE = self._FLAGS.get("debug_mode")
+        self._DISPLAY_TIMESTAMP = self._FLAGS.get("display_timestamp")
+
     def execute_sequence(self):
-        print(f"Shout out from Macro executor")
-        self.seq00_initialize()
+        self._update_flag_statuses()
+        print(f"Updated Flag statuses: {self._FLAGS}")
+        if (self._SERIAL_CONNECTED and
+                self._MACRO_RUNNING and
+                not self._MACRO_STOPPED and
+                not self._MACRO_COMPLETED and
+                not self._WAITING_FOR_COMPLETION and
+                not self._ALARM_RECEIVED):
 
-    def seq00_initialize(self):
-        # there has to be a better way to give veeveryone access to all the flags
-        flags = self.flag_state_manager.get_all_flag_statuses()
-        print(f"Flag statuses: {flags}")
-        self.seq01_send_command()
+            print(f"Executing Sequence")
+            # self.sequence_duration_stopwatch.start()
+            self.seq00_initialize_cycle()
+        else:
+            print(f"Flag violation 00: {self._FLAGS}")
+
+    def seq00_initialize_cycle(self):
+        self._update_flag_statuses()
+        if (self._SERIAL_CONNECTED and
+                self._MACRO_RUNNING and
+                not self._MACRO_STOPPED and
+                not self._MACRO_COMPLETED and
+                not self._WAITING_FOR_COMPLETION and
+                not self._ALARM_RECEIVED):
+            print("self.cycle_duration_stopwatch.start()")
+            self.seq01_send_command()
+
+        else:
+            print(f"Flag violation 01: {self._FLAGS}")
 
     def seq01_send_command(self):
-        self.signal_distributor.send_command_signal.emit()
-        self.seq02_waiting_for_completion()
+        self._update_flag_statuses()
+        if (self._SERIAL_CONNECTED and
+                self._MACRO_RUNNING and
+                not self._MACRO_STOPPED and
+                not self._MACRO_COMPLETED and
+                not self._WAITING_FOR_COMPLETION and
+                not self._ALARM_RECEIVED):
+            self.signal_distributor.send_command_signal.emit()
+        else:
+            print(f"Flag violation 02: {self._FLAGS}")
 
+    # this needs to be triggered by whatever updates the flag.
     def seq02_waiting_for_completion(self):
-        # advance sequence line to load the next command
-        # start elapsed timer
-        self.seq03_handling_command_completion()
+        self._update_flag_statuses()
+        if (self._SERIAL_CONNECTED and
+                self._MACRO_RUNNING and
+                not self._MACRO_STOPPED and
+                not self._MACRO_COMPLETED and
+                self._WAITING_FOR_COMPLETION and
+                not self._ALARM_RECEIVED):
 
+            print("self.command_duration_stopwatch.start()")
+        else:
+            print(f"Flag violation 03: {self._FLAGS}")
+
+    # this will need to be triggerd by an event
     def seq03_handling_command_completion(self):
-        # parse response values
-        # stop elapsed timer
-        # log cycle number, response values, elapsed time
-        # run seq01 yo start the next line
-        # else run seq04
-        self.seq04_handling_cycle_completion()
+        self._update_flag_statuses()
+        if (self._SERIAL_CONNECTED and
+                self._MACRO_RUNNING and
+                not self._MACRO_STOPPED and
+                not self._MACRO_COMPLETED and
+                not self._WAITING_FOR_COMPLETION and
+                not self._ALARM_RECEIVED):
 
+            print("self.command_duration_stopwatch.stop()")
+            self._COMMANDS_COMPLETED += 1
+            # log cycle number, response values, elapsed time
+            # run seq01 yo start the next line
+            # else run seq04
+            print("and yet another command successfully completed")
+        else:
+            print(f"Flag violation 04: {self._FLAGS}")
+
+    # this will need to be triggerd by an event
     def seq04_handling_cycle_completion(self):
-        # compare completed cycles with total cycles
-        # add one and log cycle completed
-        # log starting next cycle
-        # run seq01 to start the next cycles
-        # else run seq05
-        self.seq05_handling_sequence_completion()
+        self._update_flag_statuses()
+        if (self._SERIAL_CONNECTED and
+                self._MACRO_RUNNING and
+                not self._MACRO_STOPPED and
+                not self._MACRO_COMPLETED and
+                not self._WAITING_FOR_COMPLETION and
+                not self._ALARM_RECEIVED):
 
+            print("self.cycle_duration_stopwatch.stop()")
+            self._CYCLES_COMPLETED += 1
+            # compare completed cycles with total cycles
+            # add one and log cycle completed
+            # log starting next cycle
+            # run seq01 to start the next cycles
+            # else run seq05
+            print("and yet another cycle successfully completed")
+        else:
+            print(f"Flag violation 05: {self._FLAGS}")
+
+    # this will need to be triggerd by an event
     def seq05_handling_sequence_completion(self):
-        # log sequence completion
-        # display statistics in UI popup
-        # state changed macro_completed state changed True
-        pass
+        self._update_flag_statuses()
+        if (self._SERIAL_CONNECTED and
+                self._MACRO_RUNNING and
+                self._MACRO_STOPPED and
+                self._MACRO_COMPLETED and
+                not self._WAITING_FOR_COMPLETION and
+                not self._ALARM_RECEIVED):
+
+            print("self.sequences_duration_stopwatch.stop()")
+            self._SEQUENCES_COMPLETED += 1
+            # log sequence completion
+            # display statistics in UI popup
+            # state changed macro_completed state changed True
+            print("That has completed the sequence")
+        else:
+            print(f"Flag violation 06: {self._FLAGS}")
