@@ -46,7 +46,7 @@ class MacroExecutor(QObject):
                 not self._ALARM_RECEIVED):
 
             print(f"Executing Sequence")
-            # self.sequence_duration_stopwatch.start()
+            self.sequence_duration_stopwatch.start()
             self.seq00_initialize_cycle()
         else:
             print(f"Flag violation 00: {self._FLAGS}")
@@ -59,7 +59,7 @@ class MacroExecutor(QObject):
                 not self._MACRO_COMPLETED and
                 not self._WAITING_FOR_COMPLETION and
                 not self._ALARM_RECEIVED):
-            print("self.cycle_duration_stopwatch.start()")
+            self.cycle_duration_stopwatch.start()
             self.seq01_send_command()
 
         else:
@@ -77,7 +77,6 @@ class MacroExecutor(QObject):
         else:
             print(f"Flag violation 02: {self._FLAGS}")
 
-    # this needs to be triggered by whatever updates the flag.
     def seq02_waiting_for_completion(self):
         self._update_flag_statuses()
         if (self._SERIAL_CONNECTED and
@@ -87,11 +86,10 @@ class MacroExecutor(QObject):
                 self._WAITING_FOR_COMPLETION and
                 not self._ALARM_RECEIVED):
 
-            print("self.command_duration_stopwatch.start()")
+            self.command_duration_stopwatch.start()
         else:
             print(f"Flag violation 03: {self._FLAGS}")
 
-    # this will need to be triggerd by a completed command
     def seq03_handling_command_completion(self):
         self._update_flag_statuses()
         if (self._SERIAL_CONNECTED and
@@ -101,12 +99,12 @@ class MacroExecutor(QObject):
                 not self._WAITING_FOR_COMPLETION and
                 not self._ALARM_RECEIVED):
 
-            print("self.command_duration_stopwatch.stop()")
+            command_time = self.command_duration_stopwatch.elapsed()  #
             self._COMMANDS_COMPLETED += 1
             # log cycle number, response values, elapsed time
             # run seq01 yo start the next line
             # else run seq04
-            print("and yet another command successfully completed")
+            print(f"Command Completed in {command_time/1000} seconds\nCommands Completed: {self._COMMANDS_COMPLETED}")
         else:
             print(f"Flag violation 04: {self._FLAGS}")
 
@@ -120,14 +118,14 @@ class MacroExecutor(QObject):
                 not self._WAITING_FOR_COMPLETION and
                 not self._ALARM_RECEIVED):
 
-            print("self.cycle_duration_stopwatch.stop()")
+            cycle_time = self.cycle_duration_stopwatch.elapsed()
             self._CYCLES_COMPLETED += 1
+            print(f"Cycles Completed in {cycle_time/1000} seconds\nCycles Completed: {self._CYCLES_COMPLETED}")
+
             # compare completed cycles with total cycles
-            # add one and log cycle completed
             # log starting next cycle
             # run seq01 to start the next cycles
             # else run seq05
-            print("and yet another cycle successfully completed")
         else:
             print(f"Flag violation 05: {self._FLAGS}")
 
@@ -141,11 +139,11 @@ class MacroExecutor(QObject):
                 not self._WAITING_FOR_COMPLETION and
                 not self._ALARM_RECEIVED):
 
-            print("self.sequences_duration_stopwatch.stop()")
+            sequence_time = self.sequences_duration_stopwatch.elapsed()
             self._SEQUENCES_COMPLETED += 1
             # log sequence completion
             # display statistics in UI popup
             # state changed macro_completed state changed True
-            print("That has completed the sequence")
+            print(f"Sequence Completed in {sequence_time/1000} seconds\nSequences Completed: {self._SEQUENCES_COMPLETED}")
         else:
             print(f"Flag violation 06: {self._FLAGS}")
