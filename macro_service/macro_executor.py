@@ -50,7 +50,7 @@ class MacroExecutor(QObject):
             self.sequence_duration_stopwatch.start()
             self.seq00_initialize_cycle()
         else:
-            print(f"Flag violation 00: {self._FLAGS}")
+            print(f"Flag violation: {self._FLAGS}")
 
     def seq00_initialize_cycle(self):
         self._update_flag_statuses()
@@ -64,7 +64,7 @@ class MacroExecutor(QObject):
             self.seq01_send_command()
 
         else:
-            print(f"Flag violation 01: {self._FLAGS}")
+            print(f"Flag violation 00: {self._FLAGS}")
 
     def seq01_send_command(self):
         self._update_flag_statuses()
@@ -76,7 +76,7 @@ class MacroExecutor(QObject):
                 not self._ALARM_RECEIVED):
             self.signal_distributor.send_command_signal.emit()
         else:
-            print(f"Flag violation 02: {self._FLAGS}")
+            print(f"Flag violation 01: {self._FLAGS}")
 
     def seq02_waiting_for_completion(self):
         self._update_flag_statuses()
@@ -89,7 +89,7 @@ class MacroExecutor(QObject):
 
             self.command_duration_stopwatch.start()
         else:
-            print(f"Flag violation 03: {self._FLAGS}")
+            print(f"Flag violation 02: {self._FLAGS}")
 
     def seq03_handling_command_completion(self):
         self._update_flag_statuses()
@@ -106,7 +106,7 @@ class MacroExecutor(QObject):
             print(f"Command Completed in {command_time/1000} seconds\nCommands Completed: {self._COMMANDS_COMPLETED}")
             self.signal_distributor.next_macro_item.emit()
         else:
-            print(f"Flag violation 04: {self._FLAGS}")
+            print(f"Flag violation 03: {self._FLAGS}")
 
     def seq04_handling_cycle_completion(self):
         self._update_flag_statuses()
@@ -122,28 +122,25 @@ class MacroExecutor(QObject):
             print(f"That cycle was completed in only {cycle_time/1000} seconds\nCycles Completed: {self._CYCLES_COMPLETED}")
             self.signal_distributor.updateCompletedCycles.emit(self._CYCLES_COMPLETED)
             self.signal_distributor.requestTotalCycles.emit()
-            # log starting next cycle
-            # run seq01 to start the next cycles
-            # else run seq05
         else:
-            print(f"Flag violation 05: {self._FLAGS}")
+            print(f"Flag violation 04: {self._FLAGS}")
 
     # this will need to be triggerd by an event
     def seq05_handling_sequence_completion(self):
         self._update_flag_statuses()
         if (self._SERIAL_CONNECTED and
-                self._MACRO_RUNNING and
-                not self._MACRO_STOPPED and
+                not self._MACRO_RUNNING and
+                self._MACRO_STOPPED and
                 self._MACRO_COMPLETED and
                 not self._WAITING_FOR_COMPLETION and
                 not self._ALARM_RECEIVED):
 
-            sequence_time = self.sequences_duration_stopwatch.elapsed()
+            sequence_time = self.sequence_duration_stopwatch.elapsed()
             self._SEQUENCES_COMPLETED += 1
             # state changed macro_completed state changed True
             print(f"Sequence Completed in {sequence_time/1000} seconds\nSequences Completed: {self._SEQUENCES_COMPLETED}")
         else:
-            print(f"Flag violation 06: {self._FLAGS}")
+            print(f"Flag violation 05: {self._FLAGS}")
 
     def handle_total_cycles(self, total_cycles):
         print(f"Let's see if we have {total_cycles} finished yet")
@@ -151,5 +148,9 @@ class MacroExecutor(QObject):
             self.signal_distributor.restart_cycle.emit()
             print("restart cycle")
         else:
+            self.signal_distributor.state_changed.emit("macro_completed", True, "update")
+            self.signal_distributor.state_changed.emit("macro_stopped", True, "update")
+            self.signal_distributor.state_changed.emit("macro_running", False, "update")
+            self.signal_distributor.state_changed.emit("macro_ready_to_run", False, "update")
             self.seq05_handling_sequence_completion()
-            print("handling macro completion")
+            print("handling sequence completion")
