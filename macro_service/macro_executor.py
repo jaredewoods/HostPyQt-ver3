@@ -119,7 +119,8 @@ class MacroExecutor(QObject):
 
             cycle_time = self.cycle_duration_stopwatch.elapsed()
             self._CYCLES_COMPLETED += 1
-            print(f"Cycles Completed in {cycle_time/1000} seconds\nCycles Completed: {self._CYCLES_COMPLETED}")
+            print(f"Completed in {cycle_time/1000} seconds\nCycles Completed: {self._CYCLES_COMPLETED}")
+            self.signal_distributor.restart_cycle.emit()
 
             # compare completed cycles with total cycles
             # log starting next cycle

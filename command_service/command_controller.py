@@ -19,7 +19,12 @@ class CommandController(QObject):
         self.view.entry_parameters.textChanged.connect(self.update_model)
         self.view.single_shot_btn_clicked.connect(self.send_single_shot)
         self.view.run_next_command.connect(self.run_next_command)
+        self.view.signal_cycle_completed.connect(self.signal_cycle_completed)
         self.update_view()
+
+    def signal_cycle_completed(self):
+        self.signal_distributor.macro_trigger_seq04.emit()
+        print("restarting sequence")
 
     def run_next_command(self):
         self.signal_distributor.macro_trigger_seq00.emit()
