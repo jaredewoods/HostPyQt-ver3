@@ -43,11 +43,12 @@ class MacroView(QWidget):
         self.macro_completed_cycles_lbl = QLineEdit("")
         layout.addWidget(self.macro_completed_cycles_lbl, 1, 3, 1, 1)
 
-        # Macro Control Buttons
+        # Macro Start Button
         self.macro_start_btn = QPushButton("Start")
         self.macro_start_btn.setEnabled(False)
         layout.addWidget(self.macro_start_btn, 2, 0, 1, 2)
 
+        # Macro Stop Button
         self.macro_stop_btn = QPushButton("Stop")
         self.macro_stop_btn.setEnabled(False)
         layout.addWidget(self.macro_stop_btn, 2, 2, 1, 2)
