@@ -15,6 +15,8 @@ class SignalDistributor(QObject):
     macro_trigger_seq04 = pyqtSignal()
     restart_cycle = pyqtSignal()
     updateCompletedCycles = pyqtSignal(int)
+    requestTotalCycles = pyqtSignal()
+    sendTotalCycles = pyqtSignal(int)
 
     def __init__(self):
         super().__init__()

@@ -63,3 +63,4 @@ class MacroView(QWidget):
 
     def update_completed_cycles(self, cycles):
         self.macro_completed_cycles_lbl.setText(str(cycles))
+        print(f"updating completed cycles {cycles}")

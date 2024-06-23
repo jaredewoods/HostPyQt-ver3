@@ -19,6 +19,7 @@ class MacroExecutor(QObject):
 
         self.signal_distributor.macro_trigger_seq02.connect(self.seq02_waiting_for_completion)
         self.signal_distributor.macro_trigger_seq03.connect(self.seq03_handling_command_completion)
+        self.signal_distributor.sendTotalCycles.connect(self.handle_total_cycles)
 
     def _update_flag_statuses(self):
         self._FLAGS = self.flag_state_manager.get_all_flag_statuses()
@@ -119,9 +120,8 @@ class MacroExecutor(QObject):
             cycle_time = self.cycle_duration_stopwatch.elapsed()
             self._CYCLES_COMPLETED += 1
             print(f"That cycle was completed in only {cycle_time/1000} seconds\nCycles Completed: {self._CYCLES_COMPLETED}")
-            self.signal_distributor.restart_cycle.emit()
             self.signal_distributor.updateCompletedCycles.emit(self._CYCLES_COMPLETED)
-            # compare completed cycles with total cycles
+            self.signal_distributor.requestTotalCycles.emit()
             # log starting next cycle
             # run seq01 to start the next cycles
             # else run seq05
@@ -133,16 +133,23 @@ class MacroExecutor(QObject):
         self._update_flag_statuses()
         if (self._SERIAL_CONNECTED and
                 self._MACRO_RUNNING and
-                self._MACRO_STOPPED and
+                not self._MACRO_STOPPED and
                 self._MACRO_COMPLETED and
                 not self._WAITING_FOR_COMPLETION and
                 not self._ALARM_RECEIVED):
 
             sequence_time = self.sequences_duration_stopwatch.elapsed()
             self._SEQUENCES_COMPLETED += 1
-            # log sequence completion
-            # display statistics in UI popup
             # state changed macro_completed state changed True
             print(f"Sequence Completed in {sequence_time/1000} seconds\nSequences Completed: {self._SEQUENCES_COMPLETED}")
         else:
             print(f"Flag violation 06: {self._FLAGS}")
+
+    def handle_total_cycles(self, total_cycles):
+        print(f"Let's see if we have {total_cycles} finished yet")
+        if self._CYCLES_COMPLETED < total_cycles:
+            self.signal_distributor.restart_cycle.emit()
+            print("restart cycle")
+        else:
+            self.seq05_handling_sequence_completion()
+            print("handling macro completion")

@@ -24,7 +24,6 @@ class CommandController(QObject):
 
     def signal_cycle_completed(self):
         self.signal_distributor.macro_trigger_seq04.emit()
-        print("restarting sequence")
 
     def run_next_command(self):
         self.signal_distributor.macro_trigger_seq00.emit()

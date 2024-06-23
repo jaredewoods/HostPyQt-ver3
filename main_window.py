@@ -69,6 +69,7 @@ class MainWindow(QMainWindow):
         self.signal_distributor.macro_trigger_seq04.connect(self.macro_executor.seq04_handling_cycle_completion)
         self.signal_distributor.restart_cycle.connect(self.command_view.restart_cycle)
         self.signal_distributor.updateCompletedCycles.connect(self.macro_view.update_completed_cycles)
+        self.signal_distributor.requestTotalCycles.connect(self.provide_total_cycles)
 
         # Initialize command_compiler_service
         self.command_model = CommandModel()
@@ -102,6 +103,10 @@ class MainWindow(QMainWindow):
         # assign additional signals
         self.signal_distributor.send_command_signal.connect(self.command_controller.send_command)
         print("MainWindow initialization complete")
+
+    def provide_total_cycles(self):
+        total_cycles = int(self.macro_view.macro_total_cycles_lbl.text())
+        self.signal_distributor.sendTotalCycles.emit(total_cycles)
 
     def on_state_changed(self, flag_name, value, update_condition):
         # Log all state changes

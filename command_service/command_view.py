@@ -202,5 +202,3 @@ class CommandView(QWidget):
     def reset_macro(self):
         self.clear_fields()
         self.reset_flags()
-
-
