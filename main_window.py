@@ -68,6 +68,8 @@ class MainWindow(QMainWindow):
         self.signal_distributor.macro_trigger_seq00.connect(self.macro_executor.seq00_initialize_cycle)
         self.signal_distributor.macro_trigger_seq04.connect(self.macro_executor.seq04_handling_cycle_completion)
         self.signal_distributor.restart_cycle.connect(self.command_view.restart_cycle)
+        self.signal_distributor.updateCompletedCycles.connect(self.macro_view.update_completed_cycles)
+
         # Initialize command_compiler_service
         self.command_model = CommandModel()
         self.command_controller = CommandController(self.command_model, self.command_view, self.serial_controller, self.signal_distributor)

@@ -29,25 +29,28 @@ class MacroView(QWidget):
         self.setLayout(layout)
 
         # Macro Sequence Selection
-        layout.addWidget(QLabel("Macro Sequence"), 0, 0)
+        layout.addWidget(QLabel("Macro Sequence"), 0, 0, 1, 2)
         self.macro_select_cbx = QComboBox()
-        layout.addWidget(self.macro_select_cbx, 1, 0)
+        layout.addWidget(self.macro_select_cbx, 1, 0, 1, 2)
 
         # Cycle Count Entry
-        layout.addWidget(QLabel("Total Cycles"), 0, 1)
+        layout.addWidget(QLabel("Total"), 0, 2, 1, 1)
         self.macro_total_cycles_lbl = QLineEdit("")
-        layout.addWidget(self.macro_total_cycles_lbl, 1, 1)
+        layout.addWidget(self.macro_total_cycles_lbl, 1, 2, 1, 1)
+
+        # Cycle Completed Entry
+        layout.addWidget(QLabel("Cycle"), 0, 3, 1, 1)
+        self.macro_completed_cycles_lbl = QLineEdit("")
+        layout.addWidget(self.macro_completed_cycles_lbl, 1, 3, 1, 1)
 
         # Macro Control Buttons
         self.macro_start_btn = QPushButton("Start")
         self.macro_start_btn.setEnabled(False)
-        layout.addWidget(self.macro_start_btn, 2, 0)
+        layout.addWidget(self.macro_start_btn, 2, 0, 1, 2)
 
         self.macro_stop_btn = QPushButton("Stop")
         self.macro_stop_btn.setEnabled(False)
-        layout.addWidget(self.macro_stop_btn, 2, 1)
-        layout.setColumnStretch(0, 1)
-        layout.setColumnStretch(1, 1)
+        layout.addWidget(self.macro_stop_btn, 2, 2, 1, 2)
 
     def populate_macro_select_combo(self, macro_files):
         self.macro_select_cbx.clear()
@@ -57,3 +60,5 @@ class MacroView(QWidget):
     def update_total_cycles(self, cycles):
         self.macro_total_cycles_lbl.setText(str(cycles))
 
+    def update_completed_cycles(self, cycles):
+        self.macro_completed_cycles_lbl.setText(str(cycles))

@@ -120,7 +120,7 @@ class MacroExecutor(QObject):
             self._CYCLES_COMPLETED += 1
             print(f"That cycle was completed in only {cycle_time/1000} seconds\nCycles Completed: {self._CYCLES_COMPLETED}")
             self.signal_distributor.restart_cycle.emit()
-
+            self.signal_distributor.updateCompletedCycles.emit(self._CYCLES_COMPLETED)
             # compare completed cycles with total cycles
             # log starting next cycle
             # run seq01 to start the next cycles
