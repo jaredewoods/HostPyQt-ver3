@@ -8,6 +8,7 @@ class CommandView(QWidget):
     single_shot_btn_clicked = pyqtSignal()
     reset_btn_clicked = pyqtSignal()
     log_message = pyqtSignal()
+    run_next_command = pyqtSignal()
 
     def __init__(self, btn_preset1_name, btn_preset2_name, btn_preset3_name, btn_preset4_name):
         super().__init__()
@@ -125,6 +126,22 @@ class CommandView(QWidget):
 
         self.macro_display_layout.addLayout(buttons_layout)
         self.main_layout.addLayout(self.macro_display_layout)
+
+    def select_next_macro_sequence_item(self):
+        selected_items = self.macro_sequence_display.selectedItems()
+
+        if not selected_items:
+            if self.macro_sequence_display.count() > 0:
+                self.macro_sequence_display.setCurrentRow(0)
+        else:
+            current_index = self.macro_sequence_display.row(selected_items[0])
+
+            # Calculate the index of the next item
+            next_index = current_index + 1
+            # Check if the next item exists
+            if next_index < self.macro_sequence_display.count():
+                self.macro_sequence_display.setCurrentRow(next_index)
+                self.run_next_command.emit()
 
     def on_single_shot_btn_clicked(self):
         self.single_shot_btn_clicked.emit()

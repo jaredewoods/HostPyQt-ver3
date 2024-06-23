@@ -101,10 +101,9 @@ class MacroExecutor(QObject):
 
             command_time = self.command_duration_stopwatch.elapsed()  #
             self._COMMANDS_COMPLETED += 1
-            # log cycle number, response values, elapsed time
-            # run seq01 yo start the next line
             # else run seq04
             print(f"Command Completed in {command_time/1000} seconds\nCommands Completed: {self._COMMANDS_COMPLETED}")
+            self.signal_distributor.next_macro_item.emit()
         else:
             print(f"Flag violation 04: {self._FLAGS}")
 

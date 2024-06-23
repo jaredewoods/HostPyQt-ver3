@@ -64,6 +64,8 @@ class MainWindow(QMainWindow):
         self.macro_view = MacroView()
         self.command_view = CommandView("Preset 1", "Preset 2", "Preset 3", "Preset 4")
         self.macro_controller = MacroController(self.macro_model, self.macro_view, self.command_view, self.signal_distributor, self.flag_state_manager)
+        self.signal_distributor.next_macro_item.connect(self.command_view.select_next_macro_sequence_item)
+        self.signal_distributor.macro_trigger_seq00.connect(self.macro_executor.seq00_initialize_cycle)
 
         # Initialize command_compiler_service
         self.command_model = CommandModel()
@@ -96,8 +98,6 @@ class MainWindow(QMainWindow):
 
         # assign additional signals
         self.signal_distributor.send_command_signal.connect(self.command_controller.send_command)
-
-
         print("MainWindow initialization complete")
 
     def on_state_changed(self, flag_name, value, update_condition):
