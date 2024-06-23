@@ -132,12 +132,12 @@ class MainWindow(QMainWindow):
 
     def handle_serial_connected(self, value):
         self.debug_display.append(f"Serial connection status: {value}")
-        self.serial_controller._update_connection_state(value)
+        self.serial_controller.update_connection_state(value)
         self.status_view.update_serial_status(value)  # Update serial status label
 
     def handle_tcp_connected(self, value):
         self.debug_display.append(f"TCP connection status: {value}")
-        self.tcp_controller._update_connection_btn_state(value)
+        self.tcp_controller.update_connection_btn_state(value)
         self.status_view.update_tcp_status(value)  # Update TCP status label
 
     # Example additional handlers

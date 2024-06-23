@@ -32,6 +32,6 @@ class TCPController(QObject):
             self.signal_distributor.state_changed.emit('tcp_connected', False, 'update')
             self.debug_message.emit("Disconnected from TCP connection")
 
-    def _update_connection_btn_state(self, connected):
+    def update_connection_btn_state(self, connected):
         self.view.tcp_connect_btn.setEnabled(not connected)
         self.view.tcp_close_btn.setEnabled(connected)
