@@ -74,7 +74,7 @@ class SerialModel(QObject):
                 self.serial_port.write(command.encode())
                 cleaned_command = command.replace('\r', '').replace('\n', '')
                 self.debug_message.emit(f"Command written to serial port: {cleaned_command}")
-                self.log_message.emit(f"SENT: {cleaned_command}")
+                self.log_message.emit(f"  (sent)  {cleaned_command}")
                 # I believe this is redundant, keep the state_changed
                 self.reader_thread.expecting_response = True
                 self.signal_distributor.state_changed.emit('completion_received', False, 'update')

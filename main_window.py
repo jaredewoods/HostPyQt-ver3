@@ -42,7 +42,7 @@ class MainWindow(QMainWindow):
 
         # Log display frame
         self.message_display_frame = QTabWidget()
-        self.message_display_frame.setFixedWidth(350)
+        self.message_display_frame.setFixedWidth(400)
 
         self.log_display = QTextEdit()
         self.log_display.setReadOnly(True)

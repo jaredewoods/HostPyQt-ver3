@@ -39,7 +39,7 @@ class MacroView(QWidget):
         layout.addWidget(self.macro_total_cycles_lbl, 1, 2, 1, 1)
 
         # Cycle Completed Entry
-        layout.addWidget(QLabel("Cycle"), 0, 3, 1, 1)
+        layout.addWidget(QLabel("Completed"), 0, 3, 1, 1)
         self.macro_completed_cycles_lbl = QLineEdit("")
         layout.addWidget(self.macro_completed_cycles_lbl, 1, 3, 1, 1)
 

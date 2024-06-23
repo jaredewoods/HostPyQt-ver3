@@ -42,7 +42,7 @@ class SerialReader(QThread):
                         # Split buffer at the first delimiter
                         message, self.buffer = self.buffer.split(delimiter, 1)
                         if message:
-                            self.log_message.emit(f"RECEIVED: {message}")
+                            self.log_message.emit(f"        (received)  {message.strip()}")
 
                         message = message.strip()
                         self.debug_message.emit(f"Decoded data: {message}")
