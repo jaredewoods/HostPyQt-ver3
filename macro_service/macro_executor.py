@@ -51,7 +51,7 @@ class MacroExecutor(QObject):
                 not self._ALARM_RECEIVED):
 
             self.debug_message.emit(f"Executing Sequence")
-            self.start_time = datetime.now().strftime("%H:%M:%S")
+            self.start_time = datetime.now().strftime("%m/%d/%Y %H:%M:%S")
             self.log_message.emit(f"\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"
                                   f"  Sequence Started: {self.start_time}\n"
                                   f"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n")
@@ -156,7 +156,7 @@ class MacroExecutor(QObject):
                 f"Sequence Completed in {sequence_time / 1000} seconds\n"
                 f"Sequences Completed: {self._SEQUENCES_COMPLETED}")
             self.log_message.emit(
-                f"\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"
+                f"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"
                 f"  Completed Sequence: {self.stop_time}\n"
                 f"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"
                 f"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"
