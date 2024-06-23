@@ -82,6 +82,8 @@ class MainWindow(QMainWindow):
         self.signal_distributor.restart_cycle.connect(self.command_view.restart_cycle)
         self.signal_distributor.updateCompletedCycles.connect(self.macro_view.update_completed_cycles)
         self.signal_distributor.requestTotalCycles.connect(self.provide_total_cycles)
+        self.signal_distributor.wait_command_executor.connect(self.handle_wait_command)
+        self.signal_distributor.xgx_command_executor.connect(self.handle_xgx_command)
 
         # Initialize command_compiler_service
         self.command_model = CommandModel()
@@ -176,6 +178,14 @@ class MainWindow(QMainWindow):
     def handle_display_timestamp(self, value):
         self.debug_display.append(f"Display timestamp status: {value}")
         # Add your handling code here
+
+    def handle_wait_command(self, command):
+        self.wait_command = command[6:10]
+        print(f"I am handling this {self.wait_command} wait as best i can")
+
+    def handle_xgx_command(self, command):
+        self.xgx_command = command[6:8]
+        print(f"I am handling xg-x trigger {self.xgx_command} as best i can")
 
     def update_debug_display(self, message):
         self.debug_display.append(message)

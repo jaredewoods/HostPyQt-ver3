@@ -69,6 +69,17 @@ class SerialModel(QObject):
         return False
 
     def write_command(self, command):
+        if "WAIT" in command:
+            print(f"we got a WAIT{command}")
+            self.signal_distributor.wait_command_executor.emit(command)
+        elif "SEND" in command:
+            print(F"we got a XG-X{command}")
+            self.signal_distributor.xgx_command_executor.emit(command)
+        else:
+            print(f"we dont know what we got {command}")
+            self.write_command_to_serial(command)
+
+    def write_command_to_serial(self, command):
         if self.serial_port and self.serial_port.is_open:
             try:
                 self.serial_port.write(command.encode())

@@ -17,6 +17,8 @@ class SignalDistributor(QObject):
     updateCompletedCycles = pyqtSignal(int)
     requestTotalCycles = pyqtSignal()
     sendTotalCycles = pyqtSignal(int)
+    wait_command_executor = pyqtSignal(str)
+    xgx_command_executor = pyqtSignal(str)
 
     def __init__(self):
         super().__init__()

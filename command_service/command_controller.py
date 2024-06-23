@@ -28,7 +28,7 @@ class CommandController(QObject):
 
     def run_next_command(self):
         self.signal_distributor.macro_trigger_seq00.emit()
-        print("Triggering SEQ00")
+        print("Triggering SEQ00 from CommandCOntroller.run_next_object")
 
     def update_model(self):
         self.model.set_start_bit_checked(self.view.start_bit_checkbox.isChecked())
@@ -57,3 +57,13 @@ class CommandController(QObject):
         command = self.model.construct_command()
         print(f"Command sent: {command}")
         self.serial_controller.send_command(command)
+
+
+    def handle_wait_command(self, command):
+        self.command = command
+        self.wait_time = command[6:10]  # Extract parameter values starting from the 9th character
+        print(f"Handling WAIT command: {command}")
+        print(f"Parameter values: {self.wait_time}")
+
+    def handle_xgx_command(self, command):
+        print(f"Handling XG-X command: {command}")
