@@ -3,8 +3,8 @@
 from PyQt6.QtCore import QObject, pyqtSignal
 
 class TCPController(QObject):
-    log_message = pyqtSignal(str)  # Define a signal to emit log messages
-
+    debug_message = pyqtSignal(str)  # Define a signal to emit log messages
+    log_message = pyqtSignal(str) # Define a signal to emit
     def __init__(self, model, view, signal_distributor):
         super().__init__()
         self.model = model
@@ -20,16 +20,17 @@ class TCPController(QObject):
         success = self.model.connect(ip_address, port)
         if success:
             self.signal_distributor.state_changed.emit('tcp_connected', True, 'validate')
+            self.debug_message.emit(f"Connected to {ip_address}:{port}")
             self.log_message.emit(f"Connected to {ip_address}:{port}")
         else:
             self.signal_distributor.state_changed.emit('tcp_connected', False, 'update')
-            self.log_message.emit(f"Failed to connect to {ip_address}:{port}")
+            self.debug_message.emit(f"Failed to connect to {ip_address}:{port}")
 
     def disconnect_tcp(self):
         success = self.model.disconnect()
         if success:
             self.signal_distributor.state_changed.emit('tcp_connected', False, 'update')
-            self.log_message.emit("Disconnected from TCP connection")
+            self.debug_message.emit("Disconnected from TCP connection")
 
     def _update_connection_btn_state(self, connected):
         self.view.tcp_connect_btn.setEnabled(not connected)

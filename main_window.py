@@ -55,16 +55,21 @@ class MainWindow(QMainWindow):
 
         # Initialize MVC components
         self.serial_model = SerialModel(self.signal_distributor, self.flag_state_manager)
+        self.serial_model.log_message.connect(self.update_log_display)
         self.serial_view = SerialView()
         self.serial_controller = SerialController(self.serial_model, self.serial_view, self.signal_distributor, self.flag_state_manager)
-        self.serial_controller.log_message.connect(self.update_debug_display)
+        self.serial_controller.debug_message.connect(self.update_debug_display)
+        self.serial_controller.log_message.connect(self.update_log_display)
         self.serial_controller.alarm_signal.connect(self.show_alarm_messagebox)
 
         self.tcp_model = TCPModel()
         self.tcp_view = TCPView()
         self.tcp_controller = TCPController(self.tcp_model, self.tcp_view, self.signal_distributor)
-        self.tcp_controller.log_message.connect(self.update_debug_display)  # Connect the log_message signal to the slot
-        self.macro_executor.log_message.connect(self.update_debug_display)  # Connect the log_message signal to the slot
+        self.tcp_controller.debug_message.connect(self.update_debug_display)  # Connect the debug_message signal to the slot
+        self.tcp_controller.log_message.connect(self.update_log_display)
+
+        self.macro_executor.debug_message.connect(self.update_debug_display)  # Connect the debug_message signal to the slot
+        self.macro_executor.log_message.connect(self.update_log_display)
 
         self.macro_model = MacroModel()
         self.macro_view = MacroView()
@@ -81,7 +86,8 @@ class MainWindow(QMainWindow):
         # Initialize command_compiler_service
         self.command_model = CommandModel()
         self.command_controller = CommandController(self.command_model, self.command_view, self.serial_controller, self.signal_distributor)
-        self.command_controller.log_message.connect(self.update_debug_display)  # Connect the command controller log messages to the main window
+        self.command_controller.debug_message.connect(self.update_debug_display)  # Connect the command controller log messages to the main window
+        self.command_controller.log_message.connect(self.update_log_display)  # Connect the command controller log messages to the main window
 
         # Initialize status_view
         self.status_view = StatusView()
@@ -173,6 +179,9 @@ class MainWindow(QMainWindow):
 
     def update_debug_display(self, message):
         self.debug_display.append(message)
+
+    def update_log_display(self, message):
+        self.log_display.append(message)
 
     @staticmethod
     def show_alarm_messagebox(alarm_code, subcode):

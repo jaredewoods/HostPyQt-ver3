@@ -221,11 +221,11 @@ SerialModel -> SerialController: Return success/failure
 alt success
     SerialController -> Self: _update_connection_state(True)
     SerialController -> SignalDistributor: emit('serial_connected', True, 'validate')
-    SerialController -> Self: log_message.emit("Connected to {port} at {baudrate} baudrate")
+    SerialController -> Self: debug_message.emit("Connected to {port} at {baudrate} baudrate")
 else failure
     SerialController -> Self: _update_connection_state(False)
     SerialController -> SignalDistributor: emit('serial_connected', False, 'validate')
-    SerialController -> Self: log_message.emit("Failed to connect to {port}")
+    SerialController -> Self: debug_message.emit("Failed to connect to {port}")
 
 ```
 
@@ -301,10 +301,10 @@ TCPController -> TCPModel: connect(ip_address, port)
 TCPModel -> TCPController: Return success/failure
 alt success
     TCPController -> SignalDistributor: emit('tcp_connected', True, 'validate')
-    TCPController -> Self: log_message.emit("Connected to {ip_address}:{port}")
+    TCPController -> Self: debug_message.emit("Connected to {ip_address}:{port}")
 else failure
     TCPController -> SignalDistributor: emit('tcp_connected', False, 'update')
-    TCPController -> Self: log_message.emit("Failed to connect to {ip_address}:{port}")
+    TCPController -> Self: debug_message.emit("Failed to connect to {ip_address}:{port}")
 
 ```
 

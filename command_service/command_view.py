@@ -7,7 +7,7 @@ class CommandView(QWidget):
     itemSelected = pyqtSignal()  # Signal to emit when an item is selected
     single_shot_btn_clicked = pyqtSignal()
     reset_btn_clicked = pyqtSignal()
-    log_message = pyqtSignal()
+    debug_message = pyqtSignal()
     run_next_command = pyqtSignal()
     signal_cycle_completed = pyqtSignal()
 
@@ -189,7 +189,7 @@ class CommandView(QWidget):
         self.set_unit_number("")
         self.set_code("")
         self.set_parameters("")
-        # self.log_message.emit("Fields have been cleared")
+        # self.debug_message.emit("Fields have been cleared")
 
     def reset_flags(self):
         print("command view needs signal_distributor")
@@ -197,7 +197,7 @@ class CommandView(QWidget):
         # self.signal_distributor.state_changed.emit('macro_running', False, 'update')
         # self.signal_distributor.state_changed.emit('response_received', False, 'update')
         # self.signal_distributor.state_changed.emit('completion_received', False, 'update')
-        # self.log_message.emit("Flags have been reset")
+        # self.debug_message.emit("Flags have been reset")
 
     def reset_macro(self):
         self.clear_fields()

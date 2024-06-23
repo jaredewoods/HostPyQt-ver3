@@ -2,7 +2,8 @@
 from PyQt6.QtCore import QObject, pyqtSignal
 
 class CommandController(QObject):
-    log_message = pyqtSignal(str)  # Define a signal to emit log messages
+    debug_message = pyqtSignal(str)
+    log_message = pyqtSignal(str)
 
     def __init__(self, model, view, serial_controller, signal_distributor):
         super().__init__()

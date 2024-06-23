@@ -12,10 +12,11 @@ class SerialModel(QObject):
     Attributes:
         data_received: Signal emitted when data is received from the serial port.
         error_occurred: Signal emitted when an error occurs.
-        log_message: Signal emitted for general log messages.
+        debug_message: Signal emitted for general log messages.
     """
     data_received = pyqtSignal(str)
     error_occurred = pyqtSignal(str)
+    debug_message = pyqtSignal(str)
     log_message = pyqtSignal(str)
     alarm_signal = pyqtSignal(str, str)
 
@@ -45,9 +46,11 @@ class SerialModel(QObject):
             self.reader_thread.data_received.connect(self.data_received.emit)
             self.reader_thread.error_occurred.connect(self.error_occurred.emit)
             # should this be outside the scope?vvvv
+            self.reader_thread.debug_message.connect(self.debug_message.emit)
             self.reader_thread.log_message.connect(self.log_message.emit)
             self.reader_thread.alarm_signal.connect(self.alarm_signal.emit)
             self.reader_thread.start()
+            self.debug_message.emit(f"Connected to {port} at {baudrate} baudrate")
             self.log_message.emit(f"Connected to {port} at {baudrate} baudrate")
             return True
         except serial.SerialException as e:
@@ -60,7 +63,7 @@ class SerialModel(QObject):
             self.reader_thread = None
         if self.serial_port and self.serial_port.is_open:
             self.serial_port.close()
-            self.log_message.emit("Disconnected from serial port")
+            self.debug_message.emit("Disconnected from serial port")
             return True
         self.error_occurred.emit("Failed to disconnect: Serial port not open")
         return False
@@ -70,7 +73,8 @@ class SerialModel(QObject):
             try:
                 self.serial_port.write(command.encode())
                 cleaned_command = command.replace('\r', '').replace('\n', '')
-                self.log_message.emit(f"Command written to serial port: {cleaned_command}")
+                self.debug_message.emit(f"Command written to serial port: {cleaned_command}")
+                self.log_message.emit(f"SENT: {cleaned_command}")
                 # I believe this is redundant, keep the state_changed
                 self.reader_thread.expecting_response = True
                 self.signal_distributor.state_changed.emit('completion_received', False, 'update')

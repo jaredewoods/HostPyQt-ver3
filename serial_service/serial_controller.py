@@ -2,6 +2,7 @@
 from PyQt6.QtCore import QObject, pyqtSignal
 
 class SerialController(QObject):
+    debug_message = pyqtSignal(str)
     log_message = pyqtSignal(str)
     alarm_signal = pyqtSignal(str, str)
 
@@ -12,7 +13,7 @@ class SerialController(QObject):
         self.signal_distributor = signal_distributor
         self.flag_state_manager = flag_state_manager
         # TODO this is very incorrect just trying to reset
-        # self.command_view.log_message.connect(self.log_message.emit)
+        # self.command_view.debug_message.connect(self.debug_message.emit)
 
         self._populate_ports()
 
@@ -20,9 +21,9 @@ class SerialController(QObject):
         self.view.serial_close_btn.clicked.connect(self.disconnect_serial)
 
         # Connect model signals to the controller's signals
-        self.model.data_received.connect(self.log_message.emit)
-        self.model.error_occurred.connect(self.log_message.emit)
-        self.model.log_message.connect(self.log_message.emit)
+        self.model.data_received.connect(self.debug_message.emit)
+        self.model.error_occurred.connect(self.debug_message.emit)
+        self.model.debug_message.connect(self.debug_message.emit)
         self.model.alarm_signal.connect(self.alarm_signal.emit)
 
     def _populate_ports(self):
@@ -38,7 +39,7 @@ class SerialController(QObject):
         Responds directly to view.serial_connect_btn.
         Connects to the serial port
         Updates 'serial_connected' via signal_distributor
-        log_message
+        debug_message
 
         """
         port = self.view.serial_port_cbx.currentText()
@@ -47,24 +48,27 @@ class SerialController(QObject):
         if success:
             self._update_connection_state(True)
             self.signal_distributor.state_changed.emit('serial_connected', True, 'validate')
-            self.log_message.emit(f"Connected to {port} at {baudrate} baudrate")
+            # self.debug_message.emit(f"Connected to {port} at {baudrate} baudrate")
+            # self.log_message.emit(f"SERIAL CONNECTION to {port} at {baudrate}")
         else:
             self._update_connection_state(False)
             self.signal_distributor.state_changed.emit('serial_connected', False, 'validate')
-            self.log_message.emit(f"Failed to connect to {port}")
+            self.log_message.emit(f"SERIAL CONNECTION FAILED to {port} at {baudrate}")
+            self.debug_message.emit(f"Failed to connect to {port}")
 
     def disconnect_serial(self):
         """
         Responds directly to view.serial_close_btn.
         Disconnects the serial port.
         state_change
-        log_message
+        debug_message
         """
         success = self.model.disconnect_serial()
         if success:
             self._update_connection_state(False)
             self.signal_distributor.state_changed.emit('serial_connected', False, 'update')
-            self.log_message.emit("Disconnected from serial port")
+            self.debug_message.emit("Disconnected from serial port")
+            self.log_message.emit("Serial port disconnected")
 
     def send_command(self, command):
         """
