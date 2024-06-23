@@ -147,7 +147,6 @@ class CommandView(QWidget):
         self.macro_sequence_display.setCurrentRow(0)
         self.run_next_command.emit()
 
-
     def on_single_shot_btn_clicked(self):
         self.single_shot_btn_clicked.emit()
 

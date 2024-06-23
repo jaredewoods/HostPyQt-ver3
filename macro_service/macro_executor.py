@@ -107,7 +107,6 @@ class MacroExecutor(QObject):
         else:
             print(f"Flag violation 04: {self._FLAGS}")
 
-    # this will need to be triggerd by an event
     def seq04_handling_cycle_completion(self):
         self._update_flag_statuses()
         if (self._SERIAL_CONNECTED and
@@ -119,7 +118,7 @@ class MacroExecutor(QObject):
 
             cycle_time = self.cycle_duration_stopwatch.elapsed()
             self._CYCLES_COMPLETED += 1
-            print(f"Completed in {cycle_time/1000} seconds\nCycles Completed: {self._CYCLES_COMPLETED}")
+            print(f"That cycle was completed in only {cycle_time/1000} seconds\nCycles Completed: {self._CYCLES_COMPLETED}")
             self.signal_distributor.restart_cycle.emit()
 
             # compare completed cycles with total cycles
