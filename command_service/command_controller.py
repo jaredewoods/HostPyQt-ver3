@@ -1,5 +1,5 @@
 # command_controller.py
-from PyQt6.QtCore import QObject, pyqtSignal
+from PyQt6.QtCore import QObject, pyqtSignal, QTimer
 
 class CommandController(QObject):
     debug_message = pyqtSignal(str)
@@ -55,15 +55,25 @@ class CommandController(QObject):
 
     def send_command(self):
         command = self.model.construct_command()
-        print(f"Command sent: {command}")
+        print(f"Command Constructed: {command}")
         self.serial_controller.send_command(command)
 
-
     def handle_wait_command(self, command):
-        self.command = command
-        self.wait_time = command[6:10]  # Extract parameter values starting from the 9th character
-        print(f"Handling WAIT command: {command}")
-        print(f"Parameter values: {self.wait_time}")
+        self.wait_time = command
+        print(f"Wait Time: {self.wait_time}ms")
+        # Set up a QTimer to wait for the specified time
+        self.timer = QTimer(self)
+        self.timer.setSingleShot(True)
+        self.timer.timeout.connect(self.on_wait_complete)
+        self.timer.start(int(self.wait_time))
+
+    def on_wait_complete(self):
+        print(f"Wait time of {self.wait_time} seconds completed.")
+        # Continue processing after the wait time
+        # You can call the next method or signal here
 
     def handle_xgx_command(self, command):
-        print(f"Handling XG-X command: {command}")
+        self.command = command
+        self.xgx_command = command[6:8]
+        print(f"Handling XG-X command: {self.command}")
+        print(f"Parameter values: {self.xgx_command}")

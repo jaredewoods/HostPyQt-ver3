@@ -181,6 +181,7 @@ class MainWindow(QMainWindow):
 
     def handle_wait_command(self, command):
         self.wait_command = command[6:10]
+        self.command_controller.handle_wait_command(self.wait_command)
         print(f"I am handling this {self.wait_command} wait as best i can")
 
     def handle_xgx_command(self, command):

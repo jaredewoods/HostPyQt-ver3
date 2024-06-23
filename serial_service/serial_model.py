@@ -70,7 +70,7 @@ class SerialModel(QObject):
 
     def write_command(self, command):
         if "WAIT" in command:
-            print(f"we got a WAIT{command}")
+            print(f"we got to pause due to a {command}")
             self.signal_distributor.wait_command_executor.emit(command)
         elif "SEND" in command:
             print(F"we got a XG-X{command}")
