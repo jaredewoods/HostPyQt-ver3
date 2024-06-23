@@ -2,6 +2,8 @@ from PyQt6.QtCore import QObject, pyqtSignal, QElapsedTimer
 
 
 class MacroExecutor(QObject):
+    log_message = pyqtSignal(str)
+
     def __init__(self, signal_distributor, flag_state_manager):
         super().__init__()
         print(f"Initializing MacroExecutor")
@@ -46,11 +48,11 @@ class MacroExecutor(QObject):
                 not self._WAITING_FOR_COMPLETION and
                 not self._ALARM_RECEIVED):
 
-            print(f"Executing Sequence")
+            self.log_message.emit(f"Executing Sequence")
             self.sequence_duration_stopwatch.start()
             self.seq00_initialize_cycle()
         else:
-            print(f"Flag violation: {self._FLAGS}")
+            self.log_message.emit(f"Flag violation: {self._FLAGS}")
 
     def seq00_initialize_cycle(self):
         self._update_flag_statuses()
@@ -60,11 +62,12 @@ class MacroExecutor(QObject):
                 not self._MACRO_COMPLETED and
                 not self._WAITING_FOR_COMPLETION and
                 not self._ALARM_RECEIVED):
+            self.log_message.emit("Initialized cycle")
             self.cycle_duration_stopwatch.start()
             self.seq01_send_command()
 
         else:
-            print(f"Flag violation 00: {self._FLAGS}")
+            self.log_message.emit(f"Flag violation 00: {self._FLAGS}")
 
     def seq01_send_command(self):
         self._update_flag_statuses()
@@ -76,7 +79,7 @@ class MacroExecutor(QObject):
                 not self._ALARM_RECEIVED):
             self.signal_distributor.send_command_signal.emit()
         else:
-            print(f"Flag violation 01: {self._FLAGS}")
+            self.log_message.emit(f"Flag violation 01: {self._FLAGS}")
 
     def seq02_waiting_for_completion(self):
         self._update_flag_statuses()
@@ -89,7 +92,7 @@ class MacroExecutor(QObject):
 
             self.command_duration_stopwatch.start()
         else:
-            print(f"Flag violation 02: {self._FLAGS}")
+            self.log_message.emit(f"Flag violation 02: {self._FLAGS}")
 
     def seq03_handling_command_completion(self):
         self._update_flag_statuses()
@@ -103,10 +106,10 @@ class MacroExecutor(QObject):
             command_time = self.command_duration_stopwatch.elapsed()  #
             self._COMMANDS_COMPLETED += 1
             # else run seq04
-            print(f"Command Completed in {command_time/1000} seconds\nCommands Completed: {self._COMMANDS_COMPLETED}")
+            self.log_message.emit(f"Command Completed in {command_time/1000} seconds\nCommands Completed: {self._COMMANDS_COMPLETED}")
             self.signal_distributor.next_macro_item.emit()
         else:
-            print(f"Flag violation 03: {self._FLAGS}")
+            self.log_message.emit(f"Flag violation 03: {self._FLAGS}")
 
     def seq04_handling_cycle_completion(self):
         self._update_flag_statuses()
@@ -119,13 +122,12 @@ class MacroExecutor(QObject):
 
             cycle_time = self.cycle_duration_stopwatch.elapsed()
             self._CYCLES_COMPLETED += 1
-            print(f"That cycle was completed in only {cycle_time/1000} seconds\nCycles Completed: {self._CYCLES_COMPLETED}")
+            self.log_message.emit(f"Cycle #{self._CYCLES_COMPLETED} completed in {cycle_time/1000} secs")
             self.signal_distributor.updateCompletedCycles.emit(self._CYCLES_COMPLETED)
             self.signal_distributor.requestTotalCycles.emit()
         else:
-            print(f"Flag violation 04: {self._FLAGS}")
+            self.log_message.emit(f"Flag violation 04: {self._FLAGS}")
 
-    # this will need to be triggerd by an event
     def seq05_handling_sequence_completion(self):
         self._update_flag_statuses()
         if (self._SERIAL_CONNECTED and
@@ -138,19 +140,19 @@ class MacroExecutor(QObject):
             sequence_time = self.sequence_duration_stopwatch.elapsed()
             self._SEQUENCES_COMPLETED += 1
             # state changed macro_completed state changed True
-            print(f"Sequence Completed in {sequence_time/1000} seconds\nSequences Completed: {self._SEQUENCES_COMPLETED}")
+            self.log_message.emit(f"Sequence Completed in {sequence_time/1000} seconds\nSequences Completed: {self._SEQUENCES_COMPLETED}")
         else:
-            print(f"Flag violation 05: {self._FLAGS}")
+            self.log_message.emit(f"Flag violation 05: {self._FLAGS}")
 
     def handle_total_cycles(self, total_cycles):
-        print(f"Let's see if we have {total_cycles} finished yet")
+        self.log_message.emit(f"Let's see if we have {total_cycles} finished yet")
         if self._CYCLES_COMPLETED < total_cycles:
             self.signal_distributor.restart_cycle.emit()
-            print("restart cycle")
+            self.log_message.emit("restart cycle")
         else:
             self.signal_distributor.state_changed.emit("macro_completed", True, "update")
             self.signal_distributor.state_changed.emit("macro_stopped", True, "update")
             self.signal_distributor.state_changed.emit("macro_running", False, "update")
             self.signal_distributor.state_changed.emit("macro_ready_to_run", False, "update")
             self.seq05_handling_sequence_completion()
-            print("handling sequence completion")
+            self.log_message.emit("handling sequence completion")
