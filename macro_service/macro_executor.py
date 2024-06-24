@@ -129,12 +129,12 @@ class MacroExecutor(QObject):
                 not self._WAITING_FOR_COMPLETION and
                 not self._ALARM_RECEIVED):
 
-            cycle_time = self.cycle_duration_stopwatch.elapsed()
+            self.cycle_time = self.cycle_duration_stopwatch.elapsed()
             sequence_time = self.sequence_duration_stopwatch.elapsed()
             self._CYCLES_COMPLETED += 1
-            self.debug_message.emit(f"Cycle #{self._CYCLES_COMPLETED} completed in {cycle_time / 1000} seconds")
+            self.debug_message.emit(f"Cycle #{self._CYCLES_COMPLETED} completed in {self.cycle_time / 1000} seconds")
             self.log_message.emit(
-                f'  completed: {self._CYCLES_COMPLETED}  |  time: {cycle_time / 1000}s  |  total time: {sequence_time / 1000}s\n')
+                f'  completed: {self._CYCLES_COMPLETED}  |  time: {self.cycle_time / 1000}s  |  total time: {sequence_time / 1000}s\n')
             self.signal_distributor.updateCompletedCycles.emit(self._CYCLES_COMPLETED)
             self.signal_distributor.requestTotalCycles.emit()
         else:
