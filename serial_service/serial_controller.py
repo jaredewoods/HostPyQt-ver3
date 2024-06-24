@@ -70,9 +70,6 @@ class SerialController(QObject):
             self.debug_message.emit("Disconnected from serial port")
             self.log_message.emit("Serial port disconnected")
 
-    def send_command(self, command):
-        self.model.write_command(command)
-
     def update_connection_state(self, connected):
         self.view.serial_connect_btn.setEnabled(not connected)
         self.view.serial_close_btn.setEnabled(connected)

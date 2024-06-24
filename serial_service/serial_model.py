@@ -68,7 +68,7 @@ class SerialModel(QObject):
         self.error_occurred.emit("Failed to disconnect: Serial port not open")
         return False
 
-    def write_command(self, command):
+    def filter_constructed_command(self, command):
         if "WAIT" in command:
             print(f"we got to pause due to a {command}")
             self.signal_distributor.wait_command_executor.emit(command)

@@ -40,7 +40,7 @@ class MacroExecutor(QObject):
         self._DEBUG_MODE = self._FLAGS.get("debug_mode")
         self._DISPLAY_TIMESTAMP = self._FLAGS.get("display_timestamp")
 
-    def execute_sequence(self):
+    def seq_start_sequence(self):
         self._update_flag_statuses()
         print(f"Updated Flag statuses: {self._FLAGS}")
         if (self._SERIAL_CONNECTED and
@@ -57,11 +57,11 @@ class MacroExecutor(QObject):
                                   f"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n")
 
             self.sequence_duration_stopwatch.start()
-            self.seq00_initialize_cycle()
+            self.seq00_start_cycle()
         else:
             self.debug_message.emit(f"Flag violation: {self._FLAGS}")
 
-    def seq00_initialize_cycle(self):
+    def seq00_start_cycle(self):
         self._update_flag_statuses()
         if (self._SERIAL_CONNECTED and
                 self._MACRO_RUNNING and
@@ -71,12 +71,12 @@ class MacroExecutor(QObject):
                 not self._ALARM_RECEIVED):
             self.debug_message.emit("Initialized cycle")
             self.cycle_duration_stopwatch.start()
-            self.seq01_send_command()
+            self.seq01_start_command()
 
         else:
             self.debug_message.emit(f"Flag violation 00: {self._FLAGS}")
 
-    def seq01_send_command(self):
+    def seq01_start_command(self):
         self._update_flag_statuses()
         if (self._SERIAL_CONNECTED and
                 self._MACRO_RUNNING and
@@ -84,7 +84,7 @@ class MacroExecutor(QObject):
                 not self._MACRO_COMPLETED and
                 not self._WAITING_FOR_COMPLETION and
                 not self._ALARM_RECEIVED):
-            self.signal_distributor.send_command_signal.emit()
+            self.signal_distributor.construct_command_signal.emit()
         else:
             self.debug_message.emit(f"Flag violation 01: {self._FLAGS}")
 

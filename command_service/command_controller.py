@@ -53,10 +53,10 @@ class CommandController(QObject):
         self.send_command()
         self.signal_distributor.state_changed.emit('macro_ready_to_run', False, 'update')
 
-    def send_command(self):
-        command = self.model.construct_command()
-        print(f"Command Constructed: {command}")
-        self.serial_controller.send_command(command)
+    def construct_command(self):
+        constructed_command = self.model.construct_command()
+        print(f"Command Constructed: {constructed_command}")
+        self.signal_distributor.filter_constructed_command.emit(constructed_command)
 
     def handle_wait_command(self, command):
         self.wait_time = command

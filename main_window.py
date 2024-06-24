@@ -77,19 +77,21 @@ class MainWindow(QMainWindow):
         self.macro_controller = MacroController(self.macro_model, self.macro_view, self.command_view, self.signal_distributor, self.flag_state_manager)
 
         self.signal_distributor.next_macro_item.connect(self.command_view.select_next_macro_sequence_item)
-        self.signal_distributor.macro_trigger_seq00.connect(self.macro_executor.seq00_initialize_cycle)
+        self.signal_distributor.macro_trigger_seq00.connect(self.macro_executor.seq00_start_cycle)
         self.signal_distributor.macro_trigger_seq04.connect(self.macro_executor.seq04_handling_cycle_completion)
         self.signal_distributor.restart_cycle.connect(self.command_view.restart_cycle)
         self.signal_distributor.updateCompletedCycles.connect(self.macro_view.update_completed_cycles)
         self.signal_distributor.requestTotalCycles.connect(self.provide_total_cycles)
         self.signal_distributor.wait_command_executor.connect(self.handle_wait_command)
         self.signal_distributor.xgx_command_executor.connect(self.handle_xgx_command)
+        self.signal_distributor.filter_constructed_command.connect(self.serial_model.filter_constructed_command)
 
         # Initialize command_compiler_service
         self.command_model = CommandModel()
         self.command_controller = CommandController(self.command_model, self.command_view, self.serial_controller, self.signal_distributor)
         self.command_controller.debug_message.connect(self.update_debug_display)  # Connect the command controller log messages to the main window
         self.command_controller.log_message.connect(self.update_log_display)  # Connect the command controller log messages to the main window
+        self.signal_distributor.construct_command_signal.connect(self.command_controller.construct_command)
 
         # Initialize status_view
         self.status_view = StatusView()
@@ -116,7 +118,6 @@ class MainWindow(QMainWindow):
         self.flag_state_view.show()
 
         # assign additional signals
-        self.signal_distributor.send_command_signal.connect(self.command_controller.send_command)
         print("MainWindow initialization complete")
 
     def provide_total_cycles(self):
@@ -149,7 +150,7 @@ class MainWindow(QMainWindow):
     def handle_macro_running(self, value):
         self.debug_display.append(f"Macro running status: {value}")
         self.status_view.update_macro_status(value)
-        self.macro_executor.execute_sequence()
+        self.macro_executor.seq_start_sequence()
 
     def handle_macro_stopped(self, value):
         self.debug_display.append(f"Macro stopped status: {value}")
