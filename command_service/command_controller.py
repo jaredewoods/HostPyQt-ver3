@@ -28,7 +28,6 @@ class CommandController(QObject):
 
     def run_next_command(self):
         self.signal_distributor.macro_trigger_seq00.emit()
-        print("Triggering SEQ00 from CommandCOntroller.run_next_object")
 
     def update_model(self):
         self.model.set_start_bit_checked(self.view.start_bit_checkbox.isChecked())
@@ -61,7 +60,7 @@ class CommandController(QObject):
     def handle_wait_command(self, command):
         self.wait_time = command
         print(f"Wait Time: {self.wait_time}ms")
-        # Set up a QTimer to wait for the specified time
+        self.log_message.emit(f'  (host) WAIT{self.wait_time}, wait for {int(self.wait_time)/1000}secs')
         self.timer = QTimer(self)
         self.timer.setSingleShot(True)
         self.timer.timeout.connect(self.on_wait_complete)
@@ -69,7 +68,8 @@ class CommandController(QObject):
 
     def on_wait_complete(self):
         print(f"Wait time of {self.wait_time} seconds completed.")
-        # Continue processing after the wait time
+        self.log_message.emit(f'        (host) {int(self.wait_time)/1000} secs wait completed')
+        self.signal_distributor.macro_trigger_seq03.emit()  # Emit signal for seq03
         # You can call the next method or signal here
 
     def handle_xgx_command(self, command):

@@ -62,6 +62,7 @@ class MacroExecutor(QObject):
             self.debug_message.emit(f"Flag violation: {self._FLAGS}")
 
     def seq00_start_cycle(self):
+        print("the top of seq00_start_cycle")
         self._update_flag_statuses()
         if (self._SERIAL_CONNECTED and
                 self._MACRO_RUNNING and

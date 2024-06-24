@@ -128,15 +128,16 @@ class CommandView(QWidget):
         self.macro_display_layout.addLayout(buttons_layout)
         self.main_layout.addLayout(self.macro_display_layout)
 
-    def select_next_macro_sequence_item(self):
+    def select_next_macro_item(self):
+        print("selecting next macro item in CommandView")
         selected_items = self.macro_sequence_display.selectedItems()
 
         if selected_items:
             current_index = self.macro_sequence_display.row(selected_items[0])
-
-            # Calculate the index of the next item
+            print(f"Current Index: {current_index}")
             next_index = current_index + 1
-            # Check if the next item exists
+            print(f"Next Index: {next_index}")
+            print(f"Macro Sequence Display Count: {self.macro_sequence_display.count()}")
             if next_index < self.macro_sequence_display.count():
                 self.macro_sequence_display.setCurrentRow(next_index)
                 self.run_next_command.emit()

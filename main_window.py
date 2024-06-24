@@ -76,7 +76,7 @@ class MainWindow(QMainWindow):
         self.command_view = CommandView("Preset 1", "Preset 2", "Preset 3", "Preset 4")
         self.macro_controller = MacroController(self.macro_model, self.macro_view, self.command_view, self.signal_distributor, self.flag_state_manager)
 
-        self.signal_distributor.next_macro_item.connect(self.command_view.select_next_macro_sequence_item)
+        self.signal_distributor.next_macro_item.connect(self.command_view.select_next_macro_item)
         self.signal_distributor.macro_trigger_seq00.connect(self.macro_executor.seq00_start_cycle)
         self.signal_distributor.macro_trigger_seq04.connect(self.macro_executor.seq04_handling_cycle_completion)
         self.signal_distributor.restart_cycle.connect(self.command_view.restart_cycle)
