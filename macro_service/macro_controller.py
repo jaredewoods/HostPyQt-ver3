@@ -16,6 +16,7 @@ class MacroController(QObject):
     """
     def __init__(self, model, view, command_view, signal_distributor, flag_state_manager):
         super().__init__()
+        self.macro_commands = None
         self.view = view
         self.model = model
         self.command_view = command_view
@@ -64,11 +65,13 @@ class MacroController(QObject):
         self.update_macro_ready_state()
         self.load_macro_sequence_line()  # Initialize the first command without arguments
 
-    def read_macro_file(self, file_path):
+    @staticmethod
+    def read_macro_file(file_path):
         with open(file_path, 'r') as file:
             return file.readlines()
 
-    def parse_macro_file_content(self, lines):
+    @staticmethod
+    def parse_macro_file_content(lines):
         suggested_cycles = 0
         macro_commands = []
         current_unit = None
