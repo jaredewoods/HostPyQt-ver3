@@ -7,7 +7,15 @@ from PyQt6.QtCore import QObject, pyqtSignal
 
 class SignalDistributor(QObject):
     state_changed = pyqtSignal(str, bool, str)
+    requestTotalCycles = pyqtSignal()
+    sendTotalCycles = pyqtSignal(int)
+    updateCompletedCycles = pyqtSignal(int)
+
     construct_command_signal = pyqtSignal()
+    wait_command_executor = pyqtSignal(str)
+    xgx_command_executor = pyqtSignal(str)
+    filter_constructed_command = pyqtSignal(str)
+
     next_macro_item = pyqtSignal()
     macro_trigger_seq00 = pyqtSignal()
     macro_trigger_seq01 = pyqtSignal()
@@ -15,12 +23,6 @@ class SignalDistributor(QObject):
     macro_trigger_seq03 = pyqtSignal()
     macro_trigger_seq04 = pyqtSignal()
     restart_cycle = pyqtSignal()
-    updateCompletedCycles = pyqtSignal(int)
-    requestTotalCycles = pyqtSignal()
-    sendTotalCycles = pyqtSignal(int)
-    wait_command_executor = pyqtSignal(str)
-    xgx_command_executor = pyqtSignal(str)
-    filter_constructed_command = pyqtSignal(str)
 
     def __init__(self):
         super().__init__()
