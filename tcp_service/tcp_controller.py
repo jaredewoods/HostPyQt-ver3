@@ -4,7 +4,7 @@ from PyQt6.QtCore import QObject, pyqtSignal
 
 class TCPController(QObject):
     debug_message = pyqtSignal(str)  # Define a signal to emit log messages
-    log_message = pyqtSignal(str) # Define a signal to emit
+    log_message = pyqtSignal(str)  # Define a signal to emit
 
     def __init__(self, model, view, signal_distributor):
         super().__init__()
