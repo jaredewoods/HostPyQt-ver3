@@ -26,6 +26,12 @@ class StatusView(QWidget):
     def __init__(self):
         super().__init__()
 
+        self.macro_status_label = None
+        self.tcp_status_label = None
+        self.serial_status_label = None
+        self.run_label = None
+        self.stop_label = None
+        self.start_label = None
         self.main_layout = QVBoxLayout()
 
         self.create_status_time_layout()
