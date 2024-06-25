@@ -1,6 +1,7 @@
 # serial_controller.py
 from PyQt6.QtCore import QObject, pyqtSignal
 
+
 class SerialController(QObject):
     debug_message = pyqtSignal(str)
     log_message = pyqtSignal(str)
@@ -74,8 +75,10 @@ class SerialController(QObject):
         self.view.serial_connect_btn.setEnabled(not connected)
         self.view.serial_close_btn.setEnabled(connected)
 
-    def on_data_received(self, data):
+    @staticmethod
+    def on_data_received(data):
         print(f"Data received: {data}")
 
-    def on_error_occurred(self, error):
+    @staticmethod
+    def on_error_occurred(error):
         print(f"Error occurred: {error}")
