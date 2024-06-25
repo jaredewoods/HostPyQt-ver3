@@ -13,6 +13,18 @@ class CommandView(QWidget):
 
     def __init__(self, signal_distributor, btn_preset1_name, btn_preset2_name, btn_preset3_name, btn_preset4_name):
         super().__init__()
+        self.clear_btn = None
+        self.edit_btn = None
+        self.reset_btn = None
+        self.single_shot_btn = None
+        self.macro_sequence_display = None
+        self.macro_display_layout = None
+        self.display_command = None
+        self.dropdown_code = None
+        self.dropdown_unit_no = None
+        self.carriage_return_checkbox = None
+        self.checksum_checkbox = None
+        self.start_bit_checkbox = None
         self.signal_distributor = signal_distributor
         self.main_layout = QVBoxLayout()
         self.is_editing = False
@@ -194,7 +206,8 @@ class CommandView(QWidget):
         self.set_parameters("")
         # self.debug_message.emit("Fields have been cleared")
 
-    def reset_flags(self):
+    @staticmethod
+    def reset_flags():
         print("command view needs signal_distributor")
         # self.signal_distributor.state_changed.emit('waiting_for_completion', False, 'update')
         # self.signal_distributor.state_changed.emit('macro_running', False, 'update')

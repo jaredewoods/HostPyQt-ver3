@@ -7,6 +7,10 @@ class CommandController(QObject):
 
     def __init__(self, model, view, serial_controller, signal_distributor):
         super().__init__()
+        self.timer = None
+        self.command = None
+        self.xgx_command = None
+        self.wait_time = None
         self.model = model
         self.view = view
         self.serial_controller = serial_controller
@@ -26,7 +30,6 @@ class CommandController(QObject):
     def signal_cycle_completed(self):
         self.signal_distributor.macro_trigger_seq04.emit()
 
-    # TODO: This should not send to seq00 or seq01 rather somewhere in the middle
     def run_next_command(self):
         self.signal_distributor.macro_trigger_seq01.emit()
         print("d16 CommandController")
