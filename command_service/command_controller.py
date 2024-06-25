@@ -26,8 +26,10 @@ class CommandController(QObject):
     def signal_cycle_completed(self):
         self.signal_distributor.macro_trigger_seq04.emit()
 
+    # TODO: This should not send to seq00 or seq01 rather somewhere in the middle
     def run_next_command(self):
-        self.signal_distributor.macro_trigger_seq00.emit()
+        self.signal_distributor.macro_trigger_seq01.emit()
+        print("d16 CommandController")
 
     def update_model(self):
         self.model.set_start_bit_checked(self.view.start_bit_checkbox.isChecked())
@@ -49,13 +51,14 @@ class CommandController(QObject):
         self.update_view()
 
     def send_single_shot(self):
-        self.send_command()
+        self.construct_command()
         self.signal_distributor.state_changed.emit('macro_ready_to_run', False, 'update')
 
     def construct_command(self):
         constructed_command = self.model.construct_command()
         print(f"Command Constructed: {constructed_command}")
         self.signal_distributor.filter_constructed_command.emit(constructed_command)
+        print("d05 CommandController")
 
     def handle_wait_command(self, command):
         self.wait_time = command

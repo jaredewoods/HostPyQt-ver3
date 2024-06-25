@@ -30,7 +30,7 @@ class SerialReader(QThread):
                     data = self.serial_port.read(self.serial_port.in_waiting)
                     self.buffer += data.decode('utf-8', errors='ignore')
                     self.debug_message.emit(f"Raw buffer data received: {data}")
-                    self.debug_message.emit(f"Current buffer: {self.buffer}")
+                    self.debug_message.emit(f"Current buffer: {self.buffer.replace('\r', '<CR>')}")
 
                     # Check for complete messages (ending with a newline or carriage return)
                     while '\r' in self.buffer or '\n' in self.buffer:
@@ -49,6 +49,7 @@ class SerialReader(QThread):
 
                         if message:
                             if self.validate_response(message):
+                                print("d10 SerialReader")
                                 self.expecting_response = False
                                 self.debug_message.emit(f"Valid data received: {message}")
                             else:
@@ -96,6 +97,7 @@ class SerialReader(QThread):
                     self.signal_distributor.state_changed.emit('macro_ready_to_run', True, 'update')
                 self.debug_message.emit("Emitted state_changed signal: waiting_for_completion set to False")
                 self.signal_distributor.macro_trigger_seq03.emit()  # Emit signal for seq03
+                print("d11 SerialReader")
                 return True
             else:
                 self.signal_distributor.state_changed.emit('alarm_received', True, 'update')

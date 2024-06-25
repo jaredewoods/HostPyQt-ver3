@@ -7,17 +7,16 @@ class CommandView(QWidget):
     itemSelected = pyqtSignal()  # Signal to emit when an item is selected
     single_shot_btn_clicked = pyqtSignal()
     reset_btn_clicked = pyqtSignal()
-    debug_message = pyqtSignal()
+    debug_message = pyqtSignal(str)
     run_next_command = pyqtSignal()
     signal_cycle_completed = pyqtSignal()
 
-    def __init__(self, btn_preset1_name, btn_preset2_name, btn_preset3_name, btn_preset4_name):
+    def __init__(self, signal_distributor, btn_preset1_name, btn_preset2_name, btn_preset3_name, btn_preset4_name):
         super().__init__()
-
+        self.signal_distributor = signal_distributor
         self.main_layout = QVBoxLayout()
-        self.is_editing = False  # Track the editing state
+        self.is_editing = False
 
-        # Initialize UI components
         self.setup_dropdowns_and_parameters()
         self.setup_checkboxes()
         self.setup_display_line()
@@ -140,13 +139,16 @@ class CommandView(QWidget):
             print(f"Macro Sequence Display Count: {self.macro_sequence_display.count()}")
             if next_index < self.macro_sequence_display.count():
                 self.macro_sequence_display.setCurrentRow(next_index)
+                print("d15 CommandView")
+                # TODO: this is a hidden signal
                 self.run_next_command.emit()
             else:
                 self.signal_cycle_completed.emit()
 
     def restart_cycle(self):
         self.macro_sequence_display.setCurrentRow(0)
-        self.run_next_command.emit()
+        self.signal_distributor.macro_trigger_seq00.emit()
+        self.debug_message.emit("Restarting Cycle")
 
     def on_single_shot_btn_clicked(self):
         self.single_shot_btn_clicked.emit()

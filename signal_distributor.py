@@ -8,10 +8,11 @@ from PyQt6.QtCore import QObject, pyqtSignal
 class SignalDistributor(QObject):
     state_changed = pyqtSignal(str, bool, str)
     construct_command_signal = pyqtSignal()
-    macro_trigger_seq02 = pyqtSignal()
-    macro_trigger_seq03 = pyqtSignal()
     next_macro_item = pyqtSignal()
     macro_trigger_seq00 = pyqtSignal()
+    macro_trigger_seq01 = pyqtSignal()
+    macro_trigger_seq02 = pyqtSignal()
+    macro_trigger_seq03 = pyqtSignal()
     macro_trigger_seq04 = pyqtSignal()
     restart_cycle = pyqtSignal()
     updateCompletedCycles = pyqtSignal(int)

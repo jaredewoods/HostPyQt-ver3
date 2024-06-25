@@ -76,8 +76,9 @@ class SerialModel(QObject):
             print(F"we got a XG-X{command}")
             self.signal_distributor.xgx_command_executor.emit(command)
         else:
-            print(f"we dont know what we got {command}")
+            print(f"NXC100 command {command}")
             self.write_command_to_serial(command)
+            print("d07 SerialModel")
 
     def write_command_to_serial(self, command):
         if self.serial_port and self.serial_port.is_open:
@@ -90,6 +91,7 @@ class SerialModel(QObject):
                 self.reader_thread.expecting_response = True
                 self.signal_distributor.state_changed.emit('completion_received', False, 'update')
                 self.signal_distributor.state_changed.emit('response_received', False, 'update')
+                print("d08 SerialModel")
 
             except serial.SerialException as e:
                 self.error_occurred.emit(f"Failed to send command: {e}")

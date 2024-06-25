@@ -73,18 +73,27 @@ class MainWindow(QMainWindow):
 
         self.macro_model = MacroModel()
         self.macro_view = MacroView()
-        self.command_view = CommandView("Preset 1", "Preset 2", "Preset 3", "Preset 4")
+        self.command_view = CommandView(self.signal_distributor, "Preset 1", "Preset 2", "Preset 3", "Preset 4")
+        self.command_view.debug_message.connect(self.update_debug_display)
         self.macro_controller = MacroController(self.macro_model, self.macro_view, self.command_view, self.signal_distributor, self.flag_state_manager)
 
         self.signal_distributor.next_macro_item.connect(self.command_view.select_next_macro_item)
+        print("d14 MainWindow")
         self.signal_distributor.macro_trigger_seq00.connect(self.macro_executor.seq00_start_cycle)
+        self.signal_distributor.macro_trigger_seq01.connect(self.macro_executor.seq01_start_command)
+        print("d17 MainWindow")
+        self.signal_distributor.macro_trigger_seq02.connect(self.macro_executor.seq02_waiting_for_completion)
+        self.signal_distributor.macro_trigger_seq03.connect(self.macro_executor.seq03_handling_command_completion)
+        print("d12 MainWindow")
         self.signal_distributor.macro_trigger_seq04.connect(self.macro_executor.seq04_handling_cycle_completion)
         self.signal_distributor.restart_cycle.connect(self.command_view.restart_cycle)
+        self.signal_distributor.sendTotalCycles.connect(self.macro_executor.handle_total_cycles)
         self.signal_distributor.updateCompletedCycles.connect(self.macro_view.update_completed_cycles)
         self.signal_distributor.requestTotalCycles.connect(self.provide_total_cycles)
         self.signal_distributor.wait_command_executor.connect(self.handle_wait_command)
         self.signal_distributor.xgx_command_executor.connect(self.handle_xgx_command)
         self.signal_distributor.filter_constructed_command.connect(self.serial_model.filter_constructed_command)
+        print("d05 CommandController")
 
         # Initialize command_compiler_service
         self.command_model = CommandModel()
@@ -92,6 +101,7 @@ class MainWindow(QMainWindow):
         self.command_controller.debug_message.connect(self.update_debug_display)  # Connect the command controller log messages to the main window
         self.command_controller.log_message.connect(self.update_log_display)  # Connect the command controller log messages to the main window
         self.signal_distributor.construct_command_signal.connect(self.command_controller.construct_command)
+        print("d04 MainWindow")
 
         # Initialize status_view
         self.status_view = StatusView()
@@ -151,7 +161,7 @@ class MainWindow(QMainWindow):
         self.debug_display.append(f"Macro running status: {value}")
         self.status_view.update_macro_status(value)
         self.macro_executor.seq_start_sequence()
-
+        print("d00 MainWindow")
     def handle_macro_stopped(self, value):
         self.debug_display.append(f"Macro stopped status: {value}")
         # Add your handling code here
