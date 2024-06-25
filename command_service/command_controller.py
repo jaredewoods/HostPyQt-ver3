@@ -75,8 +75,7 @@ class CommandController(QObject):
     def on_wait_complete(self):
         print(f"Wait time of {self.wait_time} seconds completed.")
         self.log_message.emit(f'        (host) {int(self.wait_time)/1000} secs wait completed')
-        self.signal_distributor.macro_trigger_seq03.emit()  # Emit signal for seq03
-        # You can call the next method or signal here
+        self.signal_distributor.macro_trigger_seq03.emit()
 
     def handle_xgx_command(self, command):
         self.command = command
