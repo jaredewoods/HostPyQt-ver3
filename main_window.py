@@ -1,7 +1,7 @@
 # main_window.py
 from PyQt6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QHBoxLayout, QWidget, QTabWidget, QFrame, QTextEdit
 import sys
-
+# TODO: Integrate the T1 signal
 from serial_service.serial_model import SerialModel
 from serial_service.serial_view import SerialView
 from serial_service.serial_controller import SerialController
