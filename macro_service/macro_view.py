@@ -50,7 +50,7 @@ class MacroView(QWidget):
 
         # Macro Stop Button
         self.macro_stop_btn = QPushButton("Stop")
-        self.macro_stop_btn.setEnabled(False)
+        self.macro_stop_btn.setEnabled(True)
         layout.addWidget(self.macro_stop_btn, 2, 2, 1, 2)
 
         # Adjust column stretch to balance the layout

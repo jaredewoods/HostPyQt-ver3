@@ -119,7 +119,6 @@ class MainWindow(QMainWindow):
         self.signal_distributor.SEND_TOTAL_CYCLES_SIGNAL.emit(total_cycles)
 
     def on_state_changed(self, flag_name, value, update_condition):
-        # Log all state changes
         self.debug_display.append(f"State changed: {flag_name} -> {value}")
 
         # Handle specific state changes locally
@@ -137,7 +136,6 @@ class MainWindow(QMainWindow):
         self.tcp_controller.update_connection_btn_state(value)
         self.status_view.update_tcp_status(value)  # Update TCP status label
 
-    # Example additional handlers
     def handle_macro_ready_to_run(self, value):
         self.debug_display.append(f"Macro ready to run status: {value}")
 

@@ -24,11 +24,15 @@ class MacroController(QObject):
         self.flag_state_manager = flag_state_manager
         self.view.macro_select_cbx.activated.connect(self.on_macro_dropdown_activated)
         self.view.macro_start_btn.clicked.connect(self.set_macro_running_flag_true)
+        self.view.macro_stop_btn.clicked.connect(self.set_macro_running_flag_false)
 
         self.populate_macro_combobox()
 
     def set_macro_running_flag_true(self):
         self.signal_distributor.STATE_CHANGED_SIGNAL.emit("macro_running", True, "update")
+
+    def set_macro_running_flag_false(self):
+        self.signal_distributor.STATE_CHANGED_SIGNAL.emit("macro_running", False, "update")
 
     @staticmethod
     def get_macro_directory():
