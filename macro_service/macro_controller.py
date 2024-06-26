@@ -24,7 +24,6 @@ class MacroController(QObject):
         self.flag_state_manager = flag_state_manager
         self.view.macro_select_cbx.activated.connect(self.on_macro_dropdown_activated)
         self.view.macro_start_btn.clicked.connect(self.set_macro_running_flag_true)
-        # self.command_view.itemSelected.connect(self.load_macro_sequence_line)
 
         self.populate_macro_combobox()
 
@@ -70,26 +69,26 @@ class MacroController(QObject):
         with open(file_path, 'r') as file:
             return file.readlines()
 
-    @staticmethod
-    def parse_macro_file_content(lines):
+    def parse_macro_file_content(self, lines):
         suggested_cycles = 0
         macro_commands = []
         current_unit = None
         for line in lines:
             line = line.strip()
-            print(f"Parsing line: {line}")  # Debug statement
+            self.signal_distributor.DEBUG_MESSAGE.emit(f"Parsing line: {line}")
+
             if line.startswith("SUGGESTED_CYCLES"):
                 suggested_cycles = int(line.split(':')[1].strip())
-                print(f"Found suggested cycles: {suggested_cycles}")  # Debug statement
+                self.signal_distributor.DEBUG_MESSAGE.emit(f"Found suggested cycles: {suggested_cycles}")  # Debug statement
             elif line.startswith("[unit") and "start" in line:
                 current_unit = int(line.split("unit")[1].split()[0])
-                print(f"Entering unit: {current_unit}")  # Debug statement
+                self.signal_distributor.DEBUG_MESSAGE.emit(f"Entering unit: {current_unit}")  # Debug statement
             elif line.startswith("unit") and "end" in line:
-                print(f"Exiting unit: {current_unit}")  # Debug statement
+                self.signal_distributor.DEBUG_MESSAGE.emit(f"Exiting unit: {current_unit}")  # Debug statement
                 current_unit = None
             elif current_unit is not None and line:
                 macro_commands.append((line, current_unit))
-                print(f"Added command: {line} (Unit {current_unit})")  # Debug statement
+                self.signal_distributor.DEBUG_MESSAGE.emit(f"Added command: {line} (Unit {current_unit})")  # Debug statement
         return suggested_cycles, macro_commands
 
     def update_ui_with_macro_data(self, suggested_cycles, macro_commands):
@@ -101,28 +100,19 @@ class MacroController(QObject):
         macro_directory = self.get_macro_directory()
         file_path = os.path.join(macro_directory, file_name)
         lines = self.read_macro_file(file_path)
-
         suggested_cycles, macro_commands = self.parse_macro_file_content(lines)
-
         self.update_ui_with_macro_data(suggested_cycles, macro_commands)
-
-        print("Suggested Cycles:", suggested_cycles)
-        print("Macro Commands:", macro_commands)
-
+        self.signal_distributor.DEBUG_MESSAGE.emit(f"Suggested Cycles: {suggested_cycles}")
+        self.signal_distributor.DEBUG_MESSAGE.emit(f"Macro Commands: {macro_commands}")
         self.macro_commands = macro_commands
-
         return suggested_cycles, macro_commands
 
     def load_macro_sequence_line(self):
         selected_item = self.command_view.macro_sequence_display.currentItem()
         if selected_item:
             full_command_with_unit = selected_item.text()
-
-            # Assuming the format is [unit_number + full_command]
             unit_number = full_command_with_unit[0]
             full_command = full_command_with_unit[1:]
-
-            # Assuming command format is COMMAND + PARAMETERS
             command = full_command[:4]
             parameters = full_command[4:]
 
