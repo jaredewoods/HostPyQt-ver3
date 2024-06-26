@@ -28,7 +28,6 @@ class MacroController(QObject):
         self.populate_macro_combobox()
 
     def set_macro_running_flag_true(self):
-        print("updates macro running flag and triggers handle_macro_running")
         self.signal_distributor.STATE_CHANGED_SIGNAL.emit("macro_running", True, "update")
 
     @staticmethod
