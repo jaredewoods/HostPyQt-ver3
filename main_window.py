@@ -96,7 +96,7 @@ class MainWindow(QMainWindow):
         self.signal_distributor.restart_cycle.connect(self.command_view.restart_cycle)
         self.signal_distributor.sendTotalCycles.connect(self.macro_executor.handle_total_cycles)
         self.signal_distributor.updateCompletedCycles.connect(self.macro_view.update_completed_cycles)
-        self.signal_distributor.requestTotalCycles.connect(self.provide_total_cycles)
+        self.signal_distributor.REQUEST_TOTAL_CYCLES_SIGNAL.connect(self.provide_total_cycles)
         self.signal_distributor.wait_command_executor.connect(self.handle_wait_command)
         self.signal_distributor.xgx_command_executor.connect(self.handle_xgx_command)
         self.signal_distributor.filter_constructed_command.connect(self.serial_model.filter_constructed_command)
