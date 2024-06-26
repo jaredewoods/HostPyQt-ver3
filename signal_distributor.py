@@ -8,7 +8,7 @@ from PyQt6.QtCore import QObject, pyqtSignal
 class SignalDistributor(QObject):
     state_changed = pyqtSignal(str, bool, str)
     REQUEST_TOTAL_CYCLES_SIGNAL = pyqtSignal()
-    sendTotalCycles = pyqtSignal(int)
+    SEND_TOTAL_CYCLES_SIGNAL = pyqtSignal(int)
     updateCompletedCycles = pyqtSignal(int)
 
     construct_command_signal = pyqtSignal()

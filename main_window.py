@@ -94,7 +94,7 @@ class MainWindow(QMainWindow):
         print("d12 MainWindow")
         self.signal_distributor.macro_trigger_seq04.connect(self.macro_executor.seq04_handling_cycle_completion)
         self.signal_distributor.restart_cycle.connect(self.command_view.restart_cycle)
-        self.signal_distributor.sendTotalCycles.connect(self.macro_executor.handle_total_cycles)
+        self.signal_distributor.SEND_TOTAL_CYCLES_SIGNAL.connect(self.macro_executor.handle_total_cycles)
         self.signal_distributor.updateCompletedCycles.connect(self.macro_view.update_completed_cycles)
         self.signal_distributor.REQUEST_TOTAL_CYCLES_SIGNAL.connect(self.provide_total_cycles)
         self.signal_distributor.wait_command_executor.connect(self.handle_wait_command)
@@ -142,7 +142,7 @@ class MainWindow(QMainWindow):
 
     def provide_total_cycles(self):
         total_cycles = int(self.macro_view.macro_total_cycles_lbl.text())
-        self.signal_distributor.sendTotalCycles.emit(total_cycles)
+        self.signal_distributor.SEND_TOTAL_CYCLES_SIGNAL.emit(total_cycles)
 
     def on_state_changed(self, flag_name, value, update_condition):
         # Log all state changes
