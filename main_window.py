@@ -110,7 +110,7 @@ class MainWindow(QMainWindow):
             self.update_debug_display)  # Connect the command controller log messages to the main window
         self.command_controller.log_message.connect(
             self.update_log_display)  # Connect the command controller log messages to the main window
-        self.signal_distributor.construct_command_signal.connect(self.command_controller.construct_command)
+        self.signal_distributor.CONSTRUCT_COMMAND_SIGNAL.connect(self.command_controller.construct_command)
         print("d04 MainWindow")
 
         # Initialize status_view

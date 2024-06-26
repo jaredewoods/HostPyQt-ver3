@@ -91,7 +91,7 @@ class MacroExecutor(QObject):
                 not self._MACRO_COMPLETED and
                 not self._WAITING_FOR_COMPLETION and
                 not self._ALARM_RECEIVED):
-            self.signal_distributor.construct_command_signal.emit()
+            self.signal_distributor.CONSTRUCT_COMMAND_SIGNAL.emit()
             print("d03 MacroExecutor")
             print("d17 MainWindow")
         else:
