@@ -5,4 +5,5 @@ unit1 end]
 MTRSG100AL
 MALN1009000
 WAIT3000
+SENDT1
 unit2 end]

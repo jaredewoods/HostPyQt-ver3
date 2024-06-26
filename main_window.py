@@ -66,7 +66,7 @@ class MainWindow(QMainWindow):
         self.serial_controller = SerialController(self.serial_model, self.serial_view, self.signal_distributor, self.flag_state_manager)
         """OUTSIDE SIGNAL DISTRIBUTOR"""
 
-        self.tcp_model = TCPModel()
+        self.tcp_model = TCPModel(self.signal_distributor)
         self.tcp_view = TCPView()
         self.tcp_controller = TCPController(self.tcp_model, self.tcp_view, self.signal_distributor)
         self.macro_model = MacroModel()
@@ -182,6 +182,7 @@ class MainWindow(QMainWindow):
 
     def handle_xgx_command(self, command):
         self.xgx_command = command[6:8]
+        self.tcp_controller.handle_tcp_command(self.xgx_command)
         print(f"I am handling xg-x trigger {self.xgx_command} as best i can")
 
     def update_debug_display(self, message):

@@ -34,3 +34,7 @@ class TCPController(QObject):
     def update_connection_btn_state(self, connected):
         self.view.tcp_connect_btn.setEnabled(not connected)
         self.view.tcp_close_btn.setEnabled(connected)
+
+    def handle_tcp_command(self, command):
+        print("1")
+        self.model.send_tcp_command(command)
