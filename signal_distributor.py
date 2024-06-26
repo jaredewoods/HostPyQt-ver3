@@ -27,6 +27,7 @@ class SignalDistributor(QObject):
 
     DEBUG_MESSAGE = pyqtSignal(str)
     LOG_MESSAGE = pyqtSignal(str)
+    ALARM_MESSAGE = pyqtSignal(str)
 
     def __init__(self):
         super().__init__()

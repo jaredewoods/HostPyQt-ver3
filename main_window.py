@@ -65,7 +65,6 @@ class MainWindow(QMainWindow):
         self.serial_view = SerialView()
         self.serial_controller = SerialController(self.serial_model, self.serial_view, self.signal_distributor, self.flag_state_manager)
         """OUTSIDE SIGNAL DISTRIBUTOR"""
-        self.serial_controller.alarm_signal.connect(self.show_alarm_messagebox)
 
         self.tcp_model = TCPModel()
         self.tcp_view = TCPView()
@@ -73,8 +72,14 @@ class MainWindow(QMainWindow):
         self.macro_model = MacroModel()
         self.macro_view = MacroView()
         self.command_view = CommandView(self.signal_distributor, "Preset 1", "Preset 2", "Preset 3", "Preset 4")
+        self.command_model = CommandModel()
+        """OUTSIDE SIGNAL DISTRIBUTOR"""
+        self.command_controller = CommandController(self.command_model, self.command_view, self.signal_distributor)
         self.macro_controller = MacroController(self.macro_model, self.macro_view, self.command_view, self.signal_distributor, self.flag_state_manager)
 
+        self.signal_distributor.DEBUG_MESSAGE.connect(self.update_debug_display)
+        self.signal_distributor.LOG_MESSAGE.connect(self.update_log_display)
+        self.signal_distributor.ALARM_MESSAGE.connect(self.show_alarm_messagebox)
         self.signal_distributor.NEXT_CYCLE_ITEM_SIGNAL.connect(self.command_view.select_next_macro_item)
         self.signal_distributor.MACRO_TRIGGER_SEQ00_SIGNAL.connect(self.macro_executor.seq00_start_cycle)
         self.signal_distributor.MACRO_TRIGGER_SEQ01_SIGNAL.connect(self.macro_executor.seq01_start_command)
@@ -88,43 +93,24 @@ class MainWindow(QMainWindow):
         self.signal_distributor.WAIT_COMMAND_EXECUTOR_SIGNAL.connect(self.handle_wait_command)
         self.signal_distributor.XGX_COMMAND_EXECUTOR_SIGNAL.connect(self.handle_xgx_command)
         self.signal_distributor.FILTER_CONSTRUCTED_COMMAND_SIGNAL.connect(self.serial_model.filter_constructed_command)
-        self.signal_distributor.DEBUG_MESSAGE.connect(self.update_debug_display)  # Connect the command controller log messages to the main window
-
-        # Initialize command_compiler_service
-        self.command_model = CommandModel()
-        self.command_controller = CommandController(self.command_model, self.command_view, self.serial_controller, self.signal_distributor)
         self.signal_distributor.CYCLE_COMPLETED_SIGNAL.connect(self.command_controller.signal_cycle_completed)
-        """OUTSIDE SIGNAL DISTRIBUTOR"""
-        # self.command_controller.log_message.connect(self.update_log_display)  # Connect the command controller log messages to the main window
-        """Should be grouped with others"""
         self.signal_distributor.CONSTRUCT_COMMAND_SIGNAL.connect(self.command_controller.construct_command)
 
-        # Initialize status_view
         self.status_view = StatusView()
-
-        # Create QTabWidget
         self.tab_widget = QTabWidget()
         self.tab_widget.addTab(self.serial_view, "Serial")
         self.tab_widget.addTab(self.tcp_view, "TCP / IP")
         self.tab_widget.addTab(self.macro_view, "Macro")
-
-        # Adding to the Control layout
         self.control_layout.addWidget(self.tab_widget)
         self.control_layout.addWidget(self.command_view)
         self.control_layout.addWidget(self.status_view)
-
-        # Adding to the main layout
         main_layout.addWidget(self.control_frame)
         main_layout.addWidget(self.message_display_frame)
-
         self.setWindowTitle("Main Window")
-
-        # Open FlagStateView at startup
         self.flag_state_view = FlagStateView(self.flag_state_manager)
-        self.flag_state_view.show()
 
-        # assign additional signals
-        print("MainWindow initialization complete")
+        self.signal_distributor.DEBUG_MESSAGE.emit("MainWindow initialization complete")
+        self.flag_state_view.show()
 
     def provide_total_cycles(self):
         total_cycles = int(self.macro_view.macro_total_cycles_lbl.text())

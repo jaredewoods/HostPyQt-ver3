@@ -81,7 +81,7 @@ class SerialReader(QThread):
                 self.signal_distributor.STATE_CHANGED_SIGNAL.emit('alarm_received', False, 'update')
                 alarm_code = response[4:8]
                 subcode = response[9:12]
-                self.alarm_signal.emit(alarm_code, subcode)
+                self.signal_distributor.ALARM_MESSAGE.emit(alarm_code, subcode)
                 return False
 
         elif response[0] == '$':
@@ -98,7 +98,7 @@ class SerialReader(QThread):
                 self.signal_distributor.STATE_CHANGED_SIGNAL.emit('alarm_received', True, 'update')
                 alarm_code = response[4:8]
                 subcode = response[9:12]
-                self.alarm_signal.emit(alarm_code, subcode)
+                self.signal_distributor.ALARM_MESSAGE.emit(alarm_code, subcode)
                 return False
 
         self.signal_distributor.DEBUG_MESSAGE.emit(f"Invalid response: {response}")

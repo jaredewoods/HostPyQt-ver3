@@ -8,7 +8,6 @@ class CommandView(QWidget):
     single_shot_btn_clicked = pyqtSignal()
     reset_btn_clicked = pyqtSignal()
     run_next_command = pyqtSignal()
-    # CYCLE_COMPLETED_SIGNAL = pyqtSignal()
 
     def __init__(self, signal_distributor, btn_preset1_name, btn_preset2_name, btn_preset3_name, btn_preset4_name):
         super().__init__()

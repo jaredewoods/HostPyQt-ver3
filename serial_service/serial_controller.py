@@ -17,7 +17,7 @@ class SerialController(QObject):
         self.view.serial_connect_btn.clicked.connect(self.connect_serial)
         self.view.serial_close_btn.clicked.connect(self.disconnect_serial)
 
-        self.model.alarm_signal.connect(self.alarm_signal.emit)
+        # self.model.alarm_signal.connect(self.alarm_signal.emit)
 
     def _populate_ports(self):
         """

@@ -3,7 +3,7 @@ from PyQt6.QtCore import QObject, pyqtSignal, QTimer
 
 class CommandController(QObject):
 
-    def __init__(self, model, view, serial_controller, signal_distributor):
+    def __init__(self, model, view, signal_distributor):
         super().__init__()
         self.timer = None
         self.command = None
@@ -11,7 +11,6 @@ class CommandController(QObject):
         self.wait_time = None
         self.model = model
         self.view = view
-        self.serial_controller = serial_controller
         self.signal_distributor = signal_distributor
 
         # Connect the view's User Interface to the controller's methods
