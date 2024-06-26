@@ -71,7 +71,7 @@ class MainWindow(QMainWindow):
         self.tcp_controller = TCPController(self.tcp_model, self.tcp_view, self.signal_distributor)
         self.macro_model = MacroModel()
         self.macro_view = MacroView()
-        self.command_view = CommandView(self.signal_distributor, "Preset 1", "Preset 2", "Preset 3", "Preset 4")
+        self.command_view = CommandView(self.signal_distributor)
         self.command_model = CommandModel()
         """OUTSIDE SIGNAL DISTRIBUTOR"""
         self.command_controller = CommandController(self.command_model, self.command_view, self.signal_distributor)

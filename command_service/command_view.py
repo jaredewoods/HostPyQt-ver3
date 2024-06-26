@@ -5,7 +5,7 @@ from resources.command_dictionary import commands
 
 class CommandView(QWidget):
 
-    def __init__(self, signal_distributor, btn_preset1_name, btn_preset2_name, btn_preset3_name, btn_preset4_name):
+    def __init__(self, signal_distributor):
         super().__init__()
         self.entry_parameters = None
         self.clear_btn = None
@@ -30,23 +30,6 @@ class CommandView(QWidget):
         self.setup_macro_display()
 
         self.setLayout(self.main_layout)
-
-    def setup_preset_buttons(self, btn_preset1_name, btn_preset2_name, btn_preset3_name, btn_preset4_name):
-        # Preset buttons
-        preset_layout = QGridLayout()
-        self.btn_preset1 = QPushButton(btn_preset1_name)
-        self.btn_preset1.setEnabled(False)
-        preset_layout.addWidget(self.btn_preset1, 0, 0, 1, 2)
-        self.btn_preset2 = QPushButton(btn_preset2_name)
-        self.btn_preset2.setEnabled(False)
-        preset_layout.addWidget(self.btn_preset2, 0, 2, 1, 2)
-        self.btn_preset3 = QPushButton(btn_preset3_name)
-        self.btn_preset3.setEnabled(False)
-        preset_layout.addWidget(self.btn_preset3, 1, 0, 1, 2)
-        self.btn_preset4 = QPushButton(btn_preset4_name)
-        self.btn_preset4.setEnabled(False)
-        preset_layout.addWidget(self.btn_preset4, 1, 2, 1, 2)
-        self.main_layout.addLayout(preset_layout)
 
     def setup_checkboxes(self):
         checkboxes_layout = QHBoxLayout()
