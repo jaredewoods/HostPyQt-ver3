@@ -159,7 +159,7 @@ class CommandView(QWidget):
 
     def restart_cycle(self):
         self.macro_sequence_display.setCurrentRow(0)
-        self.signal_distributor.macro_trigger_seq00.emit()
+        self.signal_distributor.MACRO_TRIGGER_SEQ00_SIGNAL.emit()
         self.debug_message.emit("Restarting Cycle")
 
     def on_single_shot_btn_clicked(self):

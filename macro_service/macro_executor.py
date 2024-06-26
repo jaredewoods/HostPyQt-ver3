@@ -131,7 +131,7 @@ class MacroExecutor(QObject):
             self._COMMANDS_COMPLETED += 1
             self.debug_message.emit(
                 f"Command Completed in {command_time / 1000} seconds\nCommands Completed: {self._COMMANDS_COMPLETED}")
-            self.signal_distributor.next_macro_item.emit()
+            self.signal_distributor.NEXT_CYCLE_ITEM_SIGNAL.emit()
             print("d13 MacroExecutor")
         else:
             self.debug_message.emit(f"Flag violation 03: {self._FLAGS}")
@@ -191,7 +191,7 @@ class MacroExecutor(QObject):
     def handle_total_cycles(self, total_cycles):
         self.debug_message.emit(f"{self._CYCLES_COMPLETED} of {total_cycles} completed in {self.cycle_time / 1000}s")
         if self._CYCLES_COMPLETED < total_cycles:
-            self.signal_distributor.restart_cycle.emit()
+            self.signal_distributor.RESTART_CYCLE_SIGNAL.emit()
             self.debug_message.emit("restart cycle")
         else:
             self.signal_distributor.STATE_CHANGED_SIGNAL.emit("macro_completed", True, "update")

@@ -28,10 +28,10 @@ class CommandController(QObject):
         self.update_view()
 
     def signal_cycle_completed(self):
-        self.signal_distributor.macro_trigger_seq04.emit()
+        self.signal_distributor.MACRO_TRIGGER_SEQ04_SIGNAL.emit()
 
     def run_next_command(self):
-        self.signal_distributor.macro_trigger_seq01.emit()
+        self.signal_distributor.MACRO_TRIGGER_SEQ01_SIGNAL.emit()
         print("d16 CommandController")
 
     def update_model(self):
@@ -60,7 +60,7 @@ class CommandController(QObject):
     def construct_command(self):
         constructed_command = self.model.construct_command()
         print(f"Command Constructed: {constructed_command}")
-        self.signal_distributor.filter_constructed_command.emit(constructed_command)
+        self.signal_distributor.FILTER_CONSTRUCTED_COMMAND_SIGNAL.emit(constructed_command)
         print("d05 CommandController")
 
     def handle_wait_command(self, command):
@@ -75,7 +75,7 @@ class CommandController(QObject):
     def on_wait_complete(self):
         print(f"Wait time of {self.wait_time} seconds completed.")
         self.log_message.emit(f'        (host) {int(self.wait_time)/1000} secs wait completed')
-        self.signal_distributor.macro_trigger_seq03.emit()
+        self.signal_distributor.MACRO_TRIGGER_SEQ03_SIGNAL.emit()
 
     def handle_xgx_command(self, command):
         self.command = command

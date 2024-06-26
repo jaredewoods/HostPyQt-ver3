@@ -10,19 +10,19 @@ class SignalDistributor(QObject):
     REQUEST_TOTAL_CYCLES_SIGNAL = pyqtSignal()
     SEND_TOTAL_CYCLES_SIGNAL = pyqtSignal(int)
     UPDATE_COMPLETED_CYCLES_SIGNAL = pyqtSignal(int)
+    RESTART_CYCLE_SIGNAL = pyqtSignal()
 
-    CONSTRUCT_COMMAND_SIGNAL = pyqtSignal()
     WAIT_COMMAND_EXECUTOR_SIGNAL = pyqtSignal(str)
     XGX_COMMAND_EXECUTOR_SIGNAL = pyqtSignal(str)
-    filter_constructed_command = pyqtSignal(str)
+    CONSTRUCT_COMMAND_SIGNAL = pyqtSignal()
+    FILTER_CONSTRUCTED_COMMAND_SIGNAL = pyqtSignal(str)
 
-    next_macro_item = pyqtSignal()
-    macro_trigger_seq00 = pyqtSignal()
-    macro_trigger_seq01 = pyqtSignal()
-    macro_trigger_seq02 = pyqtSignal()
-    macro_trigger_seq03 = pyqtSignal()
-    macro_trigger_seq04 = pyqtSignal()
-    restart_cycle = pyqtSignal()
+    NEXT_CYCLE_ITEM_SIGNAL = pyqtSignal()
+    MACRO_TRIGGER_SEQ00_SIGNAL = pyqtSignal()
+    MACRO_TRIGGER_SEQ01_SIGNAL = pyqtSignal()
+    MACRO_TRIGGER_SEQ02_SIGNAL = pyqtSignal()
+    MACRO_TRIGGER_SEQ03_SIGNAL = pyqtSignal()
+    MACRO_TRIGGER_SEQ04_SIGNAL = pyqtSignal()
 
     def __init__(self):
         super().__init__()
