@@ -74,7 +74,7 @@ class SerialModel(QObject):
             self.signal_distributor.WAIT_COMMAND_EXECUTOR_SIGNAL.emit(command)
         elif "SEND" in command:
             print(F"we got a XG-X{command}")
-            self.signal_distributor.xgx_command_executor.emit(command)
+            self.signal_distributor.XGX_COMMAND_EXECUTOR_SIGNAL.emit(command)
         else:
             print(f"NXC100 command {command}")
             self.write_command_to_serial(command)

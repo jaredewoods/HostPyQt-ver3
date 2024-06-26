@@ -13,7 +13,7 @@ class SignalDistributor(QObject):
 
     CONSTRUCT_COMMAND_SIGNAL = pyqtSignal()
     WAIT_COMMAND_EXECUTOR_SIGNAL = pyqtSignal(str)
-    xgx_command_executor = pyqtSignal(str)
+    XGX_COMMAND_EXECUTOR_SIGNAL = pyqtSignal(str)
     filter_constructed_command = pyqtSignal(str)
 
     next_macro_item = pyqtSignal()
