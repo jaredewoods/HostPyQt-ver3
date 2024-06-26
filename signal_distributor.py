@@ -9,7 +9,7 @@ class SignalDistributor(QObject):
     state_changed = pyqtSignal(str, bool, str)
     REQUEST_TOTAL_CYCLES_SIGNAL = pyqtSignal()
     SEND_TOTAL_CYCLES_SIGNAL = pyqtSignal(int)
-    updateCompletedCycles = pyqtSignal(int)
+    UPDATE_COMPLETED_CYCLES_SIGNAL = pyqtSignal(int)
 
     construct_command_signal = pyqtSignal()
     wait_command_executor = pyqtSignal(str)

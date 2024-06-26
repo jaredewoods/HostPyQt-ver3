@@ -154,7 +154,7 @@ class MacroExecutor(QObject):
             self.debug_message.emit(f"Cycle #{self._CYCLES_COMPLETED} completed in {self.cycle_time / 1000} seconds")
             self.log_message.emit(
                 f'  completed: {self._CYCLES_COMPLETED}  |  time: {self.cycle_time / 1000}s  |  total time: {sequence_time / 1000}s\n')
-            self.signal_distributor.updateCompletedCycles.emit(self._CYCLES_COMPLETED)
+            self.signal_distributor.UPDATE_COMPLETED_CYCLES_SIGNAL.emit(self._CYCLES_COMPLETED)
             self.signal_distributor.REQUEST_TOTAL_CYCLES_SIGNAL.emit()
         else:
             self.debug_message.emit(f"Flag violation 04: {self._FLAGS}")
