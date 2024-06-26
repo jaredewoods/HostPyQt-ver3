@@ -4,8 +4,8 @@ from PyQt6.QtCore import Qt
 from resources.command_dictionary import commands
 
 class CommandView(QWidget):
-    single_shot_btn_clicked = pyqtSignal()
-    reset_btn_clicked = pyqtSignal()
+    # single_shot_btn_clicked = pyqtSignal()
+    # reset_btn_clicked = pyqtSignal()
     run_next_command = pyqtSignal()
 
     def __init__(self, signal_distributor, btn_preset1_name, btn_preset2_name, btn_preset3_name, btn_preset4_name):
@@ -126,9 +126,9 @@ class CommandView(QWidget):
         self.clear_btn = QPushButton("Clear Command")
 
         buttons_layout.addWidget(self.single_shot_btn, 0, 0, 1, 2)
-        self.single_shot_btn.clicked.connect(self.on_single_shot_btn_clicked)
+        self.single_shot_btn.clicked.connect(self.signal_distributor.SINGLE_SHOT_BUTTON_CLICKED)
         buttons_layout.addWidget(self.reset_btn, 0, 2, 1, 2)
-        self.reset_btn.clicked.connect(self.reset_macro)
+        self.reset_btn.clicked.connect(self.reset_macro_fields_and_flags)
         buttons_layout.addWidget(self.edit_btn, 1, 0, 1, 2)
         self.edit_btn.clicked.connect(self.edit_macro_sequence)
         buttons_layout.addWidget(self.clear_btn, 1, 2, 1, 2)
@@ -203,14 +203,13 @@ class CommandView(QWidget):
         self.set_parameters("")
         self.signal_distributor.DEBUG_MESSAGE.emit("Fields have been cleared")
 
-    @staticmethod
-    def reset_flags():
+    def reset_flags(self):
         # self.signal_distributor.state_changed.emit('waiting_for_completion', False, 'update')
         # self.signal_distributor.state_changed.emit('macro_running', False, 'update')
         # self.signal_distributor.state_changed.emit('response_received', False, 'update')
         # self.signal_distributor.state_changed.emit('completion_received', False, 'update')
-        self.signal_distributor.DEBUG_MESSAGE.emitemit("Flags have NOT been reset")
+        self.signal_distributor.DEBUG_MESSAGE.emit("Flags have NOT been reset")
 
-    def reset_macro(self):
+    def reset_macro_fields_and_flags(self):
         self.clear_fields()
         self.reset_flags()

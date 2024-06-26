@@ -7,6 +7,8 @@ from PyQt6.QtCore import QObject, pyqtSignal
 
 class SignalDistributor(QObject):
     ITEM_SELECTED_SIGNAL = pyqtSignal()
+    SINGLE_SHOT_BUTTON_CLICKED = pyqtSignal()
+    RESET_BUTTON_CLICKED = pyqtSignal()
 
     STATE_CHANGED_SIGNAL = pyqtSignal(str, bool, str)
     REQUEST_TOTAL_CYCLES_SIGNAL = pyqtSignal()

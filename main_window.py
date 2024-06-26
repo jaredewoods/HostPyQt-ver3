@@ -96,6 +96,8 @@ class MainWindow(QMainWindow):
         self.signal_distributor.CYCLE_COMPLETED_SIGNAL.connect(self.command_controller.signal_cycle_completed)
         self.signal_distributor.CONSTRUCT_COMMAND_SIGNAL.connect(self.command_controller.construct_command)
         self.signal_distributor.ITEM_SELECTED_SIGNAL.connect(self.macro_controller.load_macro_sequence_line)
+        self.signal_distributor.SINGLE_SHOT_BUTTON_CLICKED.connect(self.command_controller.send_single_shot)
+
         self.status_view = StatusView()
         self.tab_widget = QTabWidget()
         self.tab_widget.addTab(self.serial_view, "Serial")

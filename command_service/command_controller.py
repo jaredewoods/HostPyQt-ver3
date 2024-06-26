@@ -20,7 +20,6 @@ class CommandController(QObject):
         self.view.dropdown_unit_no.currentTextChanged.connect(self.update_model)
         self.view.dropdown_code.currentTextChanged.connect(self.update_model)
         self.view.entry_parameters.textChanged.connect(self.update_model)
-        self.view.single_shot_btn_clicked.connect(self.send_single_shot)
         self.view.run_next_command.connect(self.run_next_command)
         self.update_view()
 
