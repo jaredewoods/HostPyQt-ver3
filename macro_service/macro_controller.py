@@ -30,7 +30,7 @@ class MacroController(QObject):
 
     def set_macro_running_flag_true(self):
         print("updates macro running flag and triggers handle_macro_running")
-        self.signal_distributor.state_changed.emit("macro_running", True, "update")
+        self.signal_distributor.STATE_CHANGED_SIGNAL.emit("macro_running", True, "update")
 
     @staticmethod
     def get_macro_directory():
@@ -56,7 +56,7 @@ class MacroController(QObject):
     def update_macro_ready_state(self):
         serial_connected = self.flag_state_manager.get_flag_status('serial_connected')
         macro_ready = serial_connected
-        self.signal_distributor.state_changed.emit('macro_ready_to_run', macro_ready, 'update')
+        self.signal_distributor.STATE_CHANGED_SIGNAL.emit('macro_ready_to_run', macro_ready, 'update')
 
     def handle_macro_file_selection(self, selected_file):
         macro_sequence_file_path = os.path.join(self.get_macro_directory(), selected_file)

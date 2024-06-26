@@ -55,7 +55,7 @@ class CommandController(QObject):
 
     def send_single_shot(self):
         self.construct_command()
-        self.signal_distributor.state_changed.emit('macro_ready_to_run', False, 'update')
+        self.signal_distributor.STATE_CHANGED_SIGNAL.emit('macro_ready_to_run', False, 'update')
 
     def construct_command(self):
         constructed_command = self.model.construct_command()

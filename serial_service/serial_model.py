@@ -89,8 +89,8 @@ class SerialModel(QObject):
                 self.log_message.emit(f"  (sent)  {cleaned_command}")
                 # I believe this is redundant, keep the state_changed
                 self.reader_thread.expecting_response = True
-                self.signal_distributor.state_changed.emit('completion_received', False, 'update')
-                self.signal_distributor.state_changed.emit('response_received', False, 'update')
+                self.signal_distributor.STATE_CHANGED_SIGNAL.emit('completion_received', False, 'update')
+                self.signal_distributor.STATE_CHANGED_SIGNAL.emit('response_received', False, 'update')
                 print("d08 SerialModel")
 
             except serial.SerialException as e:

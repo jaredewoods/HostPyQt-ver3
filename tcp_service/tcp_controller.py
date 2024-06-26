@@ -20,17 +20,17 @@ class TCPController(QObject):
         port = self.view.port_combo.currentText()
         success = self.model.connect(ip_address, port)
         if success:
-            self.signal_distributor.state_changed.emit('tcp_connected', True, 'validate')
+            self.signal_distributor.STATE_CHANGED_SIGNAL.emit('tcp_connected', True, 'validate')
             self.debug_message.emit(f"Connected to {ip_address}:{port}")
             self.log_message.emit(f"Connected to {ip_address}:{port}")
         else:
-            self.signal_distributor.state_changed.emit('tcp_connected', False, 'update')
+            self.signal_distributor.STATE_CHANGED_SIGNAL.emit('tcp_connected', False, 'update')
             self.debug_message.emit(f"Failed to connect to {ip_address}:{port}")
 
     def disconnect_tcp(self):
         success = self.model.disconnect()
         if success:
-            self.signal_distributor.state_changed.emit('tcp_connected', False, 'update')
+            self.signal_distributor.STATE_CHANGED_SIGNAL.emit('tcp_connected', False, 'update')
             self.debug_message.emit("Disconnected from TCP connection")
 
     def update_connection_btn_state(self, connected):

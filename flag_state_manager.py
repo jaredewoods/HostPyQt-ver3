@@ -73,7 +73,7 @@ class FlagStateManager(QObject):
         self.display_timestamp = False
 
         # Connect signal_distributor signal to the update_state method
-        self.signal_distributor.state_changed.connect(self.update_state)
+        self.signal_distributor.STATE_CHANGED_SIGNAL.connect(self.update_state)
 
     @pyqtSlot(str, bool, str)
     def update_state(self, flag_name, value, condition):

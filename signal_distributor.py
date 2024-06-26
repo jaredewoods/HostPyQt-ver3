@@ -6,7 +6,7 @@ from PyQt6.QtCore import QObject, pyqtSignal
 
 
 class SignalDistributor(QObject):
-    state_changed = pyqtSignal(str, bool, str)
+    STATE_CHANGED_SIGNAL = pyqtSignal(str, bool, str)
     REQUEST_TOTAL_CYCLES_SIGNAL = pyqtSignal()
     SEND_TOTAL_CYCLES_SIGNAL = pyqtSignal(int)
     UPDATE_COMPLETED_CYCLES_SIGNAL = pyqtSignal(int)
@@ -28,4 +28,4 @@ class SignalDistributor(QObject):
         super().__init__()
 
     def emit_state_change(self, flag_name, value, update_condition):
-        self.state_changed.emit(flag_name, value, update_condition)
+        self.STATE_CHANGED_SIGNAL.emit(flag_name, value, update_condition)

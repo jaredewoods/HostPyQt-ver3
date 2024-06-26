@@ -48,12 +48,12 @@ class SerialController(QObject):
         success = self.model.connect(port, baudrate)
         if success:
             self.update_connection_state(True)
-            self.signal_distributor.state_changed.emit('serial_connected', True, 'validate')
+            self.signal_distributor.STATE_CHANGED_SIGNAL.emit('serial_connected', True, 'validate')
             # self.debug_message.emit(f"Connected to {port} at {baudrate} baudrate")
             # self.log_message.emit(f"SERIAL CONNECTION to {port} at {baudrate}")
         else:
             self.update_connection_state(False)
-            self.signal_distributor.state_changed.emit('serial_connected', False, 'validate')
+            self.signal_distributor.STATE_CHANGED_SIGNAL.emit('serial_connected', False, 'validate')
             self.log_message.emit(f"SERIAL CONNECTION FAILED to {port} at {baudrate}")
             self.debug_message.emit(f"Failed to connect to {port}")
 
@@ -67,7 +67,7 @@ class SerialController(QObject):
         success = self.model.disconnect_serial()
         if success:
             self.update_connection_state(False)
-            self.signal_distributor.state_changed.emit('serial_connected', False, 'update')
+            self.signal_distributor.STATE_CHANGED_SIGNAL.emit('serial_connected', False, 'update')
             self.debug_message.emit("Disconnected from serial port")
             self.log_message.emit("Serial port disconnected")
 

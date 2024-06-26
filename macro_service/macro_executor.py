@@ -194,9 +194,9 @@ class MacroExecutor(QObject):
             self.signal_distributor.restart_cycle.emit()
             self.debug_message.emit("restart cycle")
         else:
-            self.signal_distributor.state_changed.emit("macro_completed", True, "update")
-            self.signal_distributor.state_changed.emit("macro_stopped", True, "update")
-            self.signal_distributor.state_changed.emit("macro_running", False, "update")
-            self.signal_distributor.state_changed.emit("macro_ready_to_run", False, "update")
+            self.signal_distributor.STATE_CHANGED_SIGNAL.emit("macro_completed", True, "update")
+            self.signal_distributor.STATE_CHANGED_SIGNAL.emit("macro_stopped", True, "update")
+            self.signal_distributor.STATE_CHANGED_SIGNAL.emit("macro_running", False, "update")
+            self.signal_distributor.STATE_CHANGED_SIGNAL.emit("macro_ready_to_run", False, "update")
             self.seq05_handling_sequence_completion()
             self.debug_message.emit("handling sequence completion")
