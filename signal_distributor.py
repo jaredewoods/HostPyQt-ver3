@@ -12,7 +12,7 @@ class SignalDistributor(QObject):
     UPDATE_COMPLETED_CYCLES_SIGNAL = pyqtSignal(int)
 
     construct_command_signal = pyqtSignal()
-    wait_command_executor = pyqtSignal(str)
+    WAIT_COMMAND_EXECUTOR_SIGNAL = pyqtSignal(str)
     xgx_command_executor = pyqtSignal(str)
     filter_constructed_command = pyqtSignal(str)
 
