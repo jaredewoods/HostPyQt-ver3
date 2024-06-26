@@ -12,7 +12,6 @@ class SerialModel(QObject):
     Attributes:
         debug_message: Signal emitted for general log messages.
     """
-    debug_message = pyqtSignal(str)
     log_message = pyqtSignal(str)
     alarm_signal = pyqtSignal(str, str)
 
@@ -33,25 +32,18 @@ class SerialModel(QObject):
 
     def connect(self, port, baudrate=9600):
         try:
-            self.serial_port = serial.Serial(port,
-                                             baudrate,
-                                             parity=serial.PARITY_NONE,
-                                             stopbits=serial.STOPBITS_ONE,
-                                             bytesize=serial.EIGHTBITS,)
+            self.serial_port = serial.Serial(port, baudrate, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS,)
             self.reader_thread = SerialReader(self.serial_port, self.signal_distributor, self.flag_state_manager)
 
-            """OUTSIDE SIGNAL DISTRIBUTOR"""
-            self.reader_thread.debug_message.connect(self.debug_message.emit)
             self.reader_thread.log_message.connect(self.log_message.emit)
             self.reader_thread.alarm_signal.connect(self.alarm_signal.emit)
-
             self.reader_thread.start()
-            self.debug_message.emit(f"Connected to {port} at {baudrate} baudrate")
+            self.signal_distributor.DEBUG_MESSAGE.emit(f"Connected to {port} at {baudrate} baudrate")
             self.log_message.emit(f"Connected to {port} at {baudrate} baudrate")
             return True
 
         except serial.SerialException as e:
-            self.debug_message.emit(f"Error connecting to {port}: {e}")
+            self.signal_distributor.DEBUG_MESSAGE.emit(f"Error connecting to {port}: {e}")
             return False
 
     def disconnect_serial(self):
@@ -60,9 +52,9 @@ class SerialModel(QObject):
             self.reader_thread = None
         if self.serial_port and self.serial_port.is_open:
             self.serial_port.close()
-            self.debug_message.emit("Disconnected from serial port")
+            self.signal_distributor.DEBUG_MESSAGE.emit("Disconnected from serial port")
             return True
-        self.debug_message.emit("Failed to disconnect: Serial port not open")
+        self.signal_distributor.DEBUG_MESSAGE.emit("Failed to disconnect: Serial port not open")
         return False
 
     def filter_constructed_command(self, command):
@@ -85,7 +77,7 @@ class SerialModel(QObject):
             try:
                 self.serial_port.write(command.encode())
                 cleaned_command = command.replace('\r', '').replace('\n', '')
-                self.debug_message.emit(f"Command written to serial port: {cleaned_command}")
+                self.signal_distributor.DEBUG_MESSAGE.emit(f"Command written to serial port: {cleaned_command}")
                 self.log_message.emit(f"  (sent)  {cleaned_command}")
                 # I believe this is redundant, keep the state_changed
                 self.reader_thread.expecting_response = True
@@ -94,8 +86,8 @@ class SerialModel(QObject):
                 print("d08 SerialModel")
 
             except serial.SerialException as e:
-                self.debug_message.emit(f"Failed to send command: {e}")
+                self.signal_distributor.DEBUG_MESSAGE.emit(f"Failed to send command: {e}")
         else:
-            self.debug_message.emit("Failed to send command: Serial port not open")
+            self.signal_distributor.DEBUG_MESSAGE.emit("Failed to send command: Serial port not open")
 
 

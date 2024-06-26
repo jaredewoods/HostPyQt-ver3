@@ -106,12 +106,12 @@ class MainWindow(QMainWindow):
         self.signal_distributor.WAIT_COMMAND_EXECUTOR_SIGNAL.connect(self.handle_wait_command)
         self.signal_distributor.XGX_COMMAND_EXECUTOR_SIGNAL.connect(self.handle_xgx_command)
         self.signal_distributor.FILTER_CONSTRUCTED_COMMAND_SIGNAL.connect(self.serial_model.filter_constructed_command)
+        self.signal_distributor.DEBUG_MESSAGE.connect(self.update_debug_display)  # Connect the command controller log messages to the main window
 
         # Initialize command_compiler_service
         self.command_model = CommandModel()
         self.command_controller = CommandController(self.command_model, self.command_view, self.serial_controller, self.signal_distributor)
         """OUTSIDE SIGNAL DISTRIBUTOR"""
-        self.command_controller.debug_message.connect(self.update_debug_display)  # Connect the command controller log messages to the main window
         """OUTSIDE SIGNAL DISTRIBUTOR"""
         self.command_controller.log_message.connect(self.update_log_display)  # Connect the command controller log messages to the main window
         """Should be grouped with others"""

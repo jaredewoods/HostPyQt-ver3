@@ -18,8 +18,6 @@ class SerialController(QObject):
         self.view.serial_connect_btn.clicked.connect(self.connect_serial)
         self.view.serial_close_btn.clicked.connect(self.disconnect_serial)
 
-        # Connect model signals to the controller's signals
-        self.model.debug_message.connect(self.debug_message.emit)
         self.model.alarm_signal.connect(self.alarm_signal.emit)
 
     def _populate_ports(self):
@@ -48,7 +46,7 @@ class SerialController(QObject):
             self.update_connection_state(False)
             self.signal_distributor.STATE_CHANGED_SIGNAL.emit('serial_connected', False, 'validate')
             self.log_message.emit(f"SERIAL CONNECTION FAILED to {port} at {baudrate}")
-            self.debug_message.emit(f"Failed to connect to {port}")
+            self.signal_distributor.DEBUG_MESSAGE.emit(f"Failed to connect to {port}")
 
     def disconnect_serial(self):
         """
@@ -61,7 +59,7 @@ class SerialController(QObject):
         if success:
             self.update_connection_state(False)
             self.signal_distributor.STATE_CHANGED_SIGNAL.emit('serial_connected', False, 'update')
-            self.debug_message.emit("Disconnected from serial port")
+            self.signal_distributor.DEBUG_MESSAGE.emit("Disconnected from serial port")
             self.log_message.emit("Serial port disconnected")
 
     def update_connection_state(self, connected):

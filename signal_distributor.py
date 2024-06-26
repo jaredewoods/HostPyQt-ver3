@@ -24,6 +24,8 @@ class SignalDistributor(QObject):
     MACRO_TRIGGER_SEQ03_SIGNAL = pyqtSignal()
     MACRO_TRIGGER_SEQ04_SIGNAL = pyqtSignal()
 
+    DEBUG_MESSAGE = pyqtSignal(str)
+
     def __init__(self):
         super().__init__()
 
