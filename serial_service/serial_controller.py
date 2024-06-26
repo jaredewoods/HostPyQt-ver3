@@ -13,17 +13,12 @@ class SerialController(QObject):
         self.view = view
         self.signal_distributor = signal_distributor
         self.flag_state_manager = flag_state_manager
-        # TODO this is very incorrect just trying to reset
-        # self.command_view.debug_message.connect(self.debug_message.emit)
-
         self._populate_ports()
 
         self.view.serial_connect_btn.clicked.connect(self.connect_serial)
         self.view.serial_close_btn.clicked.connect(self.disconnect_serial)
 
         # Connect model signals to the controller's signals
-        self.model.data_received.connect(self.debug_message.emit)
-        self.model.error_occurred.connect(self.debug_message.emit)
         self.model.debug_message.connect(self.debug_message.emit)
         self.model.alarm_signal.connect(self.alarm_signal.emit)
 
@@ -49,8 +44,6 @@ class SerialController(QObject):
         if success:
             self.update_connection_state(True)
             self.signal_distributor.STATE_CHANGED_SIGNAL.emit('serial_connected', True, 'validate')
-            # self.debug_message.emit(f"Connected to {port} at {baudrate} baudrate")
-            # self.log_message.emit(f"SERIAL CONNECTION to {port} at {baudrate}")
         else:
             self.update_connection_state(False)
             self.signal_distributor.STATE_CHANGED_SIGNAL.emit('serial_connected', False, 'validate')
