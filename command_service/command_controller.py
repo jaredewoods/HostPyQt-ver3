@@ -12,7 +12,7 @@ class CommandController(QObject):
         self.model = model
         self.view = view
         self.signal_distributor = signal_distributor
-
+        """This needs to be put in view and sent as an update model Signal Slot"""
         # Connect the view's User Interface to the controller's methods
         self.view.start_bit_checkbox.toggled.connect(self.update_model)
         self.view.checksum_checkbox.toggled.connect(self.update_model)
@@ -20,14 +20,11 @@ class CommandController(QObject):
         self.view.dropdown_unit_no.currentTextChanged.connect(self.update_model)
         self.view.dropdown_code.currentTextChanged.connect(self.update_model)
         self.view.entry_parameters.textChanged.connect(self.update_model)
-        self.view.run_next_command.connect(self.run_next_command)
+
         self.update_view()
 
     def signal_cycle_completed(self):
         self.signal_distributor.MACRO_TRIGGER_SEQ04_SIGNAL.emit()
-
-    def run_next_command(self):
-        self.signal_distributor.MACRO_TRIGGER_SEQ01_SIGNAL.emit()
 
     def update_model(self):
         self.model.set_start_bit_checked(self.view.start_bit_checkbox.isChecked())

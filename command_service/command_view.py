@@ -4,9 +4,6 @@ from PyQt6.QtCore import Qt
 from resources.command_dictionary import commands
 
 class CommandView(QWidget):
-    # single_shot_btn_clicked = pyqtSignal()
-    # reset_btn_clicked = pyqtSignal()
-    run_next_command = pyqtSignal()
 
     def __init__(self, signal_distributor, btn_preset1_name, btn_preset2_name, btn_preset3_name, btn_preset4_name):
         super().__init__()
@@ -149,8 +146,7 @@ class CommandView(QWidget):
             print(f"Macro Sequence Display Count: {self.macro_sequence_display.count()}")
             if next_index < self.macro_sequence_display.count():
                 self.macro_sequence_display.setCurrentRow(next_index)
-                # TODO: this is a hidden signal
-                self.run_next_command.emit()
+                self.signal_distributor.MACRO_TRIGGER_SEQ01_SIGNAL.emit()
             else:
                 self.signal_distributor.CYCLE_COMPLETED_SIGNAL.emit()
 
