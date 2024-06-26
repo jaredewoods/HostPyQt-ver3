@@ -2,8 +2,6 @@
 from PyQt6.QtCore import QObject, pyqtSignal, QTimer
 
 class CommandController(QObject):
-    debug_message = pyqtSignal(str)
-    log_message = pyqtSignal(str)
 
     def __init__(self, model, view, serial_controller, signal_distributor):
         super().__init__()
@@ -15,7 +13,8 @@ class CommandController(QObject):
         self.view = view
         self.serial_controller = serial_controller
         self.signal_distributor = signal_distributor
-        # Connect the view's signals to the controller's methods
+
+        # Connect the view's User Interface to the controller's methods
         self.view.start_bit_checkbox.toggled.connect(self.update_model)
         self.view.checksum_checkbox.toggled.connect(self.update_model)
         self.view.carriage_return_checkbox.toggled.connect(self.update_model)
@@ -24,7 +23,6 @@ class CommandController(QObject):
         self.view.entry_parameters.textChanged.connect(self.update_model)
         self.view.single_shot_btn_clicked.connect(self.send_single_shot)
         self.view.run_next_command.connect(self.run_next_command)
-        self.view.signal_cycle_completed.connect(self.signal_cycle_completed)
         self.update_view()
 
     def signal_cycle_completed(self):
@@ -32,7 +30,6 @@ class CommandController(QObject):
 
     def run_next_command(self):
         self.signal_distributor.MACRO_TRIGGER_SEQ01_SIGNAL.emit()
-        print("d16 CommandController")
 
     def update_model(self):
         self.model.set_start_bit_checked(self.view.start_bit_checkbox.isChecked())
@@ -59,26 +56,25 @@ class CommandController(QObject):
 
     def construct_command(self):
         constructed_command = self.model.construct_command()
-        print(f"Command Constructed: {constructed_command}")
+        self.signal_distributor.DEBUG_MESSAGE.emit(f"Command Constructed: {constructed_command}")
         self.signal_distributor.FILTER_CONSTRUCTED_COMMAND_SIGNAL.emit(constructed_command)
-        print("d05 CommandController")
 
     def handle_wait_command(self, command):
         self.wait_time = command
-        print(f"Wait Time: {self.wait_time}ms")
-        self.log_message.emit(f'  (host) WAIT{self.wait_time}, wait for {int(self.wait_time)/1000}secs')
+        self.signal_distributor.DEBUG_MESSAGE.emit(f"Wait Time: {self.wait_time}ms")
+        self.signal_distributor.LOG_MESSAGE.emit(f'  (host) WAIT{self.wait_time}, wait for {int(self.wait_time)/1000}secs')
         self.timer = QTimer(self)
         self.timer.setSingleShot(True)
         self.timer.timeout.connect(self.on_wait_complete)
         self.timer.start(int(self.wait_time))
 
     def on_wait_complete(self):
-        print(f"Wait time of {self.wait_time} seconds completed.")
-        self.log_message.emit(f'        (host) {int(self.wait_time)/1000} secs wait completed')
+        self.signal_distributor.DEBUG_MESSAGE.emit(f"Wait time of {self.wait_time} seconds completed.")
+        self.signal_distributor.LOG_MESSAGE.emit(f'        (host) {int(self.wait_time)/1000} secs wait completed')
         self.signal_distributor.MACRO_TRIGGER_SEQ03_SIGNAL.emit()
 
     def handle_xgx_command(self, command):
         self.command = command
         self.xgx_command = command[6:8]
-        print(f"Handling XG-X command: {self.command}")
-        print(f"Parameter values: {self.xgx_command}")
+        self.signal_distributor.DEBUG_MESSAGE.emit(f"Handling XG-X command: {self.command}")
+        self.signal_distributor.DEBUG_MESSAGE.emit(f"Parameter values: {self.xgx_command}")

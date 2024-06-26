@@ -12,7 +12,6 @@ class SerialModel(QObject):
     Attributes:
         debug_message: Signal emitted for general log messages.
     """
-    log_message = pyqtSignal(str)
     alarm_signal = pyqtSignal(str, str)
 
     def __init__(self, signal_distributor, flag_state_manager):
@@ -34,12 +33,10 @@ class SerialModel(QObject):
         try:
             self.serial_port = serial.Serial(port, baudrate, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS,)
             self.reader_thread = SerialReader(self.serial_port, self.signal_distributor, self.flag_state_manager)
-
-            self.reader_thread.log_message.connect(self.log_message.emit)
             self.reader_thread.alarm_signal.connect(self.alarm_signal.emit)
             self.reader_thread.start()
             self.signal_distributor.DEBUG_MESSAGE.emit(f"Connected to {port} at {baudrate} baudrate")
-            self.log_message.emit(f"Connected to {port} at {baudrate} baudrate")
+            self.signal_distributor.LOG_MESSAGE.emit(f"Connected to {port} at {baudrate} baudrate")
             return True
 
         except serial.SerialException as e:
@@ -60,17 +57,16 @@ class SerialModel(QObject):
     def filter_constructed_command(self, command):
 
         if "WAIT" in command:
-            print(f"we got to pause due to a {command}")
+            self.signal_distributor.DEBUG_MESSAGE.emit(f"we got to pause due to a {command}")
             self.signal_distributor.WAIT_COMMAND_EXECUTOR_SIGNAL.emit(command)
 
         elif "SEND" in command:
-            print(F"we got a XG-X{command}")
+            self.signal_distributor.DEBUG_MESSAGE.emit(F"we got a XG-X{command}")
             self.signal_distributor.XGX_COMMAND_EXECUTOR_SIGNAL.emit(command)
 
         else:
-            print(f"NXC100 command {command}")
+            self.signal_distributor.DEBUG_MESSAGE.emit(f"NXC100 command {command}")
             self.write_command_to_serial(command)
-            print("d07 SerialModel")
 
     def write_command_to_serial(self, command):
         if self.serial_port and self.serial_port.is_open:
@@ -78,12 +74,11 @@ class SerialModel(QObject):
                 self.serial_port.write(command.encode())
                 cleaned_command = command.replace('\r', '').replace('\n', '')
                 self.signal_distributor.DEBUG_MESSAGE.emit(f"Command written to serial port: {cleaned_command}")
-                self.log_message.emit(f"  (sent)  {cleaned_command}")
+                self.signal_distributor.LOG_MESSAGE.emit(f"  (sent)  {cleaned_command}")
                 # I believe this is redundant, keep the state_changed
                 self.reader_thread.expecting_response = True
                 self.signal_distributor.STATE_CHANGED_SIGNAL.emit('completion_received', False, 'update')
                 self.signal_distributor.STATE_CHANGED_SIGNAL.emit('response_received', False, 'update')
-                print("d08 SerialModel")
 
             except serial.SerialException as e:
                 self.signal_distributor.DEBUG_MESSAGE.emit(f"Failed to send command: {e}")

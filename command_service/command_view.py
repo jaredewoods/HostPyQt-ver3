@@ -7,12 +7,12 @@ class CommandView(QWidget):
     itemSelected = pyqtSignal()  # Signal to emit when an item is selected
     single_shot_btn_clicked = pyqtSignal()
     reset_btn_clicked = pyqtSignal()
-    debug_message = pyqtSignal(str)
     run_next_command = pyqtSignal()
-    signal_cycle_completed = pyqtSignal()
+    # CYCLE_COMPLETED_SIGNAL = pyqtSignal()
 
     def __init__(self, signal_distributor, btn_preset1_name, btn_preset2_name, btn_preset3_name, btn_preset4_name):
         super().__init__()
+        self.entry_parameters = None
         self.clear_btn = None
         self.edit_btn = None
         self.reset_btn = None
@@ -140,27 +140,26 @@ class CommandView(QWidget):
         self.main_layout.addLayout(self.macro_display_layout)
 
     def select_next_macro_item(self):
-        print("selecting next macro item in CommandView")
+        self.signal_distributor.DEBUG_MESSAGE.emit("selecting next macro item in CommandView")
         selected_items = self.macro_sequence_display.selectedItems()
 
         if selected_items:
             current_index = self.macro_sequence_display.row(selected_items[0])
-            print(f"Current Index: {current_index}")
+            self.signal_distributor.DEBUG_MESSAGE.emit(f"Current Index: {current_index}")
             next_index = current_index + 1
-            print(f"Next Index: {next_index}")
+            self.signal_distributor.DEBUG_MESSAGE.emit(f"Next Index: {next_index}")
             print(f"Macro Sequence Display Count: {self.macro_sequence_display.count()}")
             if next_index < self.macro_sequence_display.count():
                 self.macro_sequence_display.setCurrentRow(next_index)
-                print("d15 CommandView")
                 # TODO: this is a hidden signal
                 self.run_next_command.emit()
             else:
-                self.signal_cycle_completed.emit()
+                self.signal_distributor.CYCLE_COMPLETED_SIGNAL.emit()
 
     def restart_cycle(self):
         self.macro_sequence_display.setCurrentRow(0)
         self.signal_distributor.MACRO_TRIGGER_SEQ00_SIGNAL.emit()
-        self.debug_message.emit("Restarting Cycle")
+        self.signal_distributor.DEBUG_MESSAGE.emit("Restarting Cycle")
 
     def on_single_shot_btn_clicked(self):
         self.single_shot_btn_clicked.emit()
@@ -179,21 +178,21 @@ class CommandView(QWidget):
         self.edit_btn.setText("Commit" if self.is_editing else "Select Step")
 
     def set_command(self, command):
-        print(f"Command set: {command}")  # Debug statement
+        self.signal_distributor.DEBUG_MESSAGE.emit(f"Command set: {command}")  # Debug statement
         self.display_command.setText(command)
 
     def set_unit_number(self, unit_number):
-        print(f"Unit number set: {unit_number}")  # Debug statement
+        self.signal_distributor.DEBUG_MESSAGE.emit(f"Unit number set: {unit_number}")  # Debug statement
         index = self.dropdown_unit_no.findText(str(unit_number))
         if index != -1:
             self.dropdown_unit_no.setCurrentIndex(index)
 
     def set_parameters(self, parameters):
-        print(f"Parameters set: {parameters}")  # Debug statement
+        self.signal_distributor.DEBUG_MESSAGE.emit(f"Parameters set: {parameters}")  # Debug statement
         self.entry_parameters.setText(parameters)
 
     def set_code(self, code):
-        print(f"Code set: {code}")  # Debug statement
+        self.signal_distributor.DEBUG_MESSAGE.emit(f"Code set: {code}")  # Debug statement
         index = self.dropdown_code.findText(code)
         if index != -1:
             self.dropdown_code.setCurrentIndex(index)
@@ -204,16 +203,15 @@ class CommandView(QWidget):
         self.set_unit_number("")
         self.set_code("")
         self.set_parameters("")
-        # self.debug_message.emit("Fields have been cleared")
+        self.signal_distributor.DEBUG_MESSAGE.emit("Fields have been cleared")
 
     @staticmethod
     def reset_flags():
-        print("command view needs signal_distributor")
         # self.signal_distributor.state_changed.emit('waiting_for_completion', False, 'update')
         # self.signal_distributor.state_changed.emit('macro_running', False, 'update')
         # self.signal_distributor.state_changed.emit('response_received', False, 'update')
         # self.signal_distributor.state_changed.emit('completion_received', False, 'update')
-        # self.debug_message.emit("Flags have been reset")
+        self.signal_distributor.DEBUG_MESSAGE.emitemit("Flags have NOT been reset")
 
     def reset_macro(self):
         self.clear_fields()

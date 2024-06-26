@@ -62,35 +62,17 @@ class MainWindow(QMainWindow):
 
         # Initialize MVC components
         self.serial_model = SerialModel(self.signal_distributor, self.flag_state_manager)
-        """OUTSIDE SIGNAL DISTRIBUTOR"""
-        self.serial_model.log_message.connect(self.update_log_display)
         self.serial_view = SerialView()
         self.serial_controller = SerialController(self.serial_model, self.serial_view, self.signal_distributor, self.flag_state_manager)
-        """OUTSIDE SIGNAL DISTRIBUTOR"""
-        self.serial_controller.debug_message.connect(self.update_debug_display)
-        """OUTSIDE SIGNAL DISTRIBUTOR"""
-        self.serial_controller.log_message.connect(self.update_log_display)
         """OUTSIDE SIGNAL DISTRIBUTOR"""
         self.serial_controller.alarm_signal.connect(self.show_alarm_messagebox)
 
         self.tcp_model = TCPModel()
         self.tcp_view = TCPView()
         self.tcp_controller = TCPController(self.tcp_model, self.tcp_view, self.signal_distributor)
-        """OUTSIDE SIGNAL DISTRIBUTOR"""
-        self.tcp_controller.debug_message.connect(self.update_debug_display)  # Connect the debug_message signal to the slot
-        """OUTSIDE SIGNAL DISTRIBUTOR"""
-        self.tcp_controller.log_message.connect(self.update_log_display)
-
-        """OUTSIDE SIGNAL DISTRIBUTOR"""
-        self.macro_executor.debug_message.connect(self.update_debug_display)  # Connect the debug_message signal to the slot
-        """OUTSIDE SIGNAL DISTRIBUTOR"""
-        self.macro_executor.log_message.connect(self.update_log_display)
-
         self.macro_model = MacroModel()
         self.macro_view = MacroView()
         self.command_view = CommandView(self.signal_distributor, "Preset 1", "Preset 2", "Preset 3", "Preset 4")
-        """OUTSIDE SIGNAL DISTRIBUTOR"""
-        self.command_view.debug_message.connect(self.update_debug_display)
         self.macro_controller = MacroController(self.macro_model, self.macro_view, self.command_view, self.signal_distributor, self.flag_state_manager)
 
         self.signal_distributor.NEXT_CYCLE_ITEM_SIGNAL.connect(self.command_view.select_next_macro_item)
@@ -111,9 +93,9 @@ class MainWindow(QMainWindow):
         # Initialize command_compiler_service
         self.command_model = CommandModel()
         self.command_controller = CommandController(self.command_model, self.command_view, self.serial_controller, self.signal_distributor)
+        self.signal_distributor.CYCLE_COMPLETED_SIGNAL.connect(self.command_controller.signal_cycle_completed)
         """OUTSIDE SIGNAL DISTRIBUTOR"""
-        """OUTSIDE SIGNAL DISTRIBUTOR"""
-        self.command_controller.log_message.connect(self.update_log_display)  # Connect the command controller log messages to the main window
+        # self.command_controller.log_message.connect(self.update_log_display)  # Connect the command controller log messages to the main window
         """Should be grouped with others"""
         self.signal_distributor.CONSTRUCT_COMMAND_SIGNAL.connect(self.command_controller.construct_command)
 

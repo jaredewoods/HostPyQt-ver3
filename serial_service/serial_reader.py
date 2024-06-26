@@ -3,10 +3,6 @@ import serial
 from PyQt6.QtCore import QThread, pyqtSignal
 
 class SerialReader(QThread):
-    # data_received = pyqtSignal(str)
-    # error_occurred = pyqtSignal(str)
-    # debug_message = pyqtSignal(str)
-    log_message = pyqtSignal(str)
     alarm_signal = pyqtSignal(str, str)
     state_changed = pyqtSignal()
 
@@ -42,14 +38,13 @@ class SerialReader(QThread):
                         # Split buffer at the first delimiter
                         message, self.buffer = self.buffer.split(delimiter, 1)
                         if message:
-                            self.log_message.emit(f"        (received)  {message.strip()}")
+                            self.signal_distributor.LOG_MESSAGE.emit(f"        (received)  {message.strip()}")
 
                         message = message.strip()
                         self.signal_distributor.DEBUG_MESSAGE.emit(f"Decoded data: {message}")
 
                         if message:
                             if self.validate_response(message):
-                                print("d10 SerialReader")
                                 self.expecting_response = False
                                 self.signal_distributor.DEBUG_MESSAGE.emit(f"Valid data received: {message}")
                             else:
@@ -80,7 +75,7 @@ class SerialReader(QThread):
                 self.signal_distributor.STATE_CHANGED_SIGNAL.emit('response_received', True, 'update')
                 self.signal_distributor.STATE_CHANGED_SIGNAL.emit('waiting_for_completion', True, 'update')
                 self.signal_distributor.DEBUG_MESSAGE.emit("Emitted state_changed signal: waiting_for_completion set to True")
-                self.signal_distributor.MACRO_TRIGGER_SEQ02_SIGNAL.emit()  # Emit signal for seq02
+                self.signal_distributor.MACRO_TRIGGER_SEQ02_SIGNAL.emit()
                 return True
             else:
                 self.signal_distributor.STATE_CHANGED_SIGNAL.emit('alarm_received', False, 'update')
@@ -96,7 +91,7 @@ class SerialReader(QThread):
                 if not self.flag_state_manager.get_flag_status('macro_running'):
                     self.signal_distributor.STATE_CHANGED_SIGNAL.emit('macro_ready_to_run', True, 'update')
                 self.signal_distributor.DEBUG_MESSAGE.emit("Emitted state_changed signal: waiting_for_completion set to False")
-                self.signal_distributor.MACRO_TRIGGER_SEQ03_SIGNAL.emit()  # Emit signal for seq03
+                self.signal_distributor.MACRO_TRIGGER_SEQ03_SIGNAL.emit()
                 print("d11 SerialReader")
                 return True
             else:

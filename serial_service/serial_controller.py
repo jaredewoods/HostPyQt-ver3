@@ -3,8 +3,7 @@ from PyQt6.QtCore import QObject, pyqtSignal
 
 
 class SerialController(QObject):
-    debug_message = pyqtSignal(str)
-    log_message = pyqtSignal(str)
+    # LOG_MESSAGE = pyqtSignal(str)
     alarm_signal = pyqtSignal(str, str)
 
     def __init__(self, model, view, signal_distributor, flag_state_manager):
@@ -45,7 +44,7 @@ class SerialController(QObject):
         else:
             self.update_connection_state(False)
             self.signal_distributor.STATE_CHANGED_SIGNAL.emit('serial_connected', False, 'validate')
-            self.log_message.emit(f"SERIAL CONNECTION FAILED to {port} at {baudrate}")
+            self.signal_distributor.LOG_MESSAGE.emit(f"SERIAL CONNECTION FAILED to {port} at {baudrate}")
             self.signal_distributor.DEBUG_MESSAGE.emit(f"Failed to connect to {port}")
 
     def disconnect_serial(self):
@@ -60,7 +59,7 @@ class SerialController(QObject):
             self.update_connection_state(False)
             self.signal_distributor.STATE_CHANGED_SIGNAL.emit('serial_connected', False, 'update')
             self.signal_distributor.DEBUG_MESSAGE.emit("Disconnected from serial port")
-            self.log_message.emit("Serial port disconnected")
+            self.signal_distributor.LOG_MESSAGE.emit("Serial port disconnected")
 
     def update_connection_state(self, connected):
         self.view.serial_connect_btn.setEnabled(not connected)
