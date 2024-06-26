@@ -4,7 +4,6 @@ from PyQt6.QtCore import Qt
 from resources.command_dictionary import commands
 
 class CommandView(QWidget):
-    itemSelected = pyqtSignal()  # Signal to emit when an item is selected
     single_shot_btn_clicked = pyqtSignal()
     reset_btn_clicked = pyqtSignal()
     run_next_command = pyqtSignal()
@@ -164,7 +163,7 @@ class CommandView(QWidget):
         self.single_shot_btn_clicked.emit()
 
     def emit_item_selected(self):
-        self.itemSelected.emit()
+        self.signal_distributor.ITEM_SELECTED_SIGNAL.emit()
 
     def update_macro_sequence(self, sequence):
         self.macro_sequence_display.clear()
