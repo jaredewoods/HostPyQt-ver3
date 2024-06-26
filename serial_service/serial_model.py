@@ -57,11 +57,11 @@ class SerialModel(QObject):
     def filter_constructed_command(self, command):
 
         if "WAIT" in command:
-            self.signal_distributor.DEBUG_MESSAGE.emit(f"we got to pause due to a {command}")
+            self.signal_distributor.DEBUG_MESSAGE.emit(f"Pausing for a {command}")
             self.signal_distributor.WAIT_COMMAND_EXECUTOR_SIGNAL.emit(command)
 
         elif "SEND" in command:
-            self.signal_distributor.DEBUG_MESSAGE.emit(F"we got a XG-X{command}")
+            self.signal_distributor.DEBUG_MESSAGE.emit(F"XG-X Trigger sent {command}")
             self.signal_distributor.XGX_COMMAND_EXECUTOR_SIGNAL.emit(command)
 
         else:
