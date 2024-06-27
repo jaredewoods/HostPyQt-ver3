@@ -10,8 +10,9 @@ class SignalDistributor(QObject):
     SINGLE_SHOT_BUTTON_CLICKED = pyqtSignal()
     RESET_BUTTON_CLICKED = pyqtSignal()
     RUN_NEXT_COMMAND_SIGNAL = pyqtSignal()
+    STATE_UPDATED_SIGNAL = pyqtSignal(str, bool)
 
-    STATE_CHANGED_SIGNAL = pyqtSignal(str, bool, str)
+    STATE_CHANGED_SIGNAL = pyqtSignal(str, bool)
     REQUEST_TOTAL_CYCLES_SIGNAL = pyqtSignal()
     SEND_TOTAL_CYCLES_SIGNAL = pyqtSignal(int)
     UPDATE_COMPLETED_CYCLES_SIGNAL = pyqtSignal(int)

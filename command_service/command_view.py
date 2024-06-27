@@ -96,7 +96,7 @@ class CommandView(QWidget):
 
         self.macro_sequence_display = QListWidget()
         self.macro_sequence_display.setDisabled(True)
-        self.macro_sequence_display.itemSelectionChanged.connect(self.emit_item_selected)  # Connect the selection change event
+        self.macro_sequence_display.itemSelectionChanged.connect(self.emit_item_selected)
         self.macro_display_layout.addWidget(self.macro_sequence_display)
 
         buttons_layout = QGridLayout()
@@ -162,7 +162,7 @@ class CommandView(QWidget):
 
     @pyqtSlot(str)
     def set_command(self, command):
-        self.signal_distributor.DEBUG_MESSAGE.emit(f"Command set: {command}")  # Debug statement
+        self.signal_distributor.DEBUG_MESSAGE.emit(f"Command set: {command}")
         self.display_command.setText(command)
 
     @pyqtSlot(str)

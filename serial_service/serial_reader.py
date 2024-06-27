@@ -73,13 +73,13 @@ class SerialReader(QThread):
             return False
         if response[0] == '@':
             if response[4:8] == '0000':
-                self.signal_distributor.STATE_CHANGED_SIGNAL.emit('response_received', True, 'update')
-                self.signal_distributor.STATE_CHANGED_SIGNAL.emit('waiting_for_completion', True, 'update')
+                self.signal_distributor.STATE_CHANGED_SIGNAL.emit('response_received', True)
+                self.signal_distributor.STATE_CHANGED_SIGNAL.emit('waiting_for_completion', True,)
                 self.signal_distributor.DEBUG_MESSAGE.emit("Emitted state_changed signal: waiting_for_completion set to True")
                 self.signal_distributor.MACRO_TRIGGER_SEQ02_SIGNAL.emit()
                 return True
             else:
-                self.signal_distributor.STATE_CHANGED_SIGNAL.emit('alarm_received', False, 'update')
+                self.signal_distributor.STATE_CHANGED_SIGNAL.emit('alarm_received', False)
                 alarm_code = response[4:8]
                 subcode = response[9:12]
                 self.signal_distributor.ALARM_MESSAGE.emit(alarm_code, subcode)
@@ -87,15 +87,15 @@ class SerialReader(QThread):
 
         elif response[0] == '$':
             if response[4:8] == '0000':
-                self.signal_distributor.STATE_CHANGED_SIGNAL.emit('waiting_for_completion', False, 'update')
-                self.signal_distributor.STATE_CHANGED_SIGNAL.emit('completion_received', True, 'update')
+                self.signal_distributor.STATE_CHANGED_SIGNAL.emit('waiting_for_completion', False,)
+                self.signal_distributor.STATE_CHANGED_SIGNAL.emit('completion_received', True)
                 if not self.flag_state_manager.get_flag_status('macro_running'):
-                    self.signal_distributor.STATE_CHANGED_SIGNAL.emit('macro_ready_to_run', True, 'update')
+                    self.signal_distributor.STATE_CHANGED_SIGNAL.emit('macro_ready_to_run', True)
                 self.signal_distributor.DEBUG_MESSAGE.emit("Emitted state_changed signal: waiting_for_completion set to False")
                 self.signal_distributor.MACRO_TRIGGER_SEQ03_SIGNAL.emit()
                 return True
             else:
-                self.signal_distributor.STATE_CHANGED_SIGNAL.emit('alarm_received', True, 'update')
+                self.signal_distributor.STATE_CHANGED_SIGNAL.emit('alarm_received', True)
                 alarm_code = response[4:8]
                 subcode = response[9:12]
                 self.signal_distributor.ALARM_MESSAGE.emit(alarm_code, subcode)

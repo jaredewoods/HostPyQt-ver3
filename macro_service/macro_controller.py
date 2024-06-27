@@ -30,11 +30,11 @@ class MacroController(QObject):
 
     @pyqtSlot()
     def set_macro_running_flag_true(self):
-        self.signal_distributor.STATE_CHANGED_SIGNAL.emit("macro_running", True, "update")
+        self.signal_distributor.STATE_CHANGED_SIGNAL.emit("macro_running", True)
 
     @pyqtSlot()
     def set_macro_running_flag_false(self):
-        self.signal_distributor.STATE_CHANGED_SIGNAL.emit("macro_running", False, "update")
+        self.signal_distributor.STATE_CHANGED_SIGNAL.emit("macro_running", False)
 
     @staticmethod
     def get_macro_directory():
@@ -50,7 +50,7 @@ class MacroController(QObject):
     @pyqtSlot(int)
     def on_macro_dropdown_activated(self, index):
         selected_file = self.view.macro_select_cbx.currentText()
-        print(f"Dropdown activated: {selected_file}")
+        self.signal_distributor.DEBUG_MESSAGE.emit(f"Dropdown activated: {selected_file}")
         if selected_file:
             self.handle_macro_file_selection(selected_file)
             self.command_view.clear_fields()
@@ -61,7 +61,7 @@ class MacroController(QObject):
     def update_macro_ready_state(self):
         serial_connected = self.flag_state_manager.get_flag_status('serial_connected')
         macro_ready = serial_connected
-        self.signal_distributor.STATE_CHANGED_SIGNAL.emit('macro_ready_to_run', macro_ready, 'update')
+        self.signal_distributor.STATE_CHANGED_SIGNAL.emit('macro_ready_to_run', macro_ready)
 
     def handle_macro_file_selection(self, selected_file):
         macro_sequence_file_path = os.path.join(self.get_macro_directory(), selected_file)
@@ -85,16 +85,16 @@ class MacroController(QObject):
 
             if line.startswith("SUGGESTED_CYCLES"):
                 suggested_cycles = int(line.split(':')[1].strip())
-                self.signal_distributor.DEBUG_MESSAGE.emit(f"Found suggested cycles: {suggested_cycles}")  # Debug statement
+                self.signal_distributor.DEBUG_MESSAGE.emit(f"Found suggested cycles: {suggested_cycles}")
             elif line.startswith("[unit") and "start" in line:
                 current_unit = int(line.split("unit")[1].split()[0])
-                self.signal_distributor.DEBUG_MESSAGE.emit(f"Entering unit: {current_unit}")  # Debug statement
+                self.signal_distributor.DEBUG_MESSAGE.emit(f"Entering unit: {current_unit}")
             elif line.startswith("unit") and "end" in line:
-                self.signal_distributor.DEBUG_MESSAGE.emit(f"Exiting unit: {current_unit}")  # Debug statement
+                self.signal_distributor.DEBUG_MESSAGE.emit(f"Exiting unit: {current_unit}")
                 current_unit = None
             elif current_unit is not None and line:
                 macro_commands.append((line, current_unit))
-                self.signal_distributor.DEBUG_MESSAGE.emit(f"Added command: {line} (Unit {current_unit})")  # Debug statement
+                self.signal_distributor.DEBUG_MESSAGE.emit(f"Added command: {line} (Unit {current_unit})")
         return suggested_cycles, macro_commands
 
     def update_ui_with_macro_data(self, suggested_cycles, macro_commands):
@@ -115,6 +115,7 @@ class MacroController(QObject):
 
     @pyqtSlot()
     def load_macro_sequence_line(self):
+        self.signal_distributor.DEBUG_MESSAGE.emit("Entered load_macro_sequence_line")
         selected_item = self.command_view.macro_sequence_display.currentItem()
         if selected_item:
             full_command_with_unit = selected_item.text()
@@ -123,11 +124,11 @@ class MacroController(QObject):
             command = full_command[:4]
             parameters = full_command[4:]
 
-            print(f"Loading command: {command}, unit: {unit_number}, parameters: {parameters}")  # Debug statement
+            self.signal_distributor.DEBUG_MESSAGE.emit(f"Loading command: {command}, unit: {unit_number}, parameters: {parameters}")  # Debug statement
             self.load_command_into_view(command, unit_number, parameters)
             return full_command
         else:
-            print("No item selected")  # Debug statement
+            self.signal_distributor.DEBUG_MESSAGE.emit("No item selected")
             return None
 
     def load_command_into_view(self, command, unit, parameters):

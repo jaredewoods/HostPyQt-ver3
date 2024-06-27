@@ -11,7 +11,7 @@ class CommandController(QObject):
         self.model = model
         self.view = view
         self.signal_distributor = signal_distributor
-        """This needs to be put in view and sent as an update model Signal Slot"""
+        """TODO: This needs to be put in view and sent as an update model Signal Slot"""
         # Connect the view's User Interface to the controller's methods
         self.view.start_bit_checkbox.toggled.connect(self.update_model)
         self.view.checksum_checkbox.toggled.connect(self.update_model)
@@ -51,7 +51,7 @@ class CommandController(QObject):
     @pyqtSlot()
     def send_single_shot(self):
         self.construct_command()
-        self.signal_distributor.STATE_CHANGED_SIGNAL.emit('macro_ready_to_run', False, 'update')
+        self.signal_distributor.STATE_CHANGED_SIGNAL.emit('macro_ready_to_run', False)
 
     @pyqtSlot()
     def construct_command(self):

@@ -23,7 +23,6 @@ class FlagStateManager(QObject):
         self.debug_mode = False
         self.display_timestamp = False
 
-        # Connect signal_distributor signal to the update_state method
         self.signal_distributor.STATE_CHANGED_SIGNAL.connect(self.update_state)
 
     @pyqtSlot(str, bool)
@@ -32,7 +31,7 @@ class FlagStateManager(QObject):
             self.signal_distributor.DEBUG_MESSAGE.emit(f"Unknown flag: {flag_name}")
             return
         setattr(self, flag_name, value)
-        self.state_updated.emit(flag_name, getattr(self, flag_name))
+        self.signal_distributor.STATE_UPDATED_SIGNAL.emit(flag_name, getattr(self, flag_name))
         self.signal_distributor.DEBUG_MESSAGE.emit(f"Updated {flag_name} to {getattr(self, flag_name)}")
 
     def get_flag_status(self, flag_name):

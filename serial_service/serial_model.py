@@ -78,8 +78,8 @@ class SerialModel(QObject):
                 self.signal_distributor.DEBUG_MESSAGE.emit(f"Command written to serial port: {cleaned_command}")
                 self.signal_distributor.LOG_MESSAGE.emit(f"  (sent)  {cleaned_command}")
                 self.reader_thread.expecting_response = True
-                self.signal_distributor.STATE_CHANGED_SIGNAL.emit('completion_received', False, 'update')
-                self.signal_distributor.STATE_CHANGED_SIGNAL.emit('response_received', False, 'update')
+                self.signal_distributor.STATE_CHANGED_SIGNAL.emit('completion_received', False)
+                self.signal_distributor.STATE_CHANGED_SIGNAL.emit('response_received', False)
 
             except serial.SerialException as e:
                 self.signal_distributor.DEBUG_MESSAGE.emit(f"Failed to send command: {e}")

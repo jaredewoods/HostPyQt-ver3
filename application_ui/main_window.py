@@ -30,8 +30,6 @@ class MainWindow(QMainWindow):
 
         self.signal_distributor = SignalDistributor()
         self.flag_state_manager = FlagStateManager(self.signal_distributor)
-        """OUTSIDE SIGNAL DISTRIBUTOR"""
-        self.flag_state_manager.state_updated.connect(self.on_state_changed)
 
         self.macro_executor = MacroExecutor(self.signal_distributor, self.flag_state_manager)
 
@@ -66,6 +64,7 @@ class MainWindow(QMainWindow):
         self.command_controller = CommandController(self.command_model, self.command_view, self.signal_distributor)
         self.macro_controller = MacroController(self.macro_model, self.macro_view, self.command_view, self.signal_distributor, self.flag_state_manager)
 
+        self.signal_distributor.STATE_UPDATED_SIGNAL.connect(self.on_state_changed)
         self.signal_distributor.DEBUG_MESSAGE.connect(self.update_debug_display)
         self.signal_distributor.LOG_MESSAGE.connect(self.update_log_display)
         self.signal_distributor.ALARM_MESSAGE.connect(self.show_alarm_messagebox)
@@ -100,6 +99,7 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("Main Window")
         self.flag_state_view = FlagStateView(self.flag_state_manager)
 
+        # self.signal_distributor.STATE_UPDATED_SIGNAL.connect(self.on_state_changed)
         self.signal_distributor.DEBUG_MESSAGE.emit("MainWindow initialization complete")
         self.flag_state_view.show()
 
@@ -108,7 +108,6 @@ class MainWindow(QMainWindow):
         total_cycles = int(self.macro_view.macro_total_cycles_lbl.text())
         self.signal_distributor.SEND_TOTAL_CYCLES_SIGNAL.emit(total_cycles)
 
-    """TODO: clean this shit"""
     @pyqtSlot(str, bool)
     def on_state_changed(self, flag_name, value):
         self._debug_display.append(f"State changed: {flag_name} -> {value}")

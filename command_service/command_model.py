@@ -40,10 +40,10 @@ class CommandModel:
         self.unit_no = value
 
     def set_command_code(self, value):
-        self.command_code = value.upper()  # Ensure uppercase
+        self.command_code = value.upper()
 
     def set_parameters(self, value):
-        self.parameters = value.upper()  # Ensure uppercase
+        self.parameters = value.upper()
 
     def set_checksum_checked(self, value):
         self.checksum_checked = value

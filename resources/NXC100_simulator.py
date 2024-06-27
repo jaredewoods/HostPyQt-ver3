@@ -10,7 +10,7 @@ import socket
 import logging
 import datetime
 import random
-from alarm_dict import alarm_dict  # Import the alarm dictionary
+from alarm_dict import alarm_dict
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -71,7 +71,6 @@ class SerialSimulator:
         self.start_tcp_server()
 
     def setup_logging(self):
-        # Setup logging to output to both console and GUI
         console_handler = logging.StreamHandler()
         console_handler.setLevel(logging.INFO)
         console_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
