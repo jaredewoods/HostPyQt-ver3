@@ -1,6 +1,6 @@
 # serial_reader.py
 import serial
-from PyQt6.QtCore import QThread, pyqtSignal
+from PyQt6.QtCore import QThread, pyqtSignal, pyqtSlot
 
 class SerialReader(QThread):
     alarm_signal = pyqtSignal(str, str)
@@ -64,6 +64,7 @@ class SerialReader(QThread):
         self.running = False
         self.wait()
 
+    @pyqtSlot(str)
     def validate_response(self, response):
         self.signal_distributor.DEBUG_MESSAGE.emit(f"Validating response: {response}")
 
@@ -92,7 +93,6 @@ class SerialReader(QThread):
                     self.signal_distributor.STATE_CHANGED_SIGNAL.emit('macro_ready_to_run', True, 'update')
                 self.signal_distributor.DEBUG_MESSAGE.emit("Emitted state_changed signal: waiting_for_completion set to False")
                 self.signal_distributor.MACRO_TRIGGER_SEQ03_SIGNAL.emit()
-                print("d11 SerialReader")
                 return True
             else:
                 self.signal_distributor.STATE_CHANGED_SIGNAL.emit('alarm_received', True, 'update')
@@ -103,4 +103,3 @@ class SerialReader(QThread):
 
         self.signal_distributor.DEBUG_MESSAGE.emit(f"Invalid response: {response}")
         return False
-
