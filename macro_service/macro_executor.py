@@ -11,9 +11,9 @@ class MacroExecutor(QObject):
         self.start_time = None
         self.signal_distributor = signal_distributor
         self.flag_state_manager = flag_state_manager
-        self.command_duration_stopwatch = QElapsedTimer()  # Initialize QElapsedTimer
-        self.cycle_duration_stopwatch = QElapsedTimer()  # Initialize QElapsedTimer
-        self.sequence_duration_stopwatch = QElapsedTimer()  # Initialize QElapsedTimer
+        self.command_duration_stopwatch = QElapsedTimer()
+        self.cycle_duration_stopwatch = QElapsedTimer()
+        self.sequence_duration_stopwatch = QElapsedTimer()
 
         self._COMMANDS_COMPLETED = 0
         self._CYCLES_COMPLETED = 0
@@ -125,7 +125,6 @@ class MacroExecutor(QObject):
             self.signal_distributor.DEBUG_MESSAGE.emit(
                 f"Command Completed in {command_time / 1000} seconds\nCommands Completed: {self._COMMANDS_COMPLETED}")
             self.signal_distributor.NEXT_CYCLE_ITEM_SIGNAL.emit()
-            print("d13 MacroExecutor")
         else:
             self.signal_distributor.DEBUG_MESSAGE.emit(f"Flag violation 03: {self._FLAGS}")
 
@@ -165,7 +164,6 @@ class MacroExecutor(QObject):
 
             sequence_time = self.sequence_duration_stopwatch.elapsed()
             self._SEQUENCES_COMPLETED += 1
-            # state changed macro_completed state changed True
             self.stop_time = datetime.now().strftime("%m/%d/%Y %H:%M:%S")
             self.signal_distributor.DEBUG_MESSAGE.emit(
                 f"Sequence Completed in {sequence_time / 1000} seconds\n"
