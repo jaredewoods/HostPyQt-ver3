@@ -1,6 +1,4 @@
-# serial_controller.py
-from PyQt6.QtCore import QObject, pyqtSignal
-
+from PyQt6.QtCore import QObject, pyqtSignal, pyqtSlot
 
 class SerialController(QObject):
     # LOG_MESSAGE = pyqtSignal(str)
@@ -22,18 +20,17 @@ class SerialController(QObject):
     def _populate_ports(self):
         """
         MVC Populates the ports in the view.
-
         """
         ports = self.model.get_available_ports()
         self.view.set_ports(ports)
 
+    @pyqtSlot()
     def connect_serial(self):
         """
         Responds directly to view.serial_connect_btn.
         Connects to the serial port
         Updates 'serial_connected' via signal_distributor
         debug_message
-
         """
         port = self.view.serial_port_cbx.currentText()
         baudrate = int(self.view.baud_combo.currentText())
@@ -47,6 +44,7 @@ class SerialController(QObject):
             self.signal_distributor.LOG_MESSAGE.emit(f"SERIAL CONNECTION FAILED to {port} at {baudrate}")
             self.signal_distributor.DEBUG_MESSAGE.emit(f"Failed to connect to {port}")
 
+    @pyqtSlot()
     def disconnect_serial(self):
         """
         Responds directly to view.serial_close_btn.
