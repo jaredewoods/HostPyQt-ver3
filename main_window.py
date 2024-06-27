@@ -1,5 +1,6 @@
 # main_window.py
 from PyQt6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QHBoxLayout, QWidget, QTabWidget, QFrame, QTextEdit
+from PyQt6.QtCore import pyqtSlot
 import sys
 
 from serial_service.serial_model import SerialModel
@@ -12,14 +13,13 @@ from macro_service.macro_model import MacroModel
 from macro_service.macro_view import MacroView
 from macro_service.macro_controller import MacroController
 from macro_service.macro_executor import MacroExecutor
-from status_view import StatusView
 from command_service.command_model import CommandModel
 from command_service.command_view import CommandView
 from command_service.command_controller import CommandController
 
-from signal_distributor import SignalDistributor
-from flag_state_manager import FlagStateManager, FlagStateView
-
+from status_service.status_view import StatusView
+from status_service.signal_distributor import SignalDistributor
+from status_service.flag_state_manager import FlagStateManager, FlagStateView
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -103,72 +103,90 @@ class MainWindow(QMainWindow):
         self.signal_distributor.DEBUG_MESSAGE.emit("MainWindow initialization complete")
         self.flag_state_view.show()
 
+    @pyqtSlot()
     def provide_total_cycles(self):
         total_cycles = int(self.macro_view.macro_total_cycles_lbl.text())
         self.signal_distributor.SEND_TOTAL_CYCLES_SIGNAL.emit(total_cycles)
 
+    """TODO: clean this shit"""
+    @pyqtSlot(str, bool, str)
     def on_state_changed(self, flag_name, value, update_condition):
         self._debug_display.append(f"State changed: {flag_name} -> {value}")
-        # Handle specific state changes locally
         _handler = getattr(self, f"handle_{flag_name}", None)
         if _handler:
             _handler(value)
 
+    @pyqtSlot(bool)
     def handle_serial_connected(self, value):
         self._debug_display.append(f"Serial connection status: {value}")
         self.serial_controller.update_connection_state(value)
-        self.status_view.update_serial_status(value)  # Update serial status label
+        self.status_view.update_serial_status(value)
 
+    @pyqtSlot(bool)
     def handle_tcp_connected(self, value):
         self._debug_display.append(f"TCP connection status: {value}")
         self.tcp_controller.update_connection_btn_state(value)
-        self.status_view.update_tcp_status(value)  # Update TCP status label
+        self.status_view.update_tcp_status(value)
 
+    @pyqtSlot(bool)
     def handle_macro_ready_to_run(self, value):
         self._debug_display.append(f"Macro ready to run status: {value}")
 
+    @pyqtSlot(bool)
     def handle_macro_running(self, value):
         self._debug_display.append(f"Macro running status: {value}")
         self.status_view.update_macro_status(value)
         self.macro_executor.seq_start_sequence()
 
+    @pyqtSlot(bool)
     def handle_macro_stopped(self, value):
         self._debug_display.append(f"Macro stopped status: {value}")
 
+    @pyqtSlot(bool)
     def handle_macro_completed(self, value):
         self._debug_display.append(f"Macro completed status: {value}")
 
+    @pyqtSlot(bool)
     def handle_waiting_for_response(self, value):
         self._debug_display.append(f"Waiting for response status: {value}")
 
+    @pyqtSlot(bool)
     def handle_response_received(self, value):
         self._debug_display.append(f"Response received status: {value}")
 
+    @pyqtSlot(bool)
     def handle_completion_received(self, value):
         self._debug_display.append(f"Completion received status: {value}")
 
+    @pyqtSlot(bool)
     def handle_alarm_received(self, value):
         self._debug_display.append(f"Alarm received status: {value}")
 
+    @pyqtSlot(bool)
     def handle_debug_mode(self, value):
         self._debug_display.append(f"Debug mode status: {value}")
 
+    @pyqtSlot(bool)
     def handle_display_timestamp(self, value):
         self._debug_display.append(f"Display timestamp status: {value}")
 
+    @pyqtSlot(str)
     def handle_wait_command(self, command):
         self.wait_command = command[6:10]
         self.command_controller.handle_wait_command(self.wait_command)
         print(f"Handling non-standard {self.wait_command}")
 
+    @pyqtSlot(str)
     def handle_xgx_command(self, command):
         self.xgx_command = command[6:8]
         self.tcp_controller.handle_tcp_command(self.xgx_command)
         print(f"Handling XG-X command: {self.xgx_command}")
 
+    @pyqtSlot(str)
     def update_debug_display(self, message):
         self._debug_display.append(message)
 
+    @pyqtSlot(str)
     def update_log_display(self, message):
         self.log_display.append(message)
 
@@ -177,7 +195,6 @@ class MainWindow(QMainWindow):
         print("attempting to open alarm message box")
         from resources.alarm_message_box import AlarmMessageBox
         AlarmMessageBox.show_alarm_messagebox(alarm_code, subcode)
-
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

@@ -1,6 +1,4 @@
-# tcp_controller.py
-
-from PyQt6.QtCore import QObject, pyqtSignal
+from PyQt6.QtCore import QObject, pyqtSignal, pyqtSlot
 
 class TCPController(QObject):
 
@@ -13,6 +11,7 @@ class TCPController(QObject):
         self.view.tcp_connect_btn.clicked.connect(self.connect_tcp)
         self.view.tcp_close_btn.clicked.connect(self.disconnect_tcp)
 
+    @pyqtSlot()
     def connect_tcp(self):
         ip_address = self.view.ip_address_combo.currentText()
         port = self.view.port_combo.currentText()
@@ -25,6 +24,7 @@ class TCPController(QObject):
             self.signal_distributor.STATE_CHANGED_SIGNAL.emit('tcp_connected', False, 'update')
             self.signal_distributor.DEBUG_MESSAGE.emit(f"Failed to connect to {ip_address}:{port}")
 
+    @pyqtSlot()
     def disconnect_tcp(self):
         success = self.model.disconnect()
         if success:
@@ -35,6 +35,7 @@ class TCPController(QObject):
         self.view.tcp_connect_btn.setEnabled(not connected)
         self.view.tcp_close_btn.setEnabled(connected)
 
+    @pyqtSlot(str)
     def handle_tcp_command(self, command):
         print("1")
         self.model.send_tcp_command(command)
