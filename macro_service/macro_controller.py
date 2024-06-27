@@ -1,7 +1,7 @@
 # macro_controller.py
 
 import os
-from PyQt6.QtCore import QObject, pyqtSignal
+from PyQt6.QtCore import QObject, pyqtSignal, pyqtSlot
 
 class MacroController(QObject):
     start_signal = pyqtSignal()
@@ -28,9 +28,11 @@ class MacroController(QObject):
 
         self.populate_macro_combobox()
 
+    @pyqtSlot()
     def set_macro_running_flag_true(self):
         self.signal_distributor.STATE_CHANGED_SIGNAL.emit("macro_running", True, "update")
 
+    @pyqtSlot()
     def set_macro_running_flag_false(self):
         self.signal_distributor.STATE_CHANGED_SIGNAL.emit("macro_running", False, "update")
 
@@ -45,6 +47,7 @@ class MacroController(QObject):
         macro_files = self.model.get_macro_filenames(macro_directory)
         self.view.populate_macro_select_combo(macro_files)
 
+    @pyqtSlot(int)
     def on_macro_dropdown_activated(self, index):
         selected_file = self.view.macro_select_cbx.currentText()
         print(f"Dropdown activated: {selected_file}")
@@ -110,6 +113,7 @@ class MacroController(QObject):
         self.macro_commands = macro_commands
         return suggested_cycles, macro_commands
 
+    @pyqtSlot()
     def load_macro_sequence_line(self):
         selected_item = self.command_view.macro_sequence_display.currentItem()
         if selected_item:
