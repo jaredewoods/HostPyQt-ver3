@@ -1,6 +1,5 @@
-from PyQt6.QtCore import QObject, pyqtSignal, QElapsedTimer
+from PyQt6.QtCore import QObject, pyqtSignal, QElapsedTimer, pyqtSlot
 from datetime import datetime
-
 
 class MacroExecutor(QObject):
 
@@ -36,6 +35,7 @@ class MacroExecutor(QObject):
         self._DEBUG_MODE = self._FLAGS.get("debug_mode")
         self._DISPLAY_TIMESTAMP = self._FLAGS.get("display_timestamp")
 
+    @pyqtSlot()
     def seq_start_sequence(self):
         self._update_flag_statuses()
         self.signal_distributor.DEBUG_MESSAGE.emit(f"Updated Flag statuses: {self._FLAGS}")
@@ -58,6 +58,7 @@ class MacroExecutor(QObject):
         else:
             self.signal_distributor.DEBUG_MESSAGE.emit(f"Flag violation: {self._FLAGS}")
 
+    @pyqtSlot()
     def seq00_start_cycle(self):
         self.signal_distributor.DEBUG_MESSAGE.emit("\n\nseq00_start_cycle")
         self.signal_distributor.DEBUG_MESSAGE.emit(f"sequence_time: {self.sequence_duration_stopwatch.elapsed()}")
@@ -75,6 +76,7 @@ class MacroExecutor(QObject):
         else:
             self.signal_distributor.DEBUG_MESSAGE.emit(f"Flag violation 00: {self._FLAGS}")
 
+    @pyqtSlot()
     def seq01_start_command(self):
         self.signal_distributor.DEBUG_MESSAGE.emit(f"\n\nseq01_start_command")
         self.signal_distributor.DEBUG_MESSAGE.emit(f"sequence_time: {self.sequence_duration_stopwatch.elapsed()}")
@@ -90,6 +92,7 @@ class MacroExecutor(QObject):
         else:
             self.signal_distributor.DEBUG_MESSAGE.emit(f"Flag violation 01: {self._FLAGS}")
 
+    @pyqtSlot()
     def seq02_waiting_for_completion(self):
         self.signal_distributor.DEBUG_MESSAGE.emit(f"\n\nseq02_waiting_for_completion")
         self.signal_distributor.DEBUG_MESSAGE.emit(f"sequence_time: {self.sequence_duration_stopwatch.elapsed()}")
@@ -107,6 +110,7 @@ class MacroExecutor(QObject):
         else:
             self.signal_distributor.DEBUG_MESSAGE.emit(f"Flag violation 02: {self._FLAGS}")
 
+    @pyqtSlot()
     def seq03_handling_command_completion(self):
         self.signal_distributor.DEBUG_MESSAGE.emit(f"\n\nseq03_handling_command_completion")
         self.signal_distributor.DEBUG_MESSAGE.emit(f"sequence_time: {self.sequence_duration_stopwatch.elapsed()}")
@@ -128,6 +132,7 @@ class MacroExecutor(QObject):
         else:
             self.signal_distributor.DEBUG_MESSAGE.emit(f"Flag violation 03: {self._FLAGS}")
 
+    @pyqtSlot()
     def seq04_handling_cycle_completion(self):
         self.signal_distributor.DEBUG_MESSAGE.emit(f"\n\nseq04_handling_cycle_completion")
         self.signal_distributor.DEBUG_MESSAGE.emit(f"sequence_time: {self.sequence_duration_stopwatch.elapsed()}")
@@ -145,12 +150,13 @@ class MacroExecutor(QObject):
             self._CYCLES_COMPLETED += 1
             self.signal_distributor.DEBUG_MESSAGE.emit(f"Cycle #{self._CYCLES_COMPLETED} completed in {self.cycle_time / 1000} seconds")
             self.signal_distributor.LOG_MESSAGE.emit(
-                f'  completed: {self._CYCLES_COMPLETED}  |  time: {self.cycle_time / 1000}s  |  total time: {sequence_time / 1000}s\n')
+                f'  completed: {self._CYCLES_COMPLETED}  |  cycle time: {self.cycle_time / 1000} s  |  total time: {sequence_time / 1000} s\n')
             self.signal_distributor.UPDATE_COMPLETED_CYCLES_SIGNAL.emit(self._CYCLES_COMPLETED)
             self.signal_distributor.REQUEST_TOTAL_CYCLES_SIGNAL.emit()
         else:
             self.signal_distributor.DEBUG_MESSAGE.emit(f"Flag violation 04: {self._FLAGS}")
 
+    @pyqtSlot()
     def seq05_handling_sequence_completion(self):
         self.signal_distributor.DEBUG_MESSAGE.emit(f"\n\nseq05_handling_sequence_completion")
         self.signal_distributor.DEBUG_MESSAGE.emit(f"sequence_time: {self.sequence_duration_stopwatch.elapsed()}")
@@ -179,6 +185,7 @@ class MacroExecutor(QObject):
         else:
             self.signal_distributor.DEBUG_MESSAGE.emit(f"Flag violation 05: {self._FLAGS}")
 
+    @pyqtSlot(int)
     def handle_total_cycles(self, total_cycles):
         self.signal_distributor.DEBUG_MESSAGE.emit(f"{self._CYCLES_COMPLETED} of {total_cycles} completed in {self.cycle_time / 1000}s")
         if self._CYCLES_COMPLETED < total_cycles:
