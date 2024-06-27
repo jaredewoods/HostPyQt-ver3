@@ -195,9 +195,3 @@ class MainWindow(QMainWindow):
         print("attempting to open alarm message box")
         from resources.alarm_message_box import AlarmMessageBox
         AlarmMessageBox.show_alarm_messagebox(alarm_code, subcode)
-
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    window = MainWindow()
-    window.show()
-    sys.exit(app.exec())
