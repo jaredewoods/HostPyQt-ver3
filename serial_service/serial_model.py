@@ -1,9 +1,8 @@
 # serial_model.py
 import serial
 from serial.tools import list_ports
-from PyQt6.QtCore import QObject, pyqtSignal
+from PyQt6.QtCore import QObject, pyqtSignal, pyqtSlot
 from serial_service.serial_reader import SerialReader
-
 
 class SerialModel(QObject):
     """
@@ -29,6 +28,7 @@ class SerialModel(QObject):
         port_list = [""] + port_list
         return port_list
 
+    @pyqtSlot(str, int)
     def connect(self, port, baudrate=9600):
         try:
             self.serial_port = serial.Serial(port, baudrate, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS,)
@@ -43,6 +43,7 @@ class SerialModel(QObject):
             self.signal_distributor.DEBUG_MESSAGE.emit(f"Error connecting to {port}: {e}")
             return False
 
+    @pyqtSlot()
     def disconnect_serial(self):
         if self.reader_thread:
             self.reader_thread.stop()
@@ -54,6 +55,7 @@ class SerialModel(QObject):
         self.signal_distributor.DEBUG_MESSAGE.emit("Failed to disconnect: Serial port not open")
         return False
 
+    @pyqtSlot(str)
     def filter_constructed_command(self, command):
 
         if "WAIT" in command:
@@ -68,6 +70,7 @@ class SerialModel(QObject):
             self.signal_distributor.DEBUG_MESSAGE.emit(f"NXC100 command {command}")
             self.write_command_to_serial(command)
 
+    @pyqtSlot(str)
     def write_command_to_serial(self, command):
         if self.serial_port and self.serial_port.is_open:
             try:
@@ -83,5 +86,3 @@ class SerialModel(QObject):
                 self.signal_distributor.DEBUG_MESSAGE.emit(f"Failed to send command: {e}")
         else:
             self.signal_distributor.DEBUG_MESSAGE.emit("Failed to send command: Serial port not open")
-
-
