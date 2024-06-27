@@ -1,5 +1,4 @@
-# command_controller.py
-from PyQt6.QtCore import QObject, pyqtSignal, QTimer
+from PyQt6.QtCore import QObject, pyqtSignal, QTimer, pyqtSlot
 
 class CommandController(QObject):
 
@@ -23,9 +22,11 @@ class CommandController(QObject):
 
         self.update_view()
 
+    @pyqtSlot()
     def signal_cycle_completed(self):
         self.signal_distributor.MACRO_TRIGGER_SEQ04_SIGNAL.emit()
 
+    @pyqtSlot()
     def update_model(self):
         self.model.set_start_bit_checked(self.view.start_bit_checkbox.isChecked())
         self.model.set_checksum_checked(self.view.checksum_checkbox.isChecked())
@@ -39,21 +40,26 @@ class CommandController(QObject):
         command = self.model.construct_command()
         self.set_command_text(command)
 
+    @pyqtSlot(str)
     def set_command_text(self, text):
         self.view.display_command.setText(text)
 
+    @pyqtSlot()
     def handle_text_changed(self):
         self.update_view()
 
+    @pyqtSlot()
     def send_single_shot(self):
         self.construct_command()
         self.signal_distributor.STATE_CHANGED_SIGNAL.emit('macro_ready_to_run', False, 'update')
 
+    @pyqtSlot()
     def construct_command(self):
         constructed_command = self.model.construct_command()
         self.signal_distributor.DEBUG_MESSAGE.emit(f"Command Constructed: {constructed_command}")
         self.signal_distributor.FILTER_CONSTRUCTED_COMMAND_SIGNAL.emit(constructed_command)
 
+    @pyqtSlot(str)
     def handle_wait_command(self, command):
         self.wait_time = command
         self.signal_distributor.DEBUG_MESSAGE.emit(f"Wait Time: {self.wait_time}ms")
@@ -63,11 +69,13 @@ class CommandController(QObject):
         self.timer.timeout.connect(self.on_wait_complete)
         self.timer.start(int(self.wait_time))
 
+    @pyqtSlot()
     def on_wait_complete(self):
         self.signal_distributor.DEBUG_MESSAGE.emit(f"Wait time of {self.wait_time} seconds completed.")
         self.signal_distributor.LOG_MESSAGE.emit(f'        (host) {int(self.wait_time)/1000} secs wait completed')
         self.signal_distributor.MACRO_TRIGGER_SEQ03_SIGNAL.emit()
 
+    @pyqtSlot(str)
     def handle_xgx_command(self, command):
         self.command = command
         self.xgx_command = command[6:8]

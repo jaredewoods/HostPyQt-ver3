@@ -1,7 +1,7 @@
 # main_window.py
 from PyQt6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QHBoxLayout, QWidget, QTabWidget, QFrame, QTextEdit
 import sys
-# TODO: Integrate the T1 signal
+
 from serial_service.serial_model import SerialModel
 from serial_service.serial_view import SerialView
 from serial_service.serial_controller import SerialController
@@ -25,12 +25,10 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        # Initialize SignalDistributor and FlagStateManager and MacroExecutor
         self.xgx_command = None
         self.wait_command = None
 
         self.signal_distributor = SignalDistributor()
-
         self.flag_state_manager = FlagStateManager(self.signal_distributor)
         """OUTSIDE SIGNAL DISTRIBUTOR"""
         self.flag_state_manager.state_updated.connect(self.on_state_changed)
@@ -43,29 +41,21 @@ class MainWindow(QMainWindow):
         main_layout = QHBoxLayout()
         central_widget.setLayout(main_layout)
 
-        # Control Frame and layout
         self.control_frame = QFrame()
         self.control_layout = QVBoxLayout(self.control_frame)
-
-        # Log display frame
         self.message_display_frame = QTabWidget()
         self.message_display_frame.setFixedWidth(400)
 
         self.log_display = QTextEdit()
         self.log_display.setReadOnly(True)
-
-        self.debug_display = QTextEdit()
-        self.debug_display.setReadOnly(True)
-
+        self._debug_display = QTextEdit()
+        self._debug_display.setReadOnly(True)
         self.message_display_frame.addTab(self.log_display, "Log")
-        self.message_display_frame.addTab(self.debug_display, "Debug")
+        self.message_display_frame.addTab(self._debug_display, "Debug")
 
-        # Initialize MVC components
         self.serial_model = SerialModel(self.signal_distributor, self.flag_state_manager)
         self.serial_view = SerialView()
         self.serial_controller = SerialController(self.serial_model, self.serial_view, self.signal_distributor, self.flag_state_manager)
-        """OUTSIDE SIGNAL DISTRIBUTOR"""
-
         self.tcp_model = TCPModel(self.signal_distributor)
         self.tcp_view = TCPView()
         self.tcp_controller = TCPController(self.tcp_model, self.tcp_view, self.signal_distributor)
@@ -73,7 +63,6 @@ class MainWindow(QMainWindow):
         self.macro_view = MacroView()
         self.command_view = CommandView(self.signal_distributor)
         self.command_model = CommandModel()
-        """OUTSIDE SIGNAL DISTRIBUTOR"""
         self.command_controller = CommandController(self.command_model, self.command_view, self.signal_distributor)
         self.macro_controller = MacroController(self.macro_model, self.macro_view, self.command_view, self.signal_distributor, self.flag_state_manager)
 
@@ -119,72 +108,66 @@ class MainWindow(QMainWindow):
         self.signal_distributor.SEND_TOTAL_CYCLES_SIGNAL.emit(total_cycles)
 
     def on_state_changed(self, flag_name, value, update_condition):
-        self.debug_display.append(f"State changed: {flag_name} -> {value}")
-
+        self._debug_display.append(f"State changed: {flag_name} -> {value}")
         # Handle specific state changes locally
-        handler = getattr(self, f"handle_{flag_name}", None)
-        if handler:
-            handler(value)
+        _handler = getattr(self, f"handle_{flag_name}", None)
+        if _handler:
+            _handler(value)
 
     def handle_serial_connected(self, value):
-        self.debug_display.append(f"Serial connection status: {value}")
+        self._debug_display.append(f"Serial connection status: {value}")
         self.serial_controller.update_connection_state(value)
         self.status_view.update_serial_status(value)  # Update serial status label
 
     def handle_tcp_connected(self, value):
-        self.debug_display.append(f"TCP connection status: {value}")
+        self._debug_display.append(f"TCP connection status: {value}")
         self.tcp_controller.update_connection_btn_state(value)
         self.status_view.update_tcp_status(value)  # Update TCP status label
 
     def handle_macro_ready_to_run(self, value):
-        self.debug_display.append(f"Macro ready to run status: {value}")
+        self._debug_display.append(f"Macro ready to run status: {value}")
 
     def handle_macro_running(self, value):
-        self.debug_display.append(f"Macro running status: {value}")
+        self._debug_display.append(f"Macro running status: {value}")
         self.status_view.update_macro_status(value)
         self.macro_executor.seq_start_sequence()
-        print("d00 MainWindow")
 
     def handle_macro_stopped(self, value):
-        self.debug_display.append(f"Macro stopped status: {value}")
-        # Add your handling code here
+        self._debug_display.append(f"Macro stopped status: {value}")
 
     def handle_macro_completed(self, value):
-        self.debug_display.append(f"Macro completed status: {value}")
-        # Add your handling code here
+        self._debug_display.append(f"Macro completed status: {value}")
 
     def handle_waiting_for_response(self, value):
-        self.debug_display.append(f"Waiting for response status: {value}")
+        self._debug_display.append(f"Waiting for response status: {value}")
 
     def handle_response_received(self, value):
-        self.debug_display.append(f"Response received status: {value}")
+        self._debug_display.append(f"Response received status: {value}")
 
     def handle_completion_received(self, value):
-        self.debug_display.append(f"Completion received status: {value}")
+        self._debug_display.append(f"Completion received status: {value}")
 
     def handle_alarm_received(self, value):
-        self.debug_display.append(f"Alarm received status: {value}")
+        self._debug_display.append(f"Alarm received status: {value}")
 
     def handle_debug_mode(self, value):
-        self.debug_display.append(f"Debug mode status: {value}")
-        # Add your handling code here
+        self._debug_display.append(f"Debug mode status: {value}")
 
     def handle_display_timestamp(self, value):
-        self.debug_display.append(f"Display timestamp status: {value}")
-        # Add your handling code here
+        self._debug_display.append(f"Display timestamp status: {value}")
 
     def handle_wait_command(self, command):
         self.wait_command = command[6:10]
         self.command_controller.handle_wait_command(self.wait_command)
-        print(f"I am handling this {self.wait_command} wait as best i can")
+        print(f"Handling non-standard {self.wait_command}")
 
     def handle_xgx_command(self, command):
         self.xgx_command = command[6:8]
         self.tcp_controller.handle_tcp_command(self.xgx_command)
-        print(f"I am handling xg-x trigger {self.xgx_command} as best i can")
+        print(f"Handling XG-X command: {self.xgx_command}")
 
     def update_debug_display(self, message):
-        self.debug_display.append(message)
+        self._debug_display.append(message)
 
     def update_log_display(self, message):
         self.log_display.append(message)

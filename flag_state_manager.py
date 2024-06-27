@@ -78,7 +78,7 @@ class FlagStateManager(QObject):
     @pyqtSlot(str, bool, str)
     def update_state(self, flag_name, value, condition):
         if not hasattr(self, flag_name):
-            print(f"Unknown flag: {flag_name}")
+            self.signal_distributor.DEBUG_MESSAGE.emit(f"Unknown flag: {flag_name}")
             return
 
         current_value = getattr(self, flag_name)
@@ -91,7 +91,7 @@ class FlagStateManager(QObject):
             setattr(self, flag_name, not current_value)
 
         self.state_updated.emit(flag_name, getattr(self, flag_name), condition)
-        print(f"Updated {flag_name} to {getattr(self, flag_name)}")
+        self.signal_distributor.DEBUG_MESSAGE.emit(f"Updated {flag_name} to {getattr(self, flag_name)}")
 
     def get_flag_status(self, flag_name):
         if hasattr(self, flag_name):

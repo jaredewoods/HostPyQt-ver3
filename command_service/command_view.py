@@ -1,4 +1,4 @@
-from PyQt6.QtCore import pyqtSignal
+from PyQt6.QtCore import pyqtSignal, pyqtSlot
 from PyQt6.QtWidgets import QWidget, QListWidget, QVBoxLayout, QHBoxLayout, QGridLayout, QCheckBox, QComboBox, QLineEdit, QLabel, QPushButton, QListWidgetItem
 from PyQt6.QtCore import Qt
 from resources.command_dictionary import commands
@@ -53,9 +53,9 @@ class CommandView(QWidget):
         self.dropdown_unit_no.addItems(["", "1", "2"])
         self.dropdown_code = QComboBox()
         self.dropdown_code.setEditable(True)
-        dropdowns_layout.addWidget(QLabel("UNo"))
+        dropdowns_layout.addWidget(QLabel("Unit No"))
         dropdowns_layout.addWidget(self.dropdown_unit_no)
-        dropdowns_layout.addWidget(QLabel("CMND"))
+        dropdowns_layout.addWidget(QLabel("Command"))
 
         self.dropdown_code.addItem("")
         for command in commands.keys():
@@ -65,7 +65,7 @@ class CommandView(QWidget):
 
         self.entry_parameters = QLineEdit()
         self.entry_parameters.setFixedWidth(90)
-        dropdowns_layout.addWidget(QLabel("PRM"))
+        dropdowns_layout.addWidget(QLabel("Param."))
         dropdowns_layout.addWidget(self.entry_parameters)
         self.main_layout.addLayout(dropdowns_layout)
 
@@ -95,7 +95,7 @@ class CommandView(QWidget):
         self.macro_display_layout = QVBoxLayout()
 
         self.macro_sequence_display = QListWidget()
-        self.macro_sequence_display.setDisabled(True)  #
+        self.macro_sequence_display.setDisabled(True)
         self.macro_sequence_display.itemSelectionChanged.connect(self.emit_item_selected)  # Connect the selection change event
         self.macro_display_layout.addWidget(self.macro_sequence_display)
 
@@ -117,6 +117,7 @@ class CommandView(QWidget):
         self.macro_display_layout.addLayout(buttons_layout)
         self.main_layout.addLayout(self.macro_display_layout)
 
+    @pyqtSlot()
     def select_next_macro_item(self):
         self.signal_distributor.DEBUG_MESSAGE.emit("selecting next macro item in CommandView")
         selected_items = self.macro_sequence_display.selectedItems()
@@ -133,55 +134,66 @@ class CommandView(QWidget):
             else:
                 self.signal_distributor.CYCLE_COMPLETED_SIGNAL.emit()
 
+    @pyqtSlot()
     def restart_cycle(self):
         self.macro_sequence_display.setCurrentRow(0)
         self.signal_distributor.MACRO_TRIGGER_SEQ00_SIGNAL.emit()
         self.signal_distributor.DEBUG_MESSAGE.emit("Restarting Cycle")
 
+    @pyqtSlot()
     def on_single_shot_btn_clicked(self):
-        self.single_shot_btn_clicked.emit()
+        self.signal_distributor.SINGLE_SHOT_BUTTON_CLICKED.emit()
 
+    @pyqtSlot()
     def emit_item_selected(self):
         self.signal_distributor.ITEM_SELECTED_SIGNAL.emit()
 
+    @pyqtSlot(str)
     def update_macro_sequence(self, sequence):
         self.macro_sequence_display.clear()
         for item in sequence.split('\n'):
             self.macro_sequence_display.addItem(QListWidgetItem(item))
 
+    @pyqtSlot()
     def edit_macro_sequence(self):
         self.is_editing = not self.is_editing
         self.macro_sequence_display.setDisabled(not self.is_editing)
         self.edit_btn.setText("Commit" if self.is_editing else "Select Step")
 
+    @pyqtSlot(str)
     def set_command(self, command):
         self.signal_distributor.DEBUG_MESSAGE.emit(f"Command set: {command}")  # Debug statement
         self.display_command.setText(command)
 
+    @pyqtSlot(str)
     def set_unit_number(self, unit_number):
         self.signal_distributor.DEBUG_MESSAGE.emit(f"Unit number set: {unit_number}")  # Debug statement
         index = self.dropdown_unit_no.findText(str(unit_number))
         if index != -1:
             self.dropdown_unit_no.setCurrentIndex(index)
 
+    @pyqtSlot(str)
     def set_parameters(self, parameters):
-        self.signal_distributor.DEBUG_MESSAGE.emit(f"Parameters set: {parameters}")  # Debug statement
+        self.signal_distributor.DEBUG_MESSAGE.emit(f"Parameters set: {parameters}")
         self.entry_parameters.setText(parameters)
 
+    @pyqtSlot(str)
     def set_code(self, code):
-        self.signal_distributor.DEBUG_MESSAGE.emit(f"Code set: {code}")  # Debug statement
+        self.signal_distributor.DEBUG_MESSAGE.emit(f"Code set: {code}")
         index = self.dropdown_code.findText(code)
         if index != -1:
             self.dropdown_code.setCurrentIndex(index)
         else:
             self.dropdown_code.setCurrentText(code)
 
+    @pyqtSlot()
     def clear_fields(self):
         self.set_unit_number("")
         self.set_code("")
         self.set_parameters("")
         self.signal_distributor.DEBUG_MESSAGE.emit("Fields have been cleared")
 
+    @pyqtSlot()
     def reset_flags(self):
         # self.signal_distributor.state_changed.emit('waiting_for_completion', False, 'update')
         # self.signal_distributor.state_changed.emit('macro_running', False, 'update')
@@ -189,6 +201,7 @@ class CommandView(QWidget):
         # self.signal_distributor.state_changed.emit('completion_received', False, 'update')
         self.signal_distributor.DEBUG_MESSAGE.emit("Flags have NOT been reset")
 
+    @pyqtSlot()
     def reset_macro_fields_and_flags(self):
         self.clear_fields()
         self.reset_flags()

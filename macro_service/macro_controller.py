@@ -47,10 +47,10 @@ class MacroController(QObject):
 
     def on_macro_dropdown_activated(self, index):
         selected_file = self.view.macro_select_cbx.currentText()
-        print(f"Dropdown activated: {selected_file}")  # Debug statement
+        print(f"Dropdown activated: {selected_file}")
         if selected_file:
             self.handle_macro_file_selection(selected_file)
-            self.command_view.clear_fields()  # Clear fields in CommandView
+            self.command_view.clear_fields()
         # Select the first item in the QListWidget
         if self.command_view.macro_sequence_display.count() > 0:
             self.command_view.macro_sequence_display.setCurrentRow(0)
