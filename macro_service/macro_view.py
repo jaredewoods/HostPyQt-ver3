@@ -28,32 +28,26 @@ class MacroView(QWidget):
         layout = QGridLayout()
         self.setLayout(layout)
 
-        # Macro Sequence Selection
         layout.addWidget(QLabel("Macro Sequence"), 0, 0, 1, 2)
         self.macro_select_cbx = QComboBox()
         layout.addWidget(self.macro_select_cbx, 1, 0, 1, 2)
 
-        # Cycle Count Entry
         layout.addWidget(QLabel("Total"), 0, 2, 1, 1)
         self.macro_total_cycles_lbl = QLineEdit("")
         layout.addWidget(self.macro_total_cycles_lbl, 1, 2, 1, 1)
 
-        # Cycle Completed Entry
         layout.addWidget(QLabel("Completed"), 0, 3, 1, 1)
         self.macro_completed_cycles_lbl = QLineEdit("")
         layout.addWidget(self.macro_completed_cycles_lbl, 1, 3, 1, 1)
 
-        # Macro Start Button
         self.macro_start_btn = QPushButton("Start")
         self.macro_start_btn.setEnabled(False)
         layout.addWidget(self.macro_start_btn, 2, 0, 1, 2)
 
-        # Macro Stop Button
         self.macro_stop_btn = QPushButton("Stop")
         self.macro_stop_btn.setEnabled(True)
         layout.addWidget(self.macro_stop_btn, 2, 2, 1, 2)
 
-        # Adjust column stretch to balance the layout
         layout.setColumnStretch(0, 1)
         layout.setColumnStretch(1, 1)
         layout.setColumnStretch(2, 1)
