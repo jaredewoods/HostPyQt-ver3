@@ -4,7 +4,7 @@ from PyQt6.QtCore import pyqtSlot, pyqtSignal, QObject
 
 class FlagStateManager(QObject):
 
-    state_updated = pyqtSignal(str, bool, str)
+    state_updated = pyqtSignal(str, bool)
 
     def __init__(self, signal_distributor):
         super().__init__()
@@ -26,22 +26,13 @@ class FlagStateManager(QObject):
         # Connect signal_distributor signal to the update_state method
         self.signal_distributor.STATE_CHANGED_SIGNAL.connect(self.update_state)
 
-    @pyqtSlot(str, bool, str)
-    def update_state(self, flag_name, value, condition):
+    @pyqtSlot(str, bool)
+    def update_state(self, flag_name, value):
         if not hasattr(self, flag_name):
             self.signal_distributor.DEBUG_MESSAGE.emit(f"Unknown flag: {flag_name}")
             return
-
-        current_value = getattr(self, flag_name)
-
-        if condition == 'update':
-            setattr(self, flag_name, value)
-        elif condition == 'validate' and current_value != value:
-            setattr(self, flag_name, value)
-        elif condition == 'toggle':
-            setattr(self, flag_name, not current_value)
-
-        self.state_updated.emit(flag_name, getattr(self, flag_name), condition)
+        setattr(self, flag_name, value)
+        self.state_updated.emit(flag_name, getattr(self, flag_name))
         self.signal_distributor.DEBUG_MESSAGE.emit(f"Updated {flag_name} to {getattr(self, flag_name)}")
 
     def get_flag_status(self, flag_name):
@@ -76,8 +67,8 @@ class FlagStateView(QMainWindow):
         self.setGeometry(100, 100, 300, 400)  # Adjusted size to better fit the content
         self.table_widget = QTableWidget()
         self.setCentralWidget(self.table_widget)
-        self.table_widget.setColumnCount(3)
-        self.table_widget.setHorizontalHeaderLabels(["Flag", "Value", "Condition"])
+        self.table_widget.setColumnCount(2)
+        self.table_widget.setHorizontalHeaderLabels(["Flag", "Value"])
         self.populate_table()
         self.table_widget.resizeColumnsToContents()  # Adjust columns to fit contents
 
@@ -97,13 +88,11 @@ class FlagStateView(QMainWindow):
             self.table_widget.setItem(row, 1, QTableWidgetItem(str(value)))
             self.table_widget.setItem(row, 2, QTableWidgetItem("Inactive"))
 
-    @pyqtSlot(str, bool, str)
-    def update_table(self, flag_name, value, update_condition):
+    @pyqtSlot(str, bool)
+    def update_table(self, flag_name, value):
         for row in range(self.table_widget.rowCount()):
             if self.table_widget.item(row, 0).text() == flag_name:
                 self.table_widget.setItem(row, 1, QTableWidgetItem(str(value)))
-                condition_item = self.table_widget.item(row, 2)
-                condition_item.setText(update_condition)
                 for column in range(self.table_widget.columnCount()):
                     item = self.table_widget.item(row, column)
 

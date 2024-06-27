@@ -37,5 +37,4 @@ class TCPController(QObject):
 
     @pyqtSlot(str)
     def handle_tcp_command(self, command):
-        print("1")
         self.model.send_tcp_command(command)

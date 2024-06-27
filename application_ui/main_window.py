@@ -109,8 +109,8 @@ class MainWindow(QMainWindow):
         self.signal_distributor.SEND_TOTAL_CYCLES_SIGNAL.emit(total_cycles)
 
     """TODO: clean this shit"""
-    @pyqtSlot(str, bool, str)
-    def on_state_changed(self, flag_name, value, update_condition):
+    @pyqtSlot(str, bool)
+    def on_state_changed(self, flag_name, value):
         self._debug_display.append(f"State changed: {flag_name} -> {value}")
         _handler = getattr(self, f"handle_{flag_name}", None)
         if _handler:
@@ -192,6 +192,5 @@ class MainWindow(QMainWindow):
 
     @staticmethod
     def show_alarm_messagebox(alarm_code, subcode):
-        print("attempting to open alarm message box")
         from resources.alarm_message_box import AlarmMessageBox
         AlarmMessageBox.show_alarm_messagebox(alarm_code, subcode)

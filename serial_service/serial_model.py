@@ -19,7 +19,6 @@ class SerialModel(QObject):
         self.reader_thread = None
         self.signal_distributor = signal_distributor
         self.flag_state_manager = flag_state_manager
-        print("SerialModel initialized")
 
     @staticmethod
     def get_available_ports():

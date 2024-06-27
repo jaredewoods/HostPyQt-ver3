@@ -28,16 +28,11 @@ class TCPModel:
         return False
 
     def send_tcp_command(self, command):
-        print("2")
         self.filtered_command = command
-        print("3")
         self.signal_distributor.DEBUG_MESSAGE.emit(f"Filtered Command: {self.filtered_command}")
-        print("4")
         self.signal_distributor.LOG_MESSAGE.emit(f"  (sent/tcp) {self.filtered_command}")
         try:
-            print("5")
             self.tcp_socket.sendall(self.filtered_command.encode())
-            print("6")
             self.receive_tcp_data()
             return True
         except socket.error as e:

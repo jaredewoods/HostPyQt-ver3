@@ -131,7 +131,6 @@ class MacroController(QObject):
             return None
 
     def load_command_into_view(self, command, unit, parameters):
-        print(f"Setting command: {command}, unit: {unit}, parameters: {parameters}")  # Debug statement
         self.command_view.set_command(command)
         self.command_view.set_unit_number(unit)
         self.command_view.set_parameters(parameters)

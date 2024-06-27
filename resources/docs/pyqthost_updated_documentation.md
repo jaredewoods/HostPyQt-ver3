@@ -371,7 +371,7 @@ elif validate
     FlagStateManager -> Self: if current_value != value: setattr(flag_name, value)
 elif toggle
     FlagStateManager -> Self: setattr(flag_name, not current_value)
-FlagStateManager -> Self: emit state_updated(flag_name, value, condition)
+FlagStateManager -> Self: emit state_updated(flag_name, value)
 
 ```
 
