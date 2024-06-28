@@ -99,7 +99,6 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("Main Window")
         self.flag_state_view = FlagStateView(self.flag_state_manager)
 
-        # self.signal_distributor.STATE_UPDATED_SIGNAL.connect(self.on_state_changed)
         self.signal_distributor.DEBUG_MESSAGE.emit("MainWindow initialization complete")
         self.flag_state_view.show()
 
