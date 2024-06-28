@@ -56,10 +56,10 @@ class MainWindow(QMainWindow):
         self.tcp_controller = TCPController(self.tcp_model, self.tcp_view, self.signal_distributor)
         self.macro_model = MacroModel()
         self.macro_view = MacroView()
+        self.macro_controller = MacroController(self.macro_model, self.macro_view, self.signal_distributor, self.flag_state_manager)
         self.command_view = CommandView(self.signal_distributor)
         self.command_model = CommandModel()
         self.command_controller = CommandController(self.command_model, self.command_view, self.signal_distributor)
-        self.macro_controller = MacroController(self.macro_model, self.macro_view, self.signal_distributor, self.flag_state_manager)
 
         self.signal_distributor.STATE_UPDATED_SIGNAL.connect(self.on_state_changed)
         self.signal_distributor.LOAD_COMMAND_INTO_VIEW.connect(self.command_view.set_command_details)
