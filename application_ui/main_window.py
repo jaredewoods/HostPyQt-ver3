@@ -36,6 +36,8 @@ class MainWindow(QMainWindow):
         central_widget.setLayout(self.main_layout)
 
         self.control_frame = QFrame()
+        self.control_frame.setMaximumWidth(300)  # Restrict the width of the control frame
+
         self.control_layout = QVBoxLayout(self.control_frame)
 
         self.message_display_frame = QTabWidget()

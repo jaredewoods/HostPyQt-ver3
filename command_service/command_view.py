@@ -58,19 +58,18 @@ class CommandView(QWidget):
         self.dropdown_unit_no.addItems(["", "1", "2"])
         self.dropdown_code = QComboBox()
         self.dropdown_code.setEditable(True)
-        dropdowns_layout.addWidget(QLabel("Unit No"))
         dropdowns_layout.addWidget(self.dropdown_unit_no)
-        dropdowns_layout.addWidget(QLabel("Command"))
+        dropdowns_layout.addWidget(QLabel("UNo"))
 
         self.dropdown_code.addItem("")
         for command in commands.keys():
             self.dropdown_code.addItem(command)
 
         dropdowns_layout.addWidget(self.dropdown_code)
+        dropdowns_layout.addWidget(QLabel("CMND"))
 
         self.entry_parameters = QLineEdit()
         self.entry_parameters.setFixedWidth(90)
-        dropdowns_layout.addWidget(QLabel("Param."))
         dropdowns_layout.addWidget(self.entry_parameters)
         self.main_layout.addLayout(dropdowns_layout)
 
