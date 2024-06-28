@@ -41,17 +41,17 @@ class StatusView(QWidget):
 
         self.serial_status_label = QLabel("SERIAL")
         self.serial_status_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.serial_status_label.setStyleSheet("background-color: #CCCCCC; color: #666666; padding: 5px;")
+        self.serial_status_label.setStyleSheet("background-color: #CCCCCC; color: #666666; padding: 5px; border: 1px solid black;")
         status_connection_layout.addWidget(self.serial_status_label)
 
         self.tcp_status_label = QLabel(" TCP / IP ")
         self.tcp_status_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.tcp_status_label.setStyleSheet("background-color: #CCCCCC; color: #666666; padding: 5px;")
+        self.tcp_status_label.setStyleSheet("background-color: #CCCCCC; color: #666666; padding: 5px; border: 1px solid black;")
         status_connection_layout.addWidget(self.tcp_status_label)
 
         self.macro_status_label = QLabel("MACRO")
         self.macro_status_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.macro_status_label.setStyleSheet("background-color: #CCCCCC; color: #666666; padding: 5px;")
+        self.macro_status_label.setStyleSheet("background-color: #CCCCCC; color: #666666; padding: 5px; border: 1px solid black;")
         status_connection_layout.addWidget(self.macro_status_label)
 
         self.main_layout.addLayout(status_connection_layout)
@@ -59,9 +59,9 @@ class StatusView(QWidget):
     @staticmethod
     def update_label_color(label, value):
         if value:
-            label.setStyleSheet("background-color: darkGreen; color: white;")
+            label.setStyleSheet("background-color: darkGreen; color: white; padding: 5px; border: 1px solid black;")
         else:
-            label.setStyleSheet("background-color: darkRed; color: white;")
+            label.setStyleSheet("background-color: darkRed; color: white; padding: 5px; border: 1px solid black;")
 
     def update_serial_status(self, value):
         self.update_label_color(self.serial_status_label, value)
