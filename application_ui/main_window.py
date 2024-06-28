@@ -70,6 +70,7 @@ class MainWindow(QMainWindow):
         self.control_layout.addWidget(self.tab_widget)
         self.control_layout.addWidget(self.command_view)
         self.control_layout.addWidget(self.status_view)
+
         self.main_layout.addWidget(self.control_frame)
         self.main_layout.addWidget(self.message_display_frame)
         self.setWindowTitle("Main Window")
