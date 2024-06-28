@@ -5,15 +5,7 @@ from PyQt6.QtCore import QObject, pyqtSignal, pyqtSlot
 
 class MacroController(QObject):
     start_signal = pyqtSignal()
-    """The MacroController class handles the logic for loading, parsing, and displaying macro commands.
 
-    Args:
-        model (Model): The model object.
-        view (View): The view object.
-        command_view (CommandView): The command view object.
-        signal_distributor (SignalDistributor): The signal distributor object.
-        flag_state_manager (FlagStateManager): The flag state manager object.
-    """
     def __init__(self, model, view, signal_distributor, flag_state_manager):
         super().__init__()
         self.updated_macro_command = None
@@ -98,7 +90,6 @@ class MacroController(QObject):
     def update_ui_with_macro_data(self, suggested_cycles, macro_commands):
         self.view.update_total_cycles(suggested_cycles)
         formatted_commands = [f"{unit}{command}" for command, unit in macro_commands]
-        # self.command_view.update_macro_sequence('\n'.join(formatted_commands))
         self.updated_macro_command = ('\n'.join(formatted_commands))
         self.signal_distributor.UPDATE_MACRO_COMMAND.emit(self.updated_macro_command)
 
@@ -115,7 +106,6 @@ class MacroController(QObject):
 
     @pyqtSlot()
     def load_macro_sequence_line(self):
-        print("3 emitting REQUEST_CURRENT_ITEM_SIGNAL")
         self.signal_distributor.DEBUG_MESSAGE.emit("Entered load_macro_sequence_line")
         self.signal_distributor.REQUEST_CURRENT_ITEM_SIGNAL.emit()
 
@@ -126,19 +116,12 @@ class MacroController(QObject):
     @pyqtSlot(str)
     def receive_current_item(self, item_text):
         if item_text:
-            print("8 from macro_controller")
-            print(item_text)
             unit_number = item_text[0]
-            print(unit_number)
             full_command = item_text[1:]
-            print(full_command)
             command = full_command[:4]
-            print(command)
             parameters = full_command[4:]
-            print(parameters)
             self.signal_distributor.DEBUG_MESSAGE.emit(f"Loading command: {command}, unit: {unit_number}, parameters: {parameters}")
             self.signal_distributor.LOAD_COMMAND_INTO_VIEW.emit(command, unit_number, parameters)
-            print(full_command)
             return full_command
         else:
             self.signal_distributor.DEBUG_MESSAGE.emit("No item selected")
