@@ -59,7 +59,7 @@ class MainWindow(QMainWindow):
         self.command_view = CommandView(self.signal_distributor)
         self.command_model = CommandModel()
         self.command_controller = CommandController(self.command_model, self.command_view, self.signal_distributor)
-        self.macro_controller = MacroController(self.macro_model, self.macro_view, self.command_view, self.signal_distributor, self.flag_state_manager)
+        self.macro_controller = MacroController(self.macro_model, self.macro_view, self.signal_distributor, self.flag_state_manager)
 
         self.signal_distributor.STATE_UPDATED_SIGNAL.connect(self.on_state_changed)
         self.signal_distributor.DEBUG_MESSAGE.connect(self.update_debug_display)
@@ -83,7 +83,7 @@ class MainWindow(QMainWindow):
         self.signal_distributor.ITEM_SELECTED_SIGNAL.connect(self.macro_controller.load_macro_sequence_line)
         self.signal_distributor.SINGLE_SHOT_BUTTON_CLICKED.connect(self.command_controller.send_single_shot)
         self.signal_distributor.LOAD_COMMAND_INTO_VIEW.connect(self.command_view.set_command_details)
-
+        self.signal_distributor.UPDATE_MACRO_COMMAND.connect(self.command_view.update_macro_sequence)
         self.status_view = StatusView()
         self.tab_widget = QTabWidget()
         self.tab_widget.addTab(self.serial_view, "Serial")

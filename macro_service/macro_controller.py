@@ -14,12 +14,12 @@ class MacroController(QObject):
         signal_distributor (SignalDistributor): The signal distributor object.
         flag_state_manager (FlagStateManager): The flag state manager object.
     """
-    def __init__(self, model, view, command_view, signal_distributor, flag_state_manager):
+    def __init__(self, model, view, signal_distributor, flag_state_manager):
         super().__init__()
+        self.updated_macro_command = None
         self.macro_commands = None
         self.view = view
         self.model = model
-        self.command_view = command_view
         self.signal_distributor = signal_distributor
         self.flag_state_manager = flag_state_manager
         self.view.macro_select_cbx.activated.connect(self.on_macro_dropdown_activated)
@@ -100,7 +100,9 @@ class MacroController(QObject):
     def update_ui_with_macro_data(self, suggested_cycles, macro_commands):
         self.view.update_total_cycles(suggested_cycles)
         formatted_commands = [f"{unit}{command}" for command, unit in macro_commands]
-        self.command_view.update_macro_sequence('\n'.join(formatted_commands))
+        # self.command_view.update_macro_sequence('\n'.join(formatted_commands))
+        self.updated_macro_command = ('\n'.join(formatted_commands))
+        self.signal_distributor.UPDATE_MACRO_COMMAND.emit(self.updated_macro_command)
 
     def load_macro_file(self, file_name):
         macro_directory = self.get_macro_directory()
@@ -126,14 +128,9 @@ class MacroController(QObject):
 
             self.signal_distributor.DEBUG_MESSAGE.emit(f"Loading command: {command}, unit: {unit_number}, parameters: {parameters}")  # Debug statement
             self.signal_distributor.LOAD_COMMAND_INTO_VIEW.emit(command, unit_number, parameters)
-            # self.load_command_into_view(command, unit_number, parameters)
             return full_command
         else:
             self.signal_distributor.DEBUG_MESSAGE.emit("No item selected")
             return None
 
-    def load_command_into_view(self, command, unit, parameters):
-        self.command_view.set_command(command)
-        self.command_view.set_unit_number(unit)
-        self.command_view.set_parameters(parameters)
-        self.command_view.set_code(command)
+
