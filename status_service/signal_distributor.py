@@ -26,6 +26,7 @@ class SignalDistributor(QObject):
     CYCLE_COMPLETED_SIGNAL = pyqtSignal()
     UPDATE_MACRO_COMMAND = pyqtSignal(str)
     CLEAR_LOG_SIGNAL = pyqtSignal()
+    ALARM_SIGNAL = pyqtSignal(str, str)
 
     WAIT_COMMAND_EXECUTOR_SIGNAL = pyqtSignal(str)
     XGX_COMMAND_EXECUTOR_SIGNAL = pyqtSignal(str)
@@ -41,7 +42,7 @@ class SignalDistributor(QObject):
 
     DEBUG_MESSAGE = pyqtSignal(str)
     LOG_MESSAGE = pyqtSignal(str)
-    ALARM_MESSAGE = pyqtSignal(str)
+    ALARM_MESSAGE = pyqtSignal(str, str)
 
     def __init__(self):
         super().__init__()

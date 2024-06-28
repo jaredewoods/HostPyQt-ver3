@@ -32,7 +32,7 @@ class SerialModel(QObject):
         try:
             self.serial_port = serial.Serial(port, baudrate, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS,)
             self.reader_thread = SerialReader(self.serial_port, self.signal_distributor, self.flag_state_manager)
-            # self.reader_thread.alarm_signal.connect(self.alarm_signal.emit)
+            self.reader_thread.alarm_signal.connect(self.alarm_signal.emit)
             self.reader_thread.start()
             self.signal_distributor.DEBUG_MESSAGE.emit(f"Connected to {port} at {baudrate} baudrate")
             self.signal_distributor.LOG_MESSAGE.emit(f"Connected to {port} at {baudrate} baudrate")
