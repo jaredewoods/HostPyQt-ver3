@@ -12,6 +12,11 @@ class SignalDistributor(QObject):
     RUN_NEXT_COMMAND_SIGNAL = pyqtSignal()
     STATE_UPDATED_SIGNAL = pyqtSignal(str, bool)
     LOAD_COMMAND_INTO_VIEW = pyqtSignal(str, str, str)
+    REQUEST_CURRENT_ITEM_SIGNAL = pyqtSignal()
+    RECEIVE_CURRENT_ITEM_SIGNAL = pyqtSignal(str)
+    CURRENT_ITEM_SIGNAL = pyqtSignal(str)
+    CLEAR_FIELDS_SIGNAL = pyqtSignal()
+    SET_CURRENT_ROW_SIGNAL = pyqtSignal(int)
 
     STATE_CHANGED_SIGNAL = pyqtSignal(str, bool)
     REQUEST_TOTAL_CYCLES_SIGNAL = pyqtSignal()
@@ -20,6 +25,7 @@ class SignalDistributor(QObject):
     RESTART_CYCLE_SIGNAL = pyqtSignal()
     CYCLE_COMPLETED_SIGNAL = pyqtSignal()
     UPDATE_MACRO_COMMAND = pyqtSignal(str)
+
 
     WAIT_COMMAND_EXECUTOR_SIGNAL = pyqtSignal(str)
     XGX_COMMAND_EXECUTOR_SIGNAL = pyqtSignal(str)

@@ -31,6 +31,11 @@ class CommandView(QWidget):
 
         self.setLayout(self.main_layout)
 
+    @pyqtSlot(int)
+    def set_current_row(self, row):
+        if self.macro_sequence_display.count() > 0:
+            self.macro_sequence_display.setCurrentRow(row)
+
     def setup_checkboxes(self):
         checkboxes_layout = QHBoxLayout()
         checkboxes_layout.setContentsMargins(20, 0, 0, 0)
@@ -212,3 +217,9 @@ class CommandView(QWidget):
         self.set_unit_number(unit)
         self.set_parameters(parameters)
         self.set_code(command)
+
+    @pyqtSlot()
+    def send_current_item(self):
+        selected_item = self.macro_sequence_display.currentItem()
+        if selected_item:
+            self.signal_distributor.CURRENT_ITEM_SIGNAL.emit(selected_item.text())

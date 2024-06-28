@@ -62,6 +62,11 @@ class MainWindow(QMainWindow):
         self.macro_controller = MacroController(self.macro_model, self.macro_view, self.signal_distributor, self.flag_state_manager)
 
         self.signal_distributor.STATE_UPDATED_SIGNAL.connect(self.on_state_changed)
+        self.signal_distributor.LOAD_COMMAND_INTO_VIEW.connect(self.command_view.set_command_details)
+        self.signal_distributor.REQUEST_CURRENT_ITEM_SIGNAL.connect(self.command_view.send_current_item)
+        self.signal_distributor.CURRENT_ITEM_SIGNAL.connect(self.macro_controller.receive_current_item)
+        self.signal_distributor.CLEAR_FIELDS_SIGNAL.connect(self.command_view.clear_fields)
+        self.signal_distributor.SET_CURRENT_ROW_SIGNAL.connect(self.command_view.set_current_row)
         self.signal_distributor.DEBUG_MESSAGE.connect(self.update_debug_display)
         self.signal_distributor.LOG_MESSAGE.connect(self.update_log_display)
         self.signal_distributor.ALARM_MESSAGE.connect(self.show_alarm_messagebox)
@@ -84,6 +89,9 @@ class MainWindow(QMainWindow):
         self.signal_distributor.SINGLE_SHOT_BUTTON_CLICKED.connect(self.command_controller.send_single_shot)
         self.signal_distributor.LOAD_COMMAND_INTO_VIEW.connect(self.command_view.set_command_details)
         self.signal_distributor.UPDATE_MACRO_COMMAND.connect(self.command_view.update_macro_sequence)
+
+
+
         self.status_view = StatusView()
         self.tab_widget = QTabWidget()
         self.tab_widget.addTab(self.serial_view, "Serial")
@@ -179,7 +187,7 @@ class MainWindow(QMainWindow):
     def handle_xgx_command(self, command):
         self.xgx_command = command[6:8]
         self.tcp_controller.handle_tcp_command(self.xgx_command)
-        self.signal_distributor.DEBUG_MESSAGE(f"Handling XG-X command: {self.xgx_command}")
+        self.signal_distributor.DEBUG_MESSAGE.emit(f"Handling XG-X command: {self.xgx_command}")
 
     @pyqtSlot(str)
     def update_debug_display(self, message):

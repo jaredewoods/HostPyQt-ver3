@@ -53,10 +53,8 @@ class MacroController(QObject):
         self.signal_distributor.DEBUG_MESSAGE.emit(f"Dropdown activated: {selected_file}")
         if selected_file:
             self.handle_macro_file_selection(selected_file)
-            self.command_view.clear_fields()
-        # Select the first item in the QListWidget
-        if self.command_view.macro_sequence_display.count() > 0:
-            self.command_view.macro_sequence_display.setCurrentRow(0)
+            self.signal_distributor.CLEAR_FIELDS_SIGNAL.emit()
+        self.signal_distributor.SET_CURRENT_ROW_SIGNAL.emit(0)
 
     def update_macro_ready_state(self):
         serial_connected = self.flag_state_manager.get_flag_status('serial_connected')
@@ -118,15 +116,20 @@ class MacroController(QObject):
     @pyqtSlot()
     def load_macro_sequence_line(self):
         self.signal_distributor.DEBUG_MESSAGE.emit("Entered load_macro_sequence_line")
-        selected_item = self.command_view.macro_sequence_display.currentItem()
-        if selected_item:
-            full_command_with_unit = selected_item.text()
-            unit_number = full_command_with_unit[0]
-            full_command = full_command_with_unit[1:]
+        self.signal_distributor.REQUEST_CURRENT_ITEM_SIGNAL.emit()
+
+    @pyqtSlot()
+    def request_current_item(self):
+        self.REQUEST_CURRENT_ITEM_SIGNAL.emit()
+
+    @pyqtSlot(str)
+    def receive_current_item(self, item_text):
+        if item_text:
+            unit_number = item_text[0]
+            full_command = item_text[1:]
             command = full_command[:4]
             parameters = full_command[4:]
-
-            self.signal_distributor.DEBUG_MESSAGE.emit(f"Loading command: {command}, unit: {unit_number}, parameters: {parameters}")  # Debug statement
+            self.signal_distributor.DEBUG_MESSAGE.emit(f"Loading command: {command}, unit: {unit_number}, parameters: {parameters}")
             self.signal_distributor.LOAD_COMMAND_INTO_VIEW.emit(command, unit_number, parameters)
             return full_command
         else:
