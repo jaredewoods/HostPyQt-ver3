@@ -91,6 +91,8 @@ class MainWindow(QMainWindow):
         self.signal_distributor.LOAD_COMMAND_INTO_VIEW.connect(self.command_view.set_command_details)
         self.signal_distributor.UPDATE_MACRO_COMMAND.connect(self.command_view.update_macro_sequence)
         self.signal_distributor.TEXT_CHANGED_SIGNAL.connect(self.command_controller.handle_text_changed)
+        self.signal_distributor.RESET_BUTTON_CLICKED.connect(self.reset_macro)
+        self.signal_distributor.CLEAR_LOG_SIGNAL.connect(self.clear_log)
 
         self.status_view = StatusView()
         self.tab_widget = QTabWidget()
@@ -110,6 +112,15 @@ class MainWindow(QMainWindow):
 
         self.xgx_command = None
         self.wait_command = None
+
+    @pyqtSlot()
+    def clear_log(self):
+        self.log_display.clear()
+
+    @pyqtSlot()
+    def reset_macro(self):
+        self.macro_view.update_completed_cycles("0")
+        self.signal_distributor.DEBUG_MESSAGE.emit("resetting macro")
 
     @pyqtSlot()
     def provide_total_cycles(self):

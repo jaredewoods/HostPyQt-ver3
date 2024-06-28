@@ -112,17 +112,17 @@ class CommandView(QWidget):
         self.single_shot_btn = QPushButton("Single Shot")
         self.reset_btn = QPushButton("Reset Sequence")
         self.edit_btn = QPushButton("Select Step")
-        self.clear_btn = QPushButton("Clear Command")
+        self.clear_btn = QPushButton("Clear Log")
 
         # Add buttons to layout
         buttons_layout.addWidget(self.single_shot_btn, 0, 0, 1, 2)
         self.single_shot_btn.clicked.connect(self.signal_distributor.SINGLE_SHOT_BUTTON_CLICKED)
         buttons_layout.addWidget(self.reset_btn, 0, 2, 1, 2)
-        self.reset_btn.clicked.connect(self.reset_macro_fields_and_flags)
+        self.reset_btn.clicked.connect(self.signal_distributor.RESET_BUTTON_CLICKED)
         buttons_layout.addWidget(self.edit_btn, 1, 0, 1, 2)
         self.edit_btn.clicked.connect(self.edit_macro_sequence)
         buttons_layout.addWidget(self.clear_btn, 1, 2, 1, 2)
-        self.clear_btn.clicked.connect(self.clear_fields)
+        self.clear_btn.clicked.connect(self.signal_distributor.CLEAR_LOG_SIGNAL)
 
         self.macro_display_layout.addLayout(buttons_layout)
         self.main_layout.addLayout(self.macro_display_layout)
@@ -180,7 +180,6 @@ class CommandView(QWidget):
 
     @pyqtSlot()
     def emit_item_selected(self):
-        print("2 emitting ITEM_SELECTED_SIGNAL")
         self.signal_distributor.ITEM_SELECTED_SIGNAL.emit()
 
     @pyqtSlot(str)
@@ -195,7 +194,6 @@ class CommandView(QWidget):
         self.macro_sequence_display.setDisabled(not self.is_editing)
         self.edit_btn.setText("Commit" if self.is_editing else "Select Step")
         self.set_macro_sequence_display_style(editable=self.is_editing)
-
 
     @pyqtSlot(str)
     def set_command(self, command):
