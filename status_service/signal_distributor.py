@@ -17,7 +17,7 @@ class SignalDistributor(QObject):
     CURRENT_ITEM_SIGNAL = pyqtSignal(str)
     CLEAR_FIELDS_SIGNAL = pyqtSignal()
     SET_CURRENT_ROW_SIGNAL = pyqtSignal(int)
-
+    TEXT_CHANGED_SIGNAL = pyqtSignal()
     STATE_CHANGED_SIGNAL = pyqtSignal(str, bool)
     REQUEST_TOTAL_CYCLES_SIGNAL = pyqtSignal()
     SEND_TOTAL_CYCLES_SIGNAL = pyqtSignal(int)

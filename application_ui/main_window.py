@@ -89,7 +89,7 @@ class MainWindow(QMainWindow):
         self.signal_distributor.SINGLE_SHOT_BUTTON_CLICKED.connect(self.command_controller.send_single_shot)
         self.signal_distributor.LOAD_COMMAND_INTO_VIEW.connect(self.command_view.set_command_details)
         self.signal_distributor.UPDATE_MACRO_COMMAND.connect(self.command_view.update_macro_sequence)
-
+        self.signal_distributor.TEXT_CHANGED_SIGNAL.connect(self.command_controller.handle_text_changed)
         self.status_view = StatusView()
         self.tab_widget = QTabWidget()
         self.tab_widget.addTab(self.serial_view, "Serial")

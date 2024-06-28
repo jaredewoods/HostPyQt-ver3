@@ -115,6 +115,7 @@ class MacroController(QObject):
 
     @pyqtSlot()
     def load_macro_sequence_line(self):
+        print("3 emitting REQUEST_CURRENT_ITEM_SIGNAL")
         self.signal_distributor.DEBUG_MESSAGE.emit("Entered load_macro_sequence_line")
         self.signal_distributor.REQUEST_CURRENT_ITEM_SIGNAL.emit()
 
@@ -125,12 +126,19 @@ class MacroController(QObject):
     @pyqtSlot(str)
     def receive_current_item(self, item_text):
         if item_text:
+            print("8 from macro_controller")
+            print(item_text)
             unit_number = item_text[0]
+            print(unit_number)
             full_command = item_text[1:]
+            print(full_command)
             command = full_command[:4]
+            print(command)
             parameters = full_command[4:]
+            print(parameters)
             self.signal_distributor.DEBUG_MESSAGE.emit(f"Loading command: {command}, unit: {unit_number}, parameters: {parameters}")
             self.signal_distributor.LOAD_COMMAND_INTO_VIEW.emit(command, unit_number, parameters)
+            print(full_command)
             return full_command
         else:
             self.signal_distributor.DEBUG_MESSAGE.emit("No item selected")

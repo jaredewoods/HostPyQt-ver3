@@ -102,6 +102,7 @@ class CommandView(QWidget):
         self.macro_sequence_display = QListWidget()
         self.macro_sequence_display.setDisabled(True)
         self.macro_sequence_display.itemSelectionChanged.connect(self.emit_item_selected)
+        print("1 selection changed")
         self.macro_display_layout.addWidget(self.macro_sequence_display)
 
         buttons_layout = QGridLayout()
@@ -151,6 +152,7 @@ class CommandView(QWidget):
 
     @pyqtSlot()
     def emit_item_selected(self):
+        print("2 emitting ITEM_SELECTED_SIGNAL")
         self.signal_distributor.ITEM_SELECTED_SIGNAL.emit()
 
     @pyqtSlot(str)
@@ -213,13 +215,16 @@ class CommandView(QWidget):
 
     @pyqtSlot(str, str, str)
     def set_command_details(self, command, unit, parameters):
+        self.signal_distributor.DEBUG_MESSAGE.emit(f"Setting command details: command={command}, unit={unit}, parameters={parameters}")
         self.set_command(command)
         self.set_unit_number(unit)
         self.set_parameters(parameters)
         self.set_code(command)
+        self.signal_distributor.TEXT_CHANGED_SIGNAL.emit()
 
     @pyqtSlot()
     def send_current_item(self):
         selected_item = self.macro_sequence_display.currentItem()
+        print(f"4 {selected_item}")
         if selected_item:
             self.signal_distributor.CURRENT_ITEM_SIGNAL.emit(selected_item.text())
