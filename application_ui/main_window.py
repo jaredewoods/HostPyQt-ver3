@@ -179,7 +179,7 @@ class MainWindow(QMainWindow):
     def handle_xgx_command(self, command):
         self.xgx_command = command[6:8]
         self.tcp_controller.handle_tcp_command(self.xgx_command)
-        print(f"Handling XG-X command: {self.xgx_command}")
+        self.signal_distributor.DEBUG_MESSAGE(f"Handling XG-X command: {self.xgx_command}")
 
     @pyqtSlot(str)
     def update_debug_display(self, message):
