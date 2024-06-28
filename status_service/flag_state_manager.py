@@ -104,12 +104,3 @@ class FlagStateView(QMainWindow):
                         item.setBackground(QColor('darkRed'))
                 break
 
-if __name__ == "__main__":
-    import sys
-    app = QApplication(sys.argv)
-
-    state_manager = FlagStateManager()
-    window = FlagStateView(state_manager)
-    window.show()
-
-    sys.exit(app.exec())
