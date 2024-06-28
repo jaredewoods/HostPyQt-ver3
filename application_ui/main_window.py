@@ -27,7 +27,6 @@ class MainWindow(QMainWindow):
 
         self.signal_distributor = SignalDistributor()
         self.flag_state_manager = FlagStateManager(self.signal_distributor)
-
         self.macro_executor = MacroExecutor(self.signal_distributor, self.flag_state_manager)
 
         # Central widget
@@ -42,9 +41,11 @@ class MainWindow(QMainWindow):
         self.message_display_frame.setFixedWidth(400)
 
         self.log_display = QTextEdit()
+        self.log_display.setStyleSheet("background-color: #000040; color: yellow;")
         self.log_display.setReadOnly(True)
         self._debug_display = QTextEdit()
         self._debug_display.setReadOnly(True)
+        self._debug_display.setStyleSheet("background-color: #060606; color: white;")
         self.message_display_frame.addTab(self.log_display, "Log")
         self.message_display_frame.addTab(self._debug_display, "Debug")
 
@@ -90,6 +91,7 @@ class MainWindow(QMainWindow):
         self.signal_distributor.LOAD_COMMAND_INTO_VIEW.connect(self.command_view.set_command_details)
         self.signal_distributor.UPDATE_MACRO_COMMAND.connect(self.command_view.update_macro_sequence)
         self.signal_distributor.TEXT_CHANGED_SIGNAL.connect(self.command_controller.handle_text_changed)
+
         self.status_view = StatusView()
         self.tab_widget = QTabWidget()
         self.tab_widget.addTab(self.serial_view, "Serial")
@@ -179,7 +181,6 @@ class MainWindow(QMainWindow):
     def handle_wait_command(self, command):
         self.wait_command = command[6:10]
         self.command_controller.handle_wait_command(self.wait_command)
-        print(f"Handling non-standard {self.wait_command}")
 
     @pyqtSlot(str)
     def handle_xgx_command(self, command):
@@ -197,7 +198,5 @@ class MainWindow(QMainWindow):
 
     @staticmethod
     def show_alarm_messagebox(alarm_code, subcode):
-        print("1")
         from application_ui.alarm_message_box import AlarmMessageBox
-        print("2")
         AlarmMessageBox.show_alarm_messagebox(alarm_code, subcode)

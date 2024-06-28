@@ -3,26 +3,6 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QColor
 
 class StatusView(QWidget):
-    """
-    Class representing a status view widget.
-
-    This class provides a widget that displays the status of various components, such as time and connection status.
-
-    Example usage:
-        status_view = StatusView()
-
-    Attributes:
-        main_layout (QVBoxLayout): The main layout of the widget.
-
-    Methods:
-        __init__(): Initializes the StatusView widget.
-        create_status_time_layout(): Creates the layout for displaying time status.
-        create_status_connection_layout(): Creates the layout for displaying connection status.
-        update_label_color(label, value): Updates the color of the given label based on the given value.
-        update_serial_status(value): Updates the serial connection status label color based on the given value.
-        update_tcp_status(value): Updates the TCP/IP connection status label color based on the given value.
-        update_macro_status(value): Updates the macro status label color based on the given value.
-    """
     def __init__(self):
         super().__init__()
 

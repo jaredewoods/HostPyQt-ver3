@@ -85,8 +85,10 @@ class CommandView(QWidget):
     def setup_display_line(self):
         display_layout = QHBoxLayout()
         self.display_command = QLabel()
+        self.display_command.setStyleSheet("background-color: #000040; color: yellow;")
         self.display_command.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.display_command.setStyleSheet("""color: blue;
+        self.display_command.setStyleSheet("""background-color: #000040; 
+                                          color: yellow;
                                           font-family: Arial;
                                           font-size: 18px;
                                           padding: 8px;
@@ -99,18 +101,20 @@ class CommandView(QWidget):
     def setup_macro_display(self):
         self.macro_display_layout = QVBoxLayout()
 
+        # Create and style QListWidget
         self.macro_sequence_display = QListWidget()
-        self.macro_sequence_display.setDisabled(True)
+        self.set_macro_sequence_display_style(editable=False)
         self.macro_sequence_display.itemSelectionChanged.connect(self.emit_item_selected)
-        print("1 selection changed")
         self.macro_display_layout.addWidget(self.macro_sequence_display)
 
+        # Create buttons layout
         buttons_layout = QGridLayout()
         self.single_shot_btn = QPushButton("Single Shot")
         self.reset_btn = QPushButton("Reset Sequence")
         self.edit_btn = QPushButton("Select Step")
         self.clear_btn = QPushButton("Clear Command")
 
+        # Add buttons to layout
         buttons_layout.addWidget(self.single_shot_btn, 0, 0, 1, 2)
         self.single_shot_btn.clicked.connect(self.signal_distributor.SINGLE_SHOT_BUTTON_CLICKED)
         buttons_layout.addWidget(self.reset_btn, 0, 2, 1, 2)
@@ -123,6 +127,30 @@ class CommandView(QWidget):
         self.macro_display_layout.addLayout(buttons_layout)
         self.main_layout.addLayout(self.macro_display_layout)
 
+    def set_macro_sequence_display_style(self, editable):
+        if editable:
+            self.macro_sequence_display.setStyleSheet("""
+                QListWidget {
+                    background-color: #000000;
+                    color: white;
+                }
+                QListWidget::item:selected {
+                    background-color: #999999;
+                    color: black;
+                }
+            """)
+        else:
+            self.macro_sequence_display.setStyleSheet("""
+                QListWidget {
+                    background-color: #000040;  /* Dark blue */
+                    color: #FFFF00;  /* Yellow text */
+                }
+                QListWidget::item:selected {
+                    background-color: #004080;  /* Highlighted background */
+                    color: #FFFFFF;  /* White text for selected item */
+                }
+            """)
+
     @pyqtSlot()
     def select_next_macro_item(self):
         self.signal_distributor.DEBUG_MESSAGE.emit("selecting next macro item in CommandView")
@@ -133,7 +161,7 @@ class CommandView(QWidget):
             self.signal_distributor.DEBUG_MESSAGE.emit(f"Current Index: {current_index}")
             next_index = current_index + 1
             self.signal_distributor.DEBUG_MESSAGE.emit(f"Next Index: {next_index}")
-            print(f"Macro Sequence Display Count: {self.macro_sequence_display.count()}")
+            self.signal_distributor.DEBUG_MESSAGE.emit(f"Macro Sequence Display Count: {self.macro_sequence_display.count()}")
             if next_index < self.macro_sequence_display.count():
                 self.macro_sequence_display.setCurrentRow(next_index)
                 self.signal_distributor.MACRO_TRIGGER_SEQ01_SIGNAL.emit()
@@ -166,6 +194,8 @@ class CommandView(QWidget):
         self.is_editing = not self.is_editing
         self.macro_sequence_display.setDisabled(not self.is_editing)
         self.edit_btn.setText("Commit" if self.is_editing else "Select Step")
+        self.set_macro_sequence_display_style(editable=self.is_editing)
+
 
     @pyqtSlot(str)
     def set_command(self, command):
@@ -225,6 +255,5 @@ class CommandView(QWidget):
     @pyqtSlot()
     def send_current_item(self):
         selected_item = self.macro_sequence_display.currentItem()
-        print(f"4 {selected_item}")
         if selected_item:
             self.signal_distributor.CURRENT_ITEM_SIGNAL.emit(selected_item.text())
