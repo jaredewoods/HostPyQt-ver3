@@ -197,5 +197,7 @@ class MainWindow(QMainWindow):
 
     @staticmethod
     def show_alarm_messagebox(alarm_code, subcode):
-        from resources.alarm_message_box import AlarmMessageBox
+        print("1")
+        from application_ui.alarm_message_box import AlarmMessageBox
+        print("2")
         AlarmMessageBox.show_alarm_messagebox(alarm_code, subcode)

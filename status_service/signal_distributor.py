@@ -26,7 +26,6 @@ class SignalDistributor(QObject):
     CYCLE_COMPLETED_SIGNAL = pyqtSignal()
     UPDATE_MACRO_COMMAND = pyqtSignal(str)
 
-
     WAIT_COMMAND_EXECUTOR_SIGNAL = pyqtSignal(str)
     XGX_COMMAND_EXECUTOR_SIGNAL = pyqtSignal(str)
     CONSTRUCT_COMMAND_SIGNAL = pyqtSignal()
