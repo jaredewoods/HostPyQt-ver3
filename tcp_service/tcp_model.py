@@ -50,7 +50,7 @@ class TCPModel:
 
     def receive_tcp_data(self):
         try:
-            self.tcp_socket.settimeout(5)  # Set a timeout for receiving data
+            self.tcp_socket.settimeout(5)
             incoming_data = self.tcp_socket.recv(1024)  # Adjust the buffer size as needed
             self.decoded_data = incoming_data.decode()
             self.signal_distributor.DEBUG_MESSAGE.emit(f"Incoming TCP: {incoming_data}")
