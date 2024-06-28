@@ -134,6 +134,7 @@ class CommandView(QWidget):
                     color: white;
                 }
                 QListWidget::item:selected {
+                    font-weight: bold; 
                     background-color: #999999;
                     color: black;
                 }

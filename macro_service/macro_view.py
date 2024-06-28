@@ -14,12 +14,18 @@ class MacroView(QWidget):
 
         layout.addWidget(QLabel("Total"), 0, 2, 1, 1)
         self.macro_total_cycles_lbl = QLineEdit("")
-        self.macro_total_cycles_lbl.setStyleSheet("background-color: #000040; color: yellow;")
+        self.macro_total_cycles_lbl.setStyleSheet("font-weight: bold; "
+                                                  "background-color: #000040; "
+                                                  "color: yellow; "
+                                                  "qproperty-alignment: AlignCenter; ")
         layout.addWidget(self.macro_total_cycles_lbl, 1, 2, 1, 1)
 
         layout.addWidget(QLabel("Completed"), 0, 3, 1, 1)
         self.macro_completed_cycles_lbl = QLineEdit("")
-        self.macro_completed_cycles_lbl.setStyleSheet("background-color: #000040; color: yellow;")
+        self.macro_completed_cycles_lbl.setStyleSheet("font-weight: bold; "
+                                                      "background-color: #000040; "
+                                                      "color: yellow; "
+                                                      "qproperty-alignment: AlignCenter;")
         layout.addWidget(self.macro_completed_cycles_lbl, 1, 3, 1, 1)
 
         self.macro_start_btn = QPushButton("Start")

@@ -3,8 +3,9 @@
 import socket
 from PyQt6.QtCore import QObject, pyqtSignal, pyqtSlot
 
-class TCPModel:
+class TCPModel(QObject):
     def __init__(self, signal_distributor):
+        super().__init__()
         self.signal_distributor = signal_distributor
         self.filtered_command = None
         self.unfiltered_command = None

@@ -1,4 +1,4 @@
-from PyQt6.QtCore import QObject, pyqtSignal, pyqtSlot
+from PyQt6.QtCore import QObject, pyqtSignal, pyqtSlot, QThread
 
 class TCPController(QObject):
 
@@ -7,6 +7,10 @@ class TCPController(QObject):
         self.model = model
         self.view = view
         self.signal_distributor = signal_distributor
+
+        self.thread = QThread()
+        self.model.moveToThread(self.thread)
+        self.thread.start()
 
         self.view.tcp_connect_btn.clicked.connect(self.connect_tcp)
         self.view.tcp_close_btn.clicked.connect(self.disconnect_tcp)
