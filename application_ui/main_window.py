@@ -25,9 +25,6 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.xgx_command = None
-        self.wait_command = None
-
         self.signal_distributor = SignalDistributor()
         self.flag_state_manager = FlagStateManager(self.signal_distributor)
 
@@ -85,6 +82,7 @@ class MainWindow(QMainWindow):
         self.signal_distributor.CONSTRUCT_COMMAND_SIGNAL.connect(self.command_controller.construct_command)
         self.signal_distributor.ITEM_SELECTED_SIGNAL.connect(self.macro_controller.load_macro_sequence_line)
         self.signal_distributor.SINGLE_SHOT_BUTTON_CLICKED.connect(self.command_controller.send_single_shot)
+        self.signal_distributor.LOAD_COMMAND_INTO_VIEW.connect(self.command_view.set_command_details)
 
         self.status_view = StatusView()
         self.tab_widget = QTabWidget()
@@ -97,10 +95,13 @@ class MainWindow(QMainWindow):
         main_layout.addWidget(self.control_frame)
         main_layout.addWidget(self.message_display_frame)
         self.setWindowTitle("Main Window")
-        self.flag_state_view = FlagStateView(self.flag_state_manager)
-
         self.signal_distributor.DEBUG_MESSAGE.emit("MainWindow initialization complete")
+        self.flag_state_view = FlagStateView(self.flag_state_manager)
+        self.signal_distributor.DEBUG_MESSAGE.emit("FlagStateView initialization complete")
         self.flag_state_view.show()
+
+        self.xgx_command = None
+        self.wait_command = None
 
     @pyqtSlot()
     def provide_total_cycles(self):

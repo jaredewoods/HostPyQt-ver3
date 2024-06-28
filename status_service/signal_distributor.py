@@ -11,6 +11,7 @@ class SignalDistributor(QObject):
     RESET_BUTTON_CLICKED = pyqtSignal()
     RUN_NEXT_COMMAND_SIGNAL = pyqtSignal()
     STATE_UPDATED_SIGNAL = pyqtSignal(str, bool)
+    LOAD_COMMAND_INTO_VIEW = pyqtSignal(str, str, str)
 
     STATE_CHANGED_SIGNAL = pyqtSignal(str, bool)
     REQUEST_TOTAL_CYCLES_SIGNAL = pyqtSignal()

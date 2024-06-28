@@ -125,7 +125,8 @@ class MacroController(QObject):
             parameters = full_command[4:]
 
             self.signal_distributor.DEBUG_MESSAGE.emit(f"Loading command: {command}, unit: {unit_number}, parameters: {parameters}")  # Debug statement
-            self.load_command_into_view(command, unit_number, parameters)
+            self.signal_distributor.LOAD_COMMAND_INTO_VIEW.emit(command, unit_number, parameters)
+            # self.load_command_into_view(command, unit_number, parameters)
             return full_command
         else:
             self.signal_distributor.DEBUG_MESSAGE.emit("No item selected")

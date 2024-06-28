@@ -205,3 +205,10 @@ class CommandView(QWidget):
     def reset_macro_fields_and_flags(self):
         self.clear_fields()
         self.reset_flags()
+
+    @pyqtSlot(str, str, str)
+    def set_command_details(self, command, unit, parameters):
+        self.set_command(command)
+        self.set_unit_number(unit)
+        self.set_parameters(parameters)
+        self.set_code(command)
