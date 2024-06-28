@@ -1,6 +1,7 @@
 from PyQt6.QtWidgets import QWidget, QGridLayout, QLabel, QComboBox, QPushButton
 
 class TCPView(QWidget):
+
     def __init__(self):
         super().__init__()
         layout = QGridLayout()
@@ -30,10 +31,6 @@ class TCPView(QWidget):
         self.port_combo.currentIndexChanged.connect(self._check_selections)
 
     def _check_selections(self):
-        """
-        Check the selections of the IP address combo box and port combo box.
-        Enables the tcp_connect_btn.
-        """
         if self.ip_address_combo.currentIndex() != -1 and self.port_combo.currentText() != "":
             self.tcp_connect_btn.setEnabled(True)
         else:

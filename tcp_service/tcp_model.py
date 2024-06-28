@@ -1,6 +1,7 @@
 # tcp_model.py
 
 import socket
+from PyQt6.QtCore import QObject, pyqtSignal, pyqtSlot
 
 class TCPModel:
     def __init__(self, signal_distributor):
@@ -14,6 +15,7 @@ class TCPModel:
     def connect(self, ip_address, port):
         try:
             self.tcp_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.tcp_socket.settimeout(1)
             self.tcp_socket.connect((ip_address, int(port)))
             return True
         except socket.error as e:
@@ -23,8 +25,14 @@ class TCPModel:
 
     def disconnect(self):
         if self.tcp_socket:
-            self.tcp_socket.close()
-            return True
+            try:
+                self.tcp_socket.close()
+                self.tcp_socket = None
+                return True
+            except socket.error as e:
+                self.signal_distributor.DEBUG_MESSAGE.emit(f"Error disconnecting - {e}")
+                self.signal_distributor.LOG_MESSAGE.emit(f"Error disconnecting - {e}")
+                return False
         return False
 
     def send_tcp_command(self, command):
@@ -36,20 +44,26 @@ class TCPModel:
             self.receive_tcp_data()
             return True
         except socket.error as e:
-            print(f"Error sending data: {e}")
+            self.signal_distributor.DEBUG_MESSAGE.emit(f"Error sending data: {e}")
+            self.signal_distributor.LOG_MESSAGE.emit(f"Error sending data: {e}")
             return False
 
     def receive_tcp_data(self):
         try:
+            self.tcp_socket.settimeout(5)  # Set a timeout for receiving data
             incoming_data = self.tcp_socket.recv(1024)  # Adjust the buffer size as needed
             self.decoded_data = incoming_data.decode()
             self.signal_distributor.DEBUG_MESSAGE.emit(f"Incoming TCP: {incoming_data}")
             self.signal_distributor.DEBUG_MESSAGE.emit(f"Decoded TCP: {self.decoded_data}")
-            # self.signal_distributor.LOG_MESSAGE.emit(f"        (received/tcp) {self.decoded_data}")
             self.validate_response()
-            return incoming_data.decode()  # Assuming the response is in a compatible encoding
+            return self.decoded_data
+        except socket.timeout:
+            self.signal_distributor.DEBUG_MESSAGE.emit("Receiving data timed out")
+            self.signal_distributor.LOG_MESSAGE.emit("Receiving data timed out")
+            return None
         except socket.error as e:
             self.signal_distributor.DEBUG_MESSAGE.emit(f"Error receiving data: {e}")
+            self.signal_distributor.LOG_MESSAGE.emit(f"Error receiving data: {e}")
             return None
 
     def validate_response(self):
@@ -57,4 +71,5 @@ class TCPModel:
             self.signal_distributor.LOG_MESSAGE.emit("        (system) Data Acquired")
             self.signal_distributor.MACRO_TRIGGER_SEQ03_SIGNAL.emit()
         else:
-            print(f"{self.filtered_command} != {self.decoded_data}")
+            self.signal_distributor.DEBUG_MESSAGE.emit(f"Validation failed: {self.filtered_command} != {self.decoded_data}")
+            self.signal_distributor.LOG_MESSAGE.emit(f"Validation failed: {self.filtered_command} != {self.decoded_data}")

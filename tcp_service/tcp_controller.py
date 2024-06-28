@@ -15,6 +15,7 @@ class TCPController(QObject):
     def connect_tcp(self):
         ip_address = self.view.ip_address_combo.currentText()
         port = self.view.port_combo.currentText()
+
         success = self.model.connect(ip_address, port)
         if success:
             self.signal_distributor.STATE_CHANGED_SIGNAL.emit('tcp_connected', True,)
