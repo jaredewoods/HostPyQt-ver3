@@ -142,12 +142,14 @@ class CommandView(QWidget):
         else:
             self.macro_sequence_display.setStyleSheet("""
                 QListWidget {
-                    background-color: #000040;  /* Dark blue */
-                    color: #FFFF00;  /* Yellow text */
+                    font-weight: bold; 
+                    background-color: #000040;
+                    color: #FFFF00;
                 }
                 QListWidget::item:selected {
-                    background-color: #004080;  /* Highlighted background */
-                    color: #FFFFFF;  /* White text for selected item */
+                    font-weight: bold; 
+                    background-color: #004080;
+                    color: #FFFFFF;
                 }
             """)
 

@@ -44,7 +44,7 @@ class MainWindow(QMainWindow):
         self.message_display_frame.setFixedWidth(400)
 
         self.log_display = QTextEdit()
-        self.log_display.setStyleSheet("background-color: #000040; color: yellow;")
+        self.log_display.setStyleSheet("font-weight: bold; background-color: #000040; color: yellow; ")
         self.log_display.setReadOnly(True)
         self._debug_display = QTextEdit()
         self._debug_display.setReadOnly(True)

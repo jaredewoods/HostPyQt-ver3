@@ -89,6 +89,7 @@ class MacroController(QObject):
 
     def update_ui_with_macro_data(self, suggested_cycles, macro_commands):
         self.view.update_total_cycles(suggested_cycles)
+        self.view.macro_completed_cycles_lbl.setText("0")
         formatted_commands = [f"{unit}{command}" for command, unit in macro_commands]
         self.updated_macro_command = ('\n'.join(formatted_commands))
         self.signal_distributor.UPDATE_MACRO_COMMAND.emit(self.updated_macro_command)
