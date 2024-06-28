@@ -32,11 +32,12 @@ class MainWindow(QMainWindow):
         # Central widget
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
-        main_layout = QHBoxLayout()
-        central_widget.setLayout(main_layout)
+        self.main_layout = QHBoxLayout()
+        central_widget.setLayout(self.main_layout)
 
         self.control_frame = QFrame()
         self.control_layout = QVBoxLayout(self.control_frame)
+
         self.message_display_frame = QTabWidget()
         self.message_display_frame.setFixedWidth(400)
 
@@ -61,7 +62,27 @@ class MainWindow(QMainWindow):
         self.command_view = CommandView(self.signal_distributor)
         self.command_model = CommandModel()
         self.command_controller = CommandController(self.command_model, self.command_view, self.signal_distributor)
+        self.status_view = StatusView()
+        self.tab_widget = QTabWidget()
+        self.tab_widget.addTab(self.serial_view, "Serial")
+        self.tab_widget.addTab(self.tcp_view, "TCP / IP")
+        self.tab_widget.addTab(self.macro_view, "Macro")
+        self.control_layout.addWidget(self.tab_widget)
+        self.control_layout.addWidget(self.command_view)
+        self.control_layout.addWidget(self.status_view)
+        self.main_layout.addWidget(self.control_frame)
+        self.main_layout.addWidget(self.message_display_frame)
+        self.setWindowTitle("Main Window")
+        self.signal_distributor.DEBUG_MESSAGE.emit("MainWindow initialization complete")
+        self.flag_state_view = FlagStateView(self.flag_state_manager)
+        self.signal_distributor.DEBUG_MESSAGE.emit("FlagStateView initialization complete")
+        self.flag_state_view.show()
 
+        self.xgx_command = None
+        self.wait_command = None
+        self.connect_signals()
+
+    def connect_signals(self):
         self.signal_distributor.STATE_UPDATED_SIGNAL.connect(self.on_state_changed)
         self.signal_distributor.LOAD_COMMAND_INTO_VIEW.connect(self.command_view.set_command_details)
         self.signal_distributor.REQUEST_CURRENT_ITEM_SIGNAL.connect(self.command_view.send_current_item)
@@ -93,25 +114,6 @@ class MainWindow(QMainWindow):
         self.signal_distributor.TEXT_CHANGED_SIGNAL.connect(self.command_controller.handle_text_changed)
         self.signal_distributor.RESET_BUTTON_CLICKED.connect(self.reset_macro)
         self.signal_distributor.CLEAR_LOG_SIGNAL.connect(self.clear_log)
-
-        self.status_view = StatusView()
-        self.tab_widget = QTabWidget()
-        self.tab_widget.addTab(self.serial_view, "Serial")
-        self.tab_widget.addTab(self.tcp_view, "TCP / IP")
-        self.tab_widget.addTab(self.macro_view, "Macro")
-        self.control_layout.addWidget(self.tab_widget)
-        self.control_layout.addWidget(self.command_view)
-        self.control_layout.addWidget(self.status_view)
-        main_layout.addWidget(self.control_frame)
-        main_layout.addWidget(self.message_display_frame)
-        self.setWindowTitle("Main Window")
-        self.signal_distributor.DEBUG_MESSAGE.emit("MainWindow initialization complete")
-        self.flag_state_view = FlagStateView(self.flag_state_manager)
-        self.signal_distributor.DEBUG_MESSAGE.emit("FlagStateView initialization complete")
-        self.flag_state_view.show()
-
-        self.xgx_command = None
-        self.wait_command = None
 
     @pyqtSlot()
     def clear_log(self):
