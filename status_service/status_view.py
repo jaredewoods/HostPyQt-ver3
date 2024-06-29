@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QTextEdit, QHBoxLayout
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QTimer, pyqtSlot
 from PyQt6.QtGui import QColor
 from datetime import datetime
 
@@ -34,7 +34,7 @@ class StatusView(QWidget):
         status_time_layout.addWidget(QLabel("Stop:"))
         status_time_layout.addWidget(self.stop_label)
 
-        self.run_label = QLabel("--:--:--")
+        self.run_label = QLabel("00:00:00")
         status_time_layout.addWidget(QLabel("Run"))
         status_time_layout.addWidget(self.run_label)
 

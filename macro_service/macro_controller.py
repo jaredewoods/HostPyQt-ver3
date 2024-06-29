@@ -5,6 +5,7 @@ from PyQt6.QtCore import QObject, pyqtSignal, pyqtSlot
 
 class MacroController(QObject):
     start_signal = pyqtSignal()
+    stop_signal = pyqtSignal()
 
     def __init__(self, model, view, signal_distributor, flag_state_manager):
         super().__init__()
