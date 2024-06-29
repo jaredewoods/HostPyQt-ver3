@@ -82,7 +82,7 @@ class StatusView(QWidget):
     @staticmethod
     def update_label_color(label, value):
         if value:
-            label.setStyleSheet("background-color: darkGreen; color: white; padding: 5px; border: 1px solid black;")
+            label.setStyleSheet("background-color: #002456; color: #F8F8F2; padding: 5px; border: 1px solid black;")
         else:
             label.setStyleSheet("background-color: darkRed; color: white; padding: 5px; border: 1px solid black;")
 

@@ -95,9 +95,11 @@ class MainWindow(QMainWindow):
 
         # Log message handling
         self.pending_log_messages = []
-        self.log_timer = QTimer()
-        self.log_timer.timeout.connect(self.process_pending_log_messages)
-        self.log_timer.setInterval(100)  # Adjust interval for desired delay
+        self.typewriter_timer = QTimer()
+        self.typewriter_timer.timeout.connect(self.process_typewriter_log_message)
+        self.typewriter_interval = 2  # Adjust for typewriter effect speed
+        self.current_typewriter_message = ""
+        self.current_typewriter_index = 0
 
     def connect_signals(self):
         self.signal_distributor.ALARM_MESSAGE.connect(self.show_alarm_messagebox)
@@ -230,15 +232,23 @@ class MainWindow(QMainWindow):
     @pyqtSlot(str)
     def update_log_display(self, message):
         self.pending_log_messages.append(message)
-        if not self.log_timer.isActive():
-            self.log_timer.start()
+        if not self.typewriter_timer.isActive():
+            self.typewriter_timer.start(self.typewriter_interval)
 
     @pyqtSlot()
-    def process_pending_log_messages(self):
-        if self.pending_log_messages:
-            self.log_display.append(self.pending_log_messages.pop(0))
+    def process_typewriter_log_message(self):
+        if self.current_typewriter_message == "" and self.pending_log_messages:
+            self.current_typewriter_message = self.pending_log_messages.pop(0)
+            self.current_typewriter_index = 0
+
+        if self.current_typewriter_index < len(self.current_typewriter_message):
+            self.log_display.insertPlainText(self.current_typewriter_message[self.current_typewriter_index])
+            self.current_typewriter_index += 1
         else:
-            self.log_timer.stop()
+            self.log_display.append('')  # Move to the next line after the typewriter message
+            self.current_typewriter_message = ""
+            if not self.pending_log_messages:
+                self.typewriter_timer.stop()
 
     @staticmethod
     def show_alarm_messagebox(alarm_code, subcode):
