@@ -3,7 +3,7 @@ from datetime import datetime
 
 class MacroExecutor(QObject):
 
-    def __init__(self, signal_distributor, flag_state_manager, max_retries=5):
+    def __init__(self, signal_distributor, flag_state_manager, max_retries=5):  # Set maximum retries
         super().__init__()
         self.stop_time = None
         self.cycle_time = None
@@ -14,7 +14,7 @@ class MacroExecutor(QObject):
 
         self.cycle_duration_stopwatch = QElapsedTimer()
         self.sequence_duration_stopwatch = QElapsedTimer()
-        self.max_retries = max_retries  # Set maximum retries
+        self.max_retries = max_retries
         self.retry_count = 0
 
         self._COMMANDS_COMPLETED = 0
