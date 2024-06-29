@@ -1,6 +1,6 @@
 # main_window.py
 from PyQt6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QHBoxLayout, QWidget, QTabWidget, QFrame, QTextEdit
-from PyQt6.QtCore import pyqtSlot
+from PyQt6.QtCore import pyqtSlot, QTimer
 import sys
 
 from serial_service.serial_model import SerialModel
@@ -92,6 +92,12 @@ class MainWindow(QMainWindow):
         self.xgx_command = None
         self.wait_command = None
         self.connect_signals()
+
+        # Log message handling
+        self.pending_log_messages = []
+        self.log_timer = QTimer()
+        self.log_timer.timeout.connect(self.process_pending_log_messages)
+        self.log_timer.setInterval(100)  # Adjust interval for desired delay
 
     def connect_signals(self):
         self.signal_distributor.ALARM_MESSAGE.connect(self.show_alarm_messagebox)
@@ -223,7 +229,16 @@ class MainWindow(QMainWindow):
 
     @pyqtSlot(str)
     def update_log_display(self, message):
-        self.log_display.append(message)
+        self.pending_log_messages.append(message)
+        if not self.log_timer.isActive():
+            self.log_timer.start()
+
+    @pyqtSlot()
+    def process_pending_log_messages(self):
+        if self.pending_log_messages:
+            self.log_display.append(self.pending_log_messages.pop(0))
+        else:
+            self.log_timer.stop()
 
     @staticmethod
     def show_alarm_messagebox(alarm_code, subcode):
