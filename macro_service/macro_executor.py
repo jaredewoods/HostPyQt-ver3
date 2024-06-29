@@ -1,9 +1,9 @@
-from PyQt6.QtCore import QObject, pyqtSignal, QElapsedTimer, pyqtSlot
+from PyQt6.QtCore import QObject, pyqtSignal, QElapsedTimer, pyqtSlot, QTimer
 from datetime import datetime
 
 class MacroExecutor(QObject):
 
-    def __init__(self, signal_distributor, flag_state_manager):
+    def __init__(self, signal_distributor, flag_state_manager, max_retries=5):
         super().__init__()
         self.stop_time = None
         self.cycle_time = None
@@ -11,14 +11,56 @@ class MacroExecutor(QObject):
         self.signal_distributor = signal_distributor
         self.flag_state_manager = flag_state_manager
         self.command_duration_stopwatch = QElapsedTimer()
+
         self.cycle_duration_stopwatch = QElapsedTimer()
         self.sequence_duration_stopwatch = QElapsedTimer()
+        self.max_retries = max_retries  # Set maximum retries
+        self.retry_count = 0
 
         self._COMMANDS_COMPLETED = 0
         self._CYCLES_COMPLETED = 0
         self._SEQUENCES_COMPLETED = 0
         self._update_flag_statuses()
         self.signal_distributor.DEBUG_MESSAGE.emit(f"MacroExecutor INITIALIZED")
+
+        self.response_timer = QTimer()
+        self.completion_timeout_timer = QTimer()
+        self.configure_timers()
+
+    def configure_timers(self):
+        self.response_timer.setInterval(500)
+        self.completion_timeout_timer.setInterval(10000)
+        self.response_timer.timeout.connect(self.handle_response_timeout)
+        self.completion_timeout_timer.timeout.connect(self.handle_completion_timeout)
+
+    def handle_failure(self, reason):
+        self.response_timer.stop()
+        self.completion_timeout_timer.stop()
+        self.signal_distributor.DEBUG_MESSAGE.emit(f"Operation failed after maximum retries: {reason}")
+        self.signal_distributor.LOG_MESSAGE.emit(f"Operation failed after maximum retries: {reason}")
+
+    def handle_response_timeout(self):
+        # Handle response timeout logic
+        self.retry_count += 1
+        if self.retry_count <= self.max_retries:
+            self.signal_distributor.DEBUG_MESSAGE.emit(f"Response timeout occurred, retrying {self.retry_count}/{self.max_retries}")
+            self.response_timer.start()  # Retry logic, adjust as needed
+        else:
+            self.signal_distributor.DEBUG_MESSAGE.emit("Response timeout occurred, maximum retries reached, giving up")
+            self.handle_failure("Response timeout")
+
+    @pyqtSlot()
+    def handle_completion_timeout(self):
+        # Handle completion timeout logic
+        self.retry_count += 1
+        if self.retry_count <= self.max_retries:
+            self.signal_distributor.DEBUG_MESSAGE.emit(f"Completion timeout occurred, retrying {self.retry_count}/{self.max_retries}")
+            self.signal_distributor.LOG_MESSAGE.emit(f"Completion timeout occurred, retrying {self.retry_count}/{self.max_retries}")
+            self.completion_timeout_timer.start()  # Retry logic, adjust as needed
+        else:
+            self.signal_distributor.DEBUG_MESSAGE.emit("Completion timeout occurred, maximum retries reached, giving up")
+            self.signal_distributor.LOG_MESSAGE.emit("Completion timeout occurred, maximum retries reached, giving up")
+            self.handle_failure("Completion timeout")
 
     def _update_flag_statuses(self):
         self._FLAGS = self.flag_state_manager.get_all_flag_statuses()
@@ -81,6 +123,7 @@ class MacroExecutor(QObject):
         self.signal_distributor.DEBUG_MESSAGE.emit(f"\n\nseq01_start_command")
         self.signal_distributor.DEBUG_MESSAGE.emit(f"sequence_time: {self.sequence_duration_stopwatch.elapsed()}")
         self.signal_distributor.DEBUG_MESSAGE.emit(f"cycle_time: {self.cycle_duration_stopwatch.elapsed()}")
+        self.response_timer.start()
         self._update_flag_statuses()
         if (self._SERIAL_CONNECTED and
                 self._MACRO_RUNNING and
@@ -97,6 +140,8 @@ class MacroExecutor(QObject):
         self.signal_distributor.DEBUG_MESSAGE.emit(f"\n\nseq02_waiting_for_completion")
         self.signal_distributor.DEBUG_MESSAGE.emit(f"sequence_time: {self.sequence_duration_stopwatch.elapsed()}")
         self.signal_distributor.DEBUG_MESSAGE.emit(f"cycle_time: {self.cycle_duration_stopwatch.elapsed()}")
+        self.response_timer.stop()
+        self.completion_timeout_timer.start()
         self._update_flag_statuses()
         if (self._SERIAL_CONNECTED and
                 self._MACRO_RUNNING and
@@ -116,6 +161,7 @@ class MacroExecutor(QObject):
         self.signal_distributor.DEBUG_MESSAGE.emit(f"sequence_time: {self.sequence_duration_stopwatch.elapsed()}")
         self.signal_distributor.DEBUG_MESSAGE.emit(f"cycle_time: {self.cycle_duration_stopwatch.elapsed()}")
         self.signal_distributor.DEBUG_MESSAGE.emit(f"command_time: {self.command_duration_stopwatch.elapsed()}")
+        self.completion_timeout_timer.stop()
         self._update_flag_statuses()
         if (self._SERIAL_CONNECTED and
                 self._MACRO_RUNNING and

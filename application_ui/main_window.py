@@ -36,7 +36,7 @@ class MainWindow(QMainWindow):
         central_widget.setLayout(self.main_layout)
 
         self.control_frame = QFrame()
-        self.control_frame.setMaximumWidth(300)  # Restrict the width of the control frame
+        self.control_frame.setMaximumWidth(300)
 
         self.control_layout = QVBoxLayout(self.control_frame)
 
@@ -86,37 +86,37 @@ class MainWindow(QMainWindow):
         self.connect_signals()
 
     def connect_signals(self):
-        self.signal_distributor.STATE_UPDATED_SIGNAL.connect(self.on_state_changed)
-        self.signal_distributor.LOAD_COMMAND_INTO_VIEW.connect(self.command_view.set_command_details)
-        self.signal_distributor.REQUEST_CURRENT_ITEM_SIGNAL.connect(self.command_view.send_current_item)
-        self.signal_distributor.CURRENT_ITEM_SIGNAL.connect(self.macro_controller.receive_current_item)
-        self.signal_distributor.CLEAR_FIELDS_SIGNAL.connect(self.command_view.clear_fields)
-        self.signal_distributor.SET_CURRENT_ROW_SIGNAL.connect(self.command_view.set_current_row)
-        self.signal_distributor.DEBUG_MESSAGE.connect(self.update_debug_display)
-        self.signal_distributor.LOG_MESSAGE.connect(self.update_log_display)
         self.signal_distributor.ALARM_MESSAGE.connect(self.show_alarm_messagebox)
-        self.signal_distributor.NEXT_CYCLE_ITEM_SIGNAL.connect(self.command_view.select_next_macro_item)
+        self.signal_distributor.CLEAR_FIELDS_SIGNAL.connect(self.command_view.clear_fields)
+        self.signal_distributor.CLEAR_LOG_SIGNAL.connect(self.clear_log)
+        self.signal_distributor.CONSTRUCT_COMMAND_SIGNAL.connect(self.command_controller.construct_command)
+        self.signal_distributor.CURRENT_ITEM_SIGNAL.connect(self.macro_controller.receive_current_item)
+        self.signal_distributor.DEBUG_MESSAGE.connect(self.update_debug_display)
+        self.signal_distributor.FILTER_CONSTRUCTED_COMMAND_SIGNAL.connect(self.serial_model.filter_constructed_command)
+        self.signal_distributor.ITEM_SELECTED_SIGNAL.connect(self.macro_controller.load_macro_sequence_line)
+        self.signal_distributor.LOAD_COMMAND_INTO_VIEW.connect(self.command_view.set_command_details)
+        self.signal_distributor.LOG_MESSAGE.connect(self.update_log_display)
         self.signal_distributor.MACRO_TRIGGER_SEQ00_SIGNAL.connect(self.macro_executor.seq00_start_cycle)
         self.signal_distributor.MACRO_TRIGGER_SEQ01_SIGNAL.connect(self.macro_executor.seq01_start_command)
         self.signal_distributor.MACRO_TRIGGER_SEQ02_SIGNAL.connect(self.macro_executor.seq02_waiting_for_completion)
         self.signal_distributor.MACRO_TRIGGER_SEQ03_SIGNAL.connect(self.macro_executor.seq03_handling_command_completion)
         self.signal_distributor.MACRO_TRIGGER_SEQ04_SIGNAL.connect(self.macro_executor.seq04_handling_cycle_completion)
+        self.signal_distributor.NEXT_CYCLE_ITEM_SIGNAL.connect(self.command_view.select_next_macro_item)
+        self.signal_distributor.REQUEST_CURRENT_ITEM_SIGNAL.connect(self.command_view.send_current_item)
+        self.signal_distributor.REQUEST_TOTAL_CYCLES_SIGNAL.connect(self.macro_executor.handle_total_cycles)
+        self.signal_distributor.RESET_BUTTON_CLICKED.connect(self.reset_macro)
         self.signal_distributor.RESTART_CYCLE_SIGNAL.connect(self.command_view.restart_cycle)
         self.signal_distributor.SEND_TOTAL_CYCLES_SIGNAL.connect(self.macro_executor.handle_total_cycles)
+        self.signal_distributor.SET_CURRENT_ROW_SIGNAL.connect(self.command_view.set_current_row)
+        self.signal_distributor.SINGLE_SHOT_BUTTON_CLICKED.connect(self.command_controller.send_single_shot)
+        self.signal_distributor.STATE_UPDATED_SIGNAL.connect(self.flag_state_view.update_table)
+        self.signal_distributor.STATE_UPDATED_SIGNAL.connect(self.on_state_changed)
+        self.signal_distributor.TEXT_CHANGED_SIGNAL.connect(self.command_controller.handle_text_changed)
         self.signal_distributor.UPDATE_COMPLETED_CYCLES_SIGNAL.connect(self.macro_view.update_completed_cycles)
-        self.signal_distributor.REQUEST_TOTAL_CYCLES_SIGNAL.connect(self.provide_total_cycles)
+        self.signal_distributor.UPDATE_MACRO_COMMAND.connect(self.command_view.update_macro_sequence)
         self.signal_distributor.WAIT_COMMAND_EXECUTOR_SIGNAL.connect(self.handle_wait_command)
         self.signal_distributor.XGX_COMMAND_EXECUTOR_SIGNAL.connect(self.handle_xgx_command)
-        self.signal_distributor.FILTER_CONSTRUCTED_COMMAND_SIGNAL.connect(self.serial_model.filter_constructed_command)
         self.signal_distributor.CYCLE_COMPLETED_SIGNAL.connect(self.command_controller.signal_cycle_completed)
-        self.signal_distributor.CONSTRUCT_COMMAND_SIGNAL.connect(self.command_controller.construct_command)
-        self.signal_distributor.ITEM_SELECTED_SIGNAL.connect(self.macro_controller.load_macro_sequence_line)
-        self.signal_distributor.SINGLE_SHOT_BUTTON_CLICKED.connect(self.command_controller.send_single_shot)
-        self.signal_distributor.LOAD_COMMAND_INTO_VIEW.connect(self.command_view.set_command_details)
-        self.signal_distributor.UPDATE_MACRO_COMMAND.connect(self.command_view.update_macro_sequence)
-        self.signal_distributor.TEXT_CHANGED_SIGNAL.connect(self.command_controller.handle_text_changed)
-        self.signal_distributor.RESET_BUTTON_CLICKED.connect(self.reset_macro)
-        self.signal_distributor.CLEAR_LOG_SIGNAL.connect(self.clear_log)
 
     @pyqtSlot()
     def clear_log(self):
@@ -127,10 +127,10 @@ class MainWindow(QMainWindow):
         self.macro_view.update_completed_cycles("0")
         self.signal_distributor.DEBUG_MESSAGE.emit("resetting macro")
 
-    @pyqtSlot()
-    def provide_total_cycles(self):
-        total_cycles = int(self.macro_view.macro_total_cycles_lbl.text())
-        self.signal_distributor.SEND_TOTAL_CYCLES_SIGNAL.emit(total_cycles)
+    """ @pyqtSlot()
+        def provide_total_cycles(self):
+            total_cycles = int(self.macro_view.macro_total_cycles_lbl.text())
+            self.signal_distributor.SEND_TOTAL_CYCLES_SIGNAL.emit(total_cycles)"""
 
     @pyqtSlot(str, bool)
     def on_state_changed(self, flag_name, value):
