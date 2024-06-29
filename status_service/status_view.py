@@ -7,6 +7,10 @@ class StatusView(QWidget):
     def __init__(self):
         super().__init__()
 
+        self.run_time_timer = QTimer(self)
+        self.run_time_timer.timeout.connect(self.update_run_time)
+        self.elapsed_seconds = 0
+
         self.run_time = None
         self.stop_time = None
         self.start_time = None
@@ -41,20 +45,20 @@ class StatusView(QWidget):
         self.main_layout.addLayout(status_time_layout)
 
     def update_start_time(self):
-        self.start_time = datetime.now().strftime("%H:%M:%S")
-        self.start_label.setText(self.start_time)
-    
+        self.start_label.setText(datetime.now().strftime("%H:%M:%S"))
+        self.run_time_timer.start(1000)  # Update every second
+
     def update_stop_time(self):
-        self.stop_time = datetime.now().strftime("%H:%M:%S")
-        self.stop_label.setText(self.stop_time)
+        self.stop_label.setText(datetime.now().strftime("%H:%M:%S"))
+        self.run_time_timer.stop()
         self.update_run_time()
 
     def update_run_time(self):
-        # TODO: this needs resolving
-        # self.run_time = self.stop_time - self.start_time
-        # self.run_label.setText(str(self.run_time))
-        self.run_label.setText("XX-XX-XX")
-    
+        self.elapsed_seconds += 1
+        hours, remainder = divmod(self.elapsed_seconds, 3600)
+        minutes, seconds = divmod(remainder, 60)
+        self.run_label.setText(f"{hours:02}:{minutes:02}:{seconds:02}")
+
     def create_status_connection_layout(self):
         status_connection_layout = QHBoxLayout()
 
@@ -90,4 +94,3 @@ class StatusView(QWidget):
 
     def update_macro_status(self, value):
         self.update_label_color(self.macro_status_label, value)
-

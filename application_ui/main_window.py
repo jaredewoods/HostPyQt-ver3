@@ -36,7 +36,8 @@ class MainWindow(QMainWindow):
         central_widget.setLayout(self.main_layout)
 
         self.control_frame = QFrame()
-        self.control_frame.setMaximumWidth(300)
+        self.control_frame.setMaximumWidth(400)
+        # set Max Width 300 for PC, 400 for Mac
 
         self.control_layout = QVBoxLayout(self.control_frame)
 
@@ -206,6 +207,7 @@ class MainWindow(QMainWindow):
 
     @pyqtSlot(str)
     def handle_wait_command(self, command):
+        self.macro_executor.response_timer.stop()
         self.wait_command = command[6:10]
         self.command_controller.handle_wait_command(self.wait_command)
 
