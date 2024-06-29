@@ -44,11 +44,18 @@ class MainWindow(QMainWindow):
         self.message_display_frame.setFixedWidth(400)
 
         self.log_display = QTextEdit()
-        self.log_display.setStyleSheet("font-weight: bold; background-color: #000040; color: yellow; ")
+        self.log_display.setStyleSheet("""
+            QTextEdit {
+                font-weight: bold;
+                background-color: #002456;
+                color: #F8F8F2; 
+            }
+        """)
         self.log_display.setReadOnly(True)
         self._debug_display = QTextEdit()
         self._debug_display.setReadOnly(True)
-        self._debug_display.setStyleSheet("background-color: #060606; color: white;")
+        self._debug_display.setStyleSheet("background-color: #060606; "
+                                          "color: white;")
         self.message_display_frame.addTab(self.log_display, "Log")
         self.message_display_frame.addTab(self._debug_display, "Debug")
 
@@ -159,6 +166,10 @@ class MainWindow(QMainWindow):
     def handle_macro_running(self, value):
         self._debug_display.append(f"Macro running status: {value}")
         self.status_view.update_macro_status(value)
+        if value:
+            self.status_view.update_start_time()
+        else:
+            self.status_view.update_stop_time()
         self.macro_executor.seq_start_sequence()
 
     @pyqtSlot(bool)

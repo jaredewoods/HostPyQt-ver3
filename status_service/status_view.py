@@ -1,11 +1,15 @@
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QTextEdit, QHBoxLayout
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QColor
+from datetime import datetime
 
 class StatusView(QWidget):
     def __init__(self):
         super().__init__()
 
+        self.run_time = None
+        self.stop_time = None
+        self.start_time = None
         self.macro_status_label = None
         self.tcp_status_label = None
         self.serial_status_label = None
@@ -36,6 +40,21 @@ class StatusView(QWidget):
 
         self.main_layout.addLayout(status_time_layout)
 
+    def update_start_time(self):
+        self.start_time = datetime.now().strftime("%H:%M:%S")
+        self.start_label.setText(self.start_time)
+    
+    def update_stop_time(self):
+        self.stop_time = datetime.now().strftime("%H:%M:%S")
+        self.stop_label.setText(self.stop_time)
+        self.update_run_time()
+
+    def update_run_time(self):
+        # TODO: this needs resolving
+        # self.run_time = self.stop_time - self.start_time
+        # self.run_label.setText(str(self.run_time))
+        self.run_label.setText("XX-XX-XX")
+    
     def create_status_connection_layout(self):
         status_connection_layout = QHBoxLayout()
 
@@ -71,3 +90,4 @@ class StatusView(QWidget):
 
     def update_macro_status(self, value):
         self.update_label_color(self.macro_status_label, value)
+

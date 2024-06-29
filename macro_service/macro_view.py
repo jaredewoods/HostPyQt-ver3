@@ -1,5 +1,7 @@
 # macro_view.py
 from PyQt6.QtWidgets import QWidget, QGridLayout, QLabel, QComboBox, QPushButton, QLineEdit
+from PyQt6.QtCore import Qt
+
 
 class MacroView(QWidget):
 
@@ -14,18 +16,28 @@ class MacroView(QWidget):
 
         layout.addWidget(QLabel("Total"), 0, 2, 1, 1)
         self.macro_total_cycles_lbl = QLineEdit("")
-        self.macro_total_cycles_lbl.setStyleSheet("font-weight: bold; "
-                                                  "background-color: #000040; "
-                                                  "color: yellow; "
-                                                  "qproperty-alignment: AlignCenter; ")
+        self.macro_total_cycles_lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.macro_total_cycles_lbl.setStyleSheet("""
+            QLineEdit {
+                font-weight: bold;
+                background-color: #002456; 
+                color: #F8F8F2;
+                text-align: center;
+            }
+        """)
         layout.addWidget(self.macro_total_cycles_lbl, 1, 2, 1, 1)
 
         layout.addWidget(QLabel("Completed"), 0, 3, 1, 1)
         self.macro_completed_cycles_lbl = QLineEdit("")
-        self.macro_completed_cycles_lbl.setStyleSheet("font-weight: bold; "
-                                                      "background-color: #000040; "
-                                                      "color: yellow; "
-                                                      "qproperty-alignment: AlignCenter;")
+        self.macro_completed_cycles_lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.macro_completed_cycles_lbl.setStyleSheet("""
+            QLineEdit {
+                font-weight: bold;
+                background-color: #002456; 
+                color: #F8F8F2;
+                text-align: center;
+            }
+        """)
         layout.addWidget(self.macro_completed_cycles_lbl, 1, 3, 1, 1)
 
         self.macro_start_btn = QPushButton("Start")

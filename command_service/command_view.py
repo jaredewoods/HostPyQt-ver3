@@ -86,13 +86,12 @@ class CommandView(QWidget):
         self.display_command = QLabel()
         self.display_command.setStyleSheet("background-color: #000040; color: yellow;")
         self.display_command.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.display_command.setStyleSheet("""background-color: #000040; 
-                                          color: yellow;
-                                          font-family: Arial;
+        self.display_command.setStyleSheet("""background-color: #002456; 
+                                          color: #F8F8F2;
                                           font-size: 18px;
                                           padding: 8px;
                                           border-style: solid;
-                                          border-width: 1px;
+                                          border-width: 0px;
                                           border-color: black;""")
         display_layout.addWidget(self.display_command)
         self.main_layout.addLayout(display_layout)
@@ -130,6 +129,7 @@ class CommandView(QWidget):
         if editable:
             self.macro_sequence_display.setStyleSheet("""
                 QListWidget {
+                    font-weight: bold;
                     background-color: #000000;
                     color: white;
                 }
@@ -143,13 +143,13 @@ class CommandView(QWidget):
             self.macro_sequence_display.setStyleSheet("""
                 QListWidget {
                     font-weight: bold; 
-                    background-color: #000040;
-                    color: #FFFF00;
+                    background-color: #002456;
+                    color: #F8F8F2;
                 }
                 QListWidget::item:selected {
                     font-weight: bold; 
-                    background-color: #004080;
-                    color: #FFFFFF;
+                    background-color: #F8F8F2;
+                    color: #002456;
                 }
             """)
 
