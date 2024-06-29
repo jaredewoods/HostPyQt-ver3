@@ -5,12 +5,7 @@ from PyQt6.QtCore import QObject, pyqtSignal, pyqtSlot
 from serial_service.serial_reader import SerialReader
 
 class SerialModel(QObject):
-    """
-    Model responsible for managing the serial connection and communication.
 
-    Attributes:
-        debug_message: Signal emitted for general log messages.
-    """
     alarm_signal = pyqtSignal(str, str)
 
     def __init__(self, signal_distributor, flag_state_manager):
