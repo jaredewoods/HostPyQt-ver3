@@ -110,7 +110,7 @@ class MainWindow(QMainWindow):
         self.signal_distributor.MACRO_TRIGGER_SEQ04_SIGNAL.connect(self.macro_executor.seq04_handling_cycle_completion)
         self.signal_distributor.NEXT_CYCLE_ITEM_SIGNAL.connect(self.command_view.select_next_macro_item)
         self.signal_distributor.REQUEST_CURRENT_ITEM_SIGNAL.connect(self.command_view.send_current_item)
-        self.signal_distributor.REQUEST_TOTAL_CYCLES_SIGNAL.connect(self.macro_executor.handle_total_cycles)
+        self.signal_distributor.REQUEST_TOTAL_CYCLES_SIGNAL.connect(self.provide_total_cycles)
         self.signal_distributor.RESET_BUTTON_CLICKED.connect(self.reset_macro)
         self.signal_distributor.RESTART_CYCLE_SIGNAL.connect(self.command_view.restart_cycle)
         self.signal_distributor.SEND_TOTAL_CYCLES_SIGNAL.connect(self.macro_executor.handle_total_cycles)
@@ -134,10 +134,10 @@ class MainWindow(QMainWindow):
         self.macro_view.update_completed_cycles("0")
         self.signal_distributor.DEBUG_MESSAGE.emit("resetting macro")
 
-    """ @pyqtSlot()
-        def provide_total_cycles(self):
-            total_cycles = int(self.macro_view.macro_total_cycles_lbl.text())
-            self.signal_distributor.SEND_TOTAL_CYCLES_SIGNAL.emit(total_cycles)"""
+    @pyqtSlot()
+    def provide_total_cycles(self):
+        total_cycles = int(self.macro_view.macro_total_cycles_lbl.text())
+        self.signal_distributor.SEND_TOTAL_CYCLES_SIGNAL.emit(total_cycles)
 
     @pyqtSlot(str, bool)
     def on_state_changed(self, flag_name, value):
