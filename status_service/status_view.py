@@ -3,6 +3,7 @@ from PyQt6.QtCore import Qt, QTimer, pyqtSlot
 from PyQt6.QtGui import QColor
 from datetime import datetime
 
+
 class StatusView(QWidget):
     def __init__(self):
         super().__init__()
@@ -30,18 +31,68 @@ class StatusView(QWidget):
         status_time_layout = QHBoxLayout()
 
         self.start_label = QLabel("--:--:--")
-        status_time_layout.addWidget(QLabel("Start:"))
+        self.start_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.start_label.setStyleSheet("background-color: #CCCCCC; "
+                                       "color: #666666; "
+                                       "padding: 5px; "
+                                       "border: 3px solid grey; "
+                                       "border-radius: 10px;")
+        # status_time_layout.addWidget(QLabel("Start:"))
         status_time_layout.addWidget(self.start_label)
 
         self.stop_label = QLabel("--:--:--")
-        status_time_layout.addWidget(QLabel("Stop:"))
+        self.stop_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.stop_label.setStyleSheet("background-color: #CCCCCC; "
+                                      "color: #666666; "
+                                      "padding: 5px; "
+                                      "border: 3px solid grey; "
+                                      "border-radius: 10px;")
+        # status_time_layout.addWidget(QLabel("Stop:"))
         status_time_layout.addWidget(self.stop_label)
 
         self.run_label = QLabel("00:00:00")
-        status_time_layout.addWidget(QLabel("Run:"))
+        self.run_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.run_label.setStyleSheet("background-color: #CCCCCC; "
+                                     "color: #666666; "
+                                     "padding: 5px; "
+                                     "border: 3px solid grey; "
+                                     "border-radius: 10px;")
+        # status_time_layout.addWidget(QLabel("Run:"))
         status_time_layout.addWidget(self.run_label)
 
         self.main_layout.addLayout(status_time_layout)
+
+    def create_status_connection_layout(self):
+        status_connection_layout = QHBoxLayout()
+
+        self.serial_status_label = QLabel("SERIAL")
+        self.serial_status_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.serial_status_label.setStyleSheet("background-color: #CCCCCC; "
+                                               "color: #666666; "
+                                               "padding: 5px; "
+                                               "border: 3px solid grey; "
+                                               "border-radius: 10px;")
+        status_connection_layout.addWidget(self.serial_status_label)
+
+        self.tcp_status_label = QLabel(" TCP / IP ")
+        self.tcp_status_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.tcp_status_label.setStyleSheet("background-color: #CCCCCC; "
+                                            "color: #666666; "
+                                            "padding: 5px; "
+                                            "border: 3px solid grey; "
+                                            "border-radius: 10px;")
+        status_connection_layout.addWidget(self.tcp_status_label)
+
+        self.macro_status_label = QLabel("MACRO")
+        self.macro_status_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.macro_status_label.setStyleSheet("background-color: #CCCCCC; "
+                                              "color: #666666; "
+                                              "padding: 5px; "
+                                              "border: 3px solid grey; "
+                                              "border-radius: 10px;")
+        status_connection_layout.addWidget(self.macro_status_label)
+
+        self.main_layout.addLayout(status_connection_layout)
 
     def update_start_time(self):
         self.start_label.setText(datetime.now().strftime("%H:%M:%S"))
@@ -58,32 +109,20 @@ class StatusView(QWidget):
         minutes, seconds = divmod(remainder, 60)
         self.run_label.setText(f"{hours:02}:{minutes:02}:{seconds:02}")
 
-    def create_status_connection_layout(self):
-        status_connection_layout = QHBoxLayout()
-
-        self.serial_status_label = QLabel("SERIAL")
-        self.serial_status_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.serial_status_label.setStyleSheet("background-color: #CCCCCC; color: #666666; padding: 5px; border: 1px solid black;")
-        status_connection_layout.addWidget(self.serial_status_label)
-
-        self.tcp_status_label = QLabel(" TCP / IP ")
-        self.tcp_status_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.tcp_status_label.setStyleSheet("background-color: #CCCCCC; color: #666666; padding: 5px; border: 1px solid black;")
-        status_connection_layout.addWidget(self.tcp_status_label)
-
-        self.macro_status_label = QLabel("MACRO")
-        self.macro_status_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.macro_status_label.setStyleSheet("background-color: #CCCCCC; color: #666666; padding: 5px; border: 1px solid black;")
-        status_connection_layout.addWidget(self.macro_status_label)
-
-        self.main_layout.addLayout(status_connection_layout)
-
     @staticmethod
     def update_label_color(label, value):
         if value:
-            label.setStyleSheet("background-color: #002456; color: #F8F8F2; padding: 5px; border: 1px solid black;")
+            label.setStyleSheet("background-color: lightGreen; "
+                                "color: darkGreen; "
+                                "padding: 5px; "
+                                "border: 3px solid darkGreen; "
+                                "border-radius: 10px;")
         else:
-            label.setStyleSheet("background-color: darkRed; color: white; padding: 5px; border: 1px solid black;")
+            label.setStyleSheet("background-color: pink; "
+                                "color: darkRed; "
+                                "padding: 5px; "
+                                "border: 3px solid darkRed;"
+                                "border-radius: 10px;")
 
     def update_serial_status(self, value):
         self.update_label_color(self.serial_status_label, value)
