@@ -133,7 +133,7 @@ class CommandView(QWidget):
                                           padding: 5px;
                                           border-width: 4px;
                                           border-style: solid;
-                                          border-color: #002456;                                          
+                                          border-color: grey;                                          
                                           border-radius: 10px;""")
         display_layout.addWidget(self.display_command)
         self.main_layout.addLayout(display_layout)
