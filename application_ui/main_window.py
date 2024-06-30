@@ -54,6 +54,7 @@ class MainWindow(QMainWindow):
                                           "color: white;")
         self.message_display_frame.addTab(self.log_display, "Log")
         self.message_display_frame.addTab(self._debug_display, "Debug")
+        self.message_display_frame.currentChanged.connect(self.on_tab_changed)
 
         self.serial_model = SerialModel(self.signal_distributor, self.flag_state_manager)
         self.serial_view = SerialView()
@@ -82,7 +83,8 @@ class MainWindow(QMainWindow):
         self.signal_distributor.DEBUG_MESSAGE.emit("MainWindow initialization complete")
         self.flag_state_view = FlagStateView(self.flag_state_manager)
         self.signal_distributor.DEBUG_MESSAGE.emit("FlagStateView initialization complete")
-        self.flag_state_view.show()
+        # self.flag_state_view.show()
+        self.flag_state_view.hide()
 
         self.xgx_command = None
         self.wait_command = None
@@ -253,3 +255,12 @@ class MainWindow(QMainWindow):
     def show_alarm_messagebox(alarm_code, subcode):
         from application_ui.alarm_message_box import AlarmMessageBox
         AlarmMessageBox.show_alarm_messagebox(alarm_code, subcode)
+
+    @pyqtSlot(int)
+    def on_tab_changed(self, index):
+        # Check if the debug tab is selected
+        if self.message_display_frame.tabText(index) == "Debug":
+            self.flag_state_view.show()
+            self.signal_distributor.STATE_UPDATED_SIGNAL.emit("debug_mode", True)
+        else:
+            self.flag_state_view.hide()
