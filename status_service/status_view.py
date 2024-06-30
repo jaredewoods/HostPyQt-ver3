@@ -132,4 +132,15 @@ class StatusView(QWidget):
         self.update_label_color(self.tcp_status_label, value)
 
     def update_macro_status(self, value):
-        self.update_label_color(self.macro_status_label, value)
+        if value:
+            self.macro_status_label.setStyleSheet("background-color: white; "
+                                                  "color: #002456; "
+                                                  "padding: 5px; "
+                                                  "border: 3px solid grey; "
+                                                  "border-radius: 10px;")
+        else:
+            self.macro_status_label.setStyleSheet("background-color: pink; "
+                                                  "color: darkRed; "
+                                                  "padding: 5px; "
+                                                  "border: 3px solid darkRed; "
+                                                  "border-radius: 10px;")
