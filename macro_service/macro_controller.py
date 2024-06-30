@@ -40,8 +40,8 @@ class MacroController(QObject):
         macro_files = self.model.get_macro_filenames(macro_directory)
         self.view.populate_macro_select_combo(macro_files)
 
-    @pyqtSlot(int)
-    def on_macro_dropdown_activated(self, index):
+    @pyqtSlot()
+    def on_macro_dropdown_activated(self):
         selected_file = self.view.macro_select_cbx.currentText()
         self.signal_distributor.DEBUG_MESSAGE.emit(f"Dropdown activated: {selected_file}")
         if selected_file:

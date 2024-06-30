@@ -167,7 +167,7 @@ class MacroExecutor(QObject):
         self.signal_distributor.DEBUG_MESSAGE.emit(f"sequence_time: {self.sequence_duration_stopwatch.elapsed()}")
         self.signal_distributor.DEBUG_MESSAGE.emit(f"cycle_time: {self.cycle_duration_stopwatch.elapsed()}")
         self.signal_distributor.DEBUG_MESSAGE.emit(f"command_time: {self.command_duration_stopwatch.elapsed()}")
-        self.response_timer.stop()  # just to make sure
+        self.response_timer.stop()
         self.completion_timeout_timer.stop()
         self.retry_count = 0
 
@@ -179,7 +179,7 @@ class MacroExecutor(QObject):
                 not self._WAITING_FOR_COMPLETION and
                 not self._ALARM_RECEIVED):
 
-            command_time = self.command_duration_stopwatch.elapsed()  #
+            command_time = self.command_duration_stopwatch.elapsed()
             self._COMMANDS_COMPLETED += 1
             self.signal_distributor.DEBUG_MESSAGE.emit(
                 f"Command Completed in {command_time / 1000} seconds\nCommands Completed: {self._COMMANDS_COMPLETED}")

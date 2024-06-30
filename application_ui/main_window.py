@@ -141,7 +141,11 @@ class MainWindow(QMainWindow):
     @pyqtSlot()
     def reset_macro(self):
         self.macro_view.update_completed_cycles("0")
+        self.command_view.macro_sequence_display.setCurrentRow(0)
         self.signal_distributor.DEBUG_MESSAGE.emit("resetting macro")
+        self.status_view.start_label.setText("--:--:--")
+        self.status_view.stop_label.setText("--:--:--")
+        self.status_view.run_label.setText("--:--:--")
 
     @pyqtSlot()
     def provide_total_cycles(self):
