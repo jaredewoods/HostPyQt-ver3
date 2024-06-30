@@ -39,7 +39,7 @@ class StatusView(QWidget):
         status_time_layout.addWidget(self.stop_label)
 
         self.run_label = QLabel("00:00:00")
-        status_time_layout.addWidget(QLabel("Run"))
+        status_time_layout.addWidget(QLabel("Run:"))
         status_time_layout.addWidget(self.run_label)
 
         self.main_layout.addLayout(status_time_layout)

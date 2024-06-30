@@ -2,7 +2,8 @@
 from PyQt6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QHBoxLayout, QWidget, QTabWidget, QFrame, QTextEdit
 from PyQt6.QtCore import pyqtSlot, QTimer
 import sys
-
+import os
+from datetime import datetime
 from serial_service.serial_model import SerialModel
 from serial_service.serial_view import SerialView
 from serial_service.serial_controller import SerialController
@@ -130,6 +131,24 @@ class MainWindow(QMainWindow):
         self.signal_distributor.WAIT_COMMAND_EXECUTOR_SIGNAL.connect(self.handle_wait_command)
         self.signal_distributor.XGX_COMMAND_EXECUTOR_SIGNAL.connect(self.handle_xgx_command)
         self.signal_distributor.CYCLE_COMPLETED_SIGNAL.connect(self.command_controller.signal_cycle_completed)
+        self.signal_distributor.EXPORT_LOG_BUTTON_SIGNAL.connect(self.export_log)
+
+    @pyqtSlot()
+    def export_log(self):
+        logs_dir = os.path.join(os.getcwd(), 'LOGS')
+        if not os.path.exists(logs_dir):
+            os.makedirs(logs_dir)
+
+        current_time = datetime.now().strftime('%m%d%Y%H%M%S')
+        log_filename = f'{current_time}.txt'
+        log_filepath = os.path.join(logs_dir, log_filename)
+
+        log_text = self.log_display.toPlainText()
+
+        with open(log_filepath, 'w') as log_file:
+            log_file.write(log_text)
+
+        self.signal_distributor.DEBUG_MESSAGE.emit(f"Log exported to {log_filepath}")
 
     @pyqtSlot()
     def clear_log(self):
@@ -264,3 +283,4 @@ class MainWindow(QMainWindow):
             self.signal_distributor.STATE_UPDATED_SIGNAL.emit("debug_mode", True)
         else:
             self.flag_state_view.hide()
+            self.signal_distributor.STATE_UPDATED_SIGNAL.emit("debug_mode", False)

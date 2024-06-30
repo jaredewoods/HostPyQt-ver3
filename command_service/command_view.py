@@ -1,12 +1,17 @@
+import os
 from PyQt6.QtCore import pyqtSignal, pyqtSlot
-from PyQt6.QtWidgets import QWidget, QListWidget, QVBoxLayout, QHBoxLayout, QGridLayout, QCheckBox, QComboBox, QLineEdit, QLabel, QPushButton, QListWidgetItem
+from PyQt6.QtWidgets import QWidget, QListWidget, QVBoxLayout, QHBoxLayout, QCheckBox, QComboBox, QLineEdit, QLabel, QPushButton, QListWidgetItem
 from PyQt6.QtCore import Qt
 from resources.command_dictionary import commands
+import sys
 
 class CommandView(QWidget):
 
     def __init__(self, signal_distributor):
         super().__init__()
+        self.stop_sequence_btn = None
+        self.start_sequence_btn = None
+        self.export_btn = None
         self.entry_parameters = None
         self.clear_btn = None
         self.edit_btn = None
@@ -97,33 +102,46 @@ class CommandView(QWidget):
         self.main_layout.addLayout(display_layout)
 
     def setup_macro_display(self):
-        self.macro_display_layout = QVBoxLayout()
+        self.macro_display_layout = QHBoxLayout()
 
-        # Create and style QListWidget
         self.macro_sequence_display = QListWidget()
         self.set_macro_sequence_display_style(editable=False)
         self.macro_sequence_display.itemSelectionChanged.connect(self.emit_item_selected)
         self.macro_display_layout.addWidget(self.macro_sequence_display)
 
         # Create buttons layout
-        buttons_layout = QGridLayout()
+        buttons_layout = QVBoxLayout()
         self.single_shot_btn = QPushButton("Single Shot")
         self.reset_btn = QPushButton("Reset Sequence")
         self.edit_btn = QPushButton("Select Step")
         self.clear_btn = QPushButton("Clear Log")
+        self.export_btn = QPushButton("Export Log")
+        self.start_sequence_btn = QPushButton("Start Sequence")
+        self.stop_sequence_btn = QPushButton("Stop Sequence")
 
         # Add buttons to layout
-        buttons_layout.addWidget(self.single_shot_btn, 0, 0, 1, 2)
+        buttons_layout.addWidget(self.single_shot_btn)
         self.single_shot_btn.clicked.connect(self.signal_distributor.SINGLE_SHOT_BUTTON_CLICKED)
-        buttons_layout.addWidget(self.reset_btn, 0, 2, 1, 2)
+        buttons_layout.addWidget(self.reset_btn)
         self.reset_btn.clicked.connect(self.signal_distributor.RESET_BUTTON_CLICKED)
-        buttons_layout.addWidget(self.edit_btn, 1, 0, 1, 2)
+        buttons_layout.addWidget(self.edit_btn)
         self.edit_btn.clicked.connect(self.edit_macro_sequence)
-        buttons_layout.addWidget(self.clear_btn, 1, 2, 1, 2)
+        buttons_layout.addWidget(self.clear_btn)
         self.clear_btn.clicked.connect(self.signal_distributor.CLEAR_LOG_SIGNAL)
-
-        self.macro_display_layout.addLayout(buttons_layout)
+        buttons_layout.addWidget(self.export_btn)
+        self.export_btn.clicked.connect(self.signal_distributor.EXPORT_LOG_BUTTON_SIGNAL.emit)
+        buttons_layout.addWidget(self.start_sequence_btn)
+        self.start_sequence_btn.clicked.connect(self.set_macro_running_true)
+        buttons_layout.addWidget(self.stop_sequence_btn)
+        self.stop_sequence_btn.clicked.connect(self.set_macro_running_false)
+        self.macro_display_layout.addLayout(buttons_layout)  # Add buttons layout to the right of macro display
         self.main_layout.addLayout(self.macro_display_layout)
+
+    def set_macro_running_true(self):
+        self.signal_distributor.STATE_CHANGED_SIGNAL.emit("macro_running", True)
+
+    def set_macro_running_false(self):
+        self.signal_distributor.STATE_CHANGED_SIGNAL.emit("macro_running", False)
 
     def set_macro_sequence_display_style(self, editable):
         if editable:
