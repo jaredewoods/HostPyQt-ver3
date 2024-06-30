@@ -139,7 +139,7 @@ class CommandView(QWidget):
                                           font-size: 18px;
                                           font-weight: bold; 
                                           padding: 5px;
-                                          border-width: 4px;
+                                          border-width: 2px;
                                           border-style: solid;
                                           border-color: grey;                                          
                                           border-radius: 10px;""")

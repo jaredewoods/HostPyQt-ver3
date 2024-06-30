@@ -4,7 +4,7 @@ from datetime import datetime
 
 
 class StatusView(QWidget):
-    _LABEL_WIDTH = 100  # Class variable for label width
+    _LABEL_WIDTH = 75  # Class variable for label width
 
     def __init__(self):
         super().__init__()
@@ -37,7 +37,7 @@ class StatusView(QWidget):
         self.start_label.setStyleSheet("background-color: #CCCCCC; "
                                        "color: #666666; "
                                        "padding: 5px; "
-                                       "border: 3px solid grey; "
+                                       "border: 2px solid grey; "
                                        "border-radius: 10px;")
         self.start_label.setFixedWidth(self._LABEL_WIDTH)  # Set fixed width
         status_time_layout.addWidget(self.start_label)
@@ -47,7 +47,7 @@ class StatusView(QWidget):
         self.stop_label.setStyleSheet("background-color: #CCCCCC; "
                                       "color: #666666; "
                                       "padding: 5px; "
-                                      "border: 3px solid grey; "
+                                      "border: 2px solid grey; "
                                       "border-radius: 10px;")
         self.stop_label.setFixedWidth(self._LABEL_WIDTH)  # Set fixed width
         status_time_layout.addWidget(self.stop_label)
@@ -57,7 +57,7 @@ class StatusView(QWidget):
         self.run_label.setStyleSheet("background-color: #CCCCCC; "
                                      "color: #666666; "
                                      "padding: 5px; "
-                                     "border: 3px solid grey; "
+                                     "border: 2px solid grey; "
                                      "border-radius: 10px;")
         self.run_label.setFixedWidth(self._LABEL_WIDTH)  # Set fixed width
         status_time_layout.addWidget(self.run_label)
@@ -72,7 +72,7 @@ class StatusView(QWidget):
         self.serial_status_label.setStyleSheet("background-color: #CCCCCC; "
                                                "color: #666666; "
                                                "padding: 5px; "
-                                               "border: 3px solid grey; "
+                                               "border: 2px solid grey; "
                                                "border-radius: 10px;")
         self.serial_status_label.setFixedWidth(self._LABEL_WIDTH)  # Set fixed width
         status_connection_layout.addWidget(self.serial_status_label)
@@ -82,7 +82,7 @@ class StatusView(QWidget):
         self.tcp_status_label.setStyleSheet("background-color: #CCCCCC; "
                                             "color: #666666; "
                                             "padding: 5px; "
-                                            "border: 3px solid grey; "
+                                            "border: 2px solid grey; "
                                             "border-radius: 10px;")
         self.tcp_status_label.setFixedWidth(self._LABEL_WIDTH)  # Set fixed width
         status_connection_layout.addWidget(self.tcp_status_label)
@@ -92,7 +92,7 @@ class StatusView(QWidget):
         self.macro_status_label.setStyleSheet("background-color: #CCCCCC; "
                                               "color: #666666; "
                                               "padding: 5px; "
-                                              "border: 3px solid grey; "
+                                              "border: 2px solid grey; "
                                               "border-radius: 10px;")
         self.macro_status_label.setFixedWidth(self._LABEL_WIDTH)  # Set fixed width
         status_connection_layout.addWidget(self.macro_status_label)
@@ -104,21 +104,21 @@ class StatusView(QWidget):
         self.start_label.setStyleSheet("background-color: white; "
                                        "color: darkGreen; "
                                        "padding: 5px; "
-                                       "border: 3px solid grey; "
+                                       "border: 2px solid grey; "
                                        "border-radius: 10px;")
         self.run_label.setStyleSheet("background-color: white; "
                                      "color: #002456; "
                                      "padding: 5px; "
-                                     "border: 3px solid grey; "
+                                     "border: 2px solid grey; "
                                      "border-radius: 10px;")
         self.run_time_timer.start(1000)  # Update every second
 
     def update_stop_time(self):
         self.stop_label.setText(datetime.now().strftime("%H:%M:%S"))
         self.stop_label.setStyleSheet("background-color: white; "
-                                      "color: darkRed; "
+                                      "color: #3B0000; "
                                       "padding: 5px; "
-                                      "border: 3px solid grey; "
+                                      "border: 2px solid grey; "
                                       "border-radius: 10px;")
         self.run_time_timer.stop()
         self.update_run_time()
@@ -127,7 +127,7 @@ class StatusView(QWidget):
         self.run_label.setStyleSheet("background-color: white; "
                                      "color: #002456; "
                                      "padding: 5px; "
-                                     "border: 3px solid grey; "
+                                     "border: 2px solid grey; "
                                      "border-radius: 10px;")
         self.elapsed_seconds += 1
         hours, remainder = divmod(self.elapsed_seconds, 3600)
@@ -140,13 +140,13 @@ class StatusView(QWidget):
             label.setStyleSheet("background-color: lightGreen; "
                                 "color: darkGreen; "
                                 "padding: 5px; "
-                                "border: 3px solid darkGreen; "
+                                "border: 2px solid darkGreen; "
                                 "border-radius: 10px;")
         else:
-            label.setStyleSheet("background-color: pink; "
-                                "color: darkRed; "
+            label.setStyleSheet("background-color: #FFCCCC; "
+                                "color: #3B0000; "
                                 "padding: 5px; "
-                                "border: 3px solid darkRed; "
+                                "border: 2px solid #3B0000; "
                                 "border-radius: 10px;")
 
     def update_serial_status(self, value):
@@ -160,11 +160,11 @@ class StatusView(QWidget):
             self.macro_status_label.setStyleSheet("background-color: white; "
                                                   "color: #002456; "
                                                   "padding: 5px; "
-                                                  "border: 3px solid grey; "
+                                                  "border: 2px solid grey; "
                                                   "border-radius: 10px;")
         else:
-            self.macro_status_label.setStyleSheet("background-color: pink; "
-                                                  "color: darkRed; "
+            self.macro_status_label.setStyleSheet("background-color: #FFCCCC; "
+                                                  "color: #3B0000; "
                                                   "padding: 5px; "
-                                                  "border: 3px solid darkRed; "
+                                                  "border: 2px solid #3B0000; "
                                                   "border-radius: 10px;")

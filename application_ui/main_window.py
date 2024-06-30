@@ -35,7 +35,7 @@ class MainWindow(QMainWindow):
         self.main_layout = QHBoxLayout()
         central_widget.setLayout(self.main_layout)
         self.control_frame = QFrame()
-        self.control_frame.setMaximumWidth(400)  # set Max Width 300 for PC, 400 for Mac
+        self.control_frame.setMaximumWidth(300)  # set Max Width 300 for PC, 400 for Mac
         self.control_layout = QVBoxLayout(self.control_frame)
 
         self.message_display_frame = QTabWidget()
