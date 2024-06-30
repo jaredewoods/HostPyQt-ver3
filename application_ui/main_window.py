@@ -88,14 +88,14 @@ class MainWindow(QMainWindow):
         self.tcp_controller = TCPController(self.tcp_model, self.tcp_view, self.signal_distributor)
         self.macro_model = MacroModel()
         self.macro_view = MacroView()
-        self.macro_controller = MacroController(self.macro_model, self.macro_view, self.signal_distributor,
-                                                self.flag_state_manager)
+        self.macro_controller = MacroController(self.macro_model, self.macro_view, self.signal_distributor,self.flag_state_manager)
         self.command_view = CommandView(self.signal_distributor)
         self.command_model = CommandModel()
         self.command_controller = CommandController(self.command_model, self.command_view, self.signal_distributor)
         self.status_view = StatusView()
         self.tab_widget = QTabWidget()
-        self.tab_widget.setFixedSize(280, 120)  # Set the desired fixed size for the tab widget
+        self.tab_widget.setFixedSize(280, 120)
+
         self.tab_widget.addTab(self.serial_view, "Serial")
         self.tab_widget.addTab(self.tcp_view, "TCP / IP")
         self.tab_widget.addTab(self.macro_view, "Macro")
@@ -116,7 +116,6 @@ class MainWindow(QMainWindow):
         self.wait_command = None
         self.connect_signals()
 
-        # Log message handling
         self.pending_log_messages = []
         self.typewriter_timer = QTimer()
         self.typewriter_timer.timeout.connect(self.process_typewriter_log_message)
