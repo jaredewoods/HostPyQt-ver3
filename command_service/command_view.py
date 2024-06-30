@@ -12,7 +12,6 @@ class CommandView(QWidget):
         self.stop_sequence_btn = None
         self.start_sequence_btn = None
         self.export_btn = None
-        self.entry_parameters = None
         self.clear_log_btn = None
         self.next_step_btn = None
         self.reset_sequence_btn = None
@@ -22,18 +21,17 @@ class CommandView(QWidget):
         self.display_command = None
         self.dropdown_code = None
         self.dropdown_unit_no = None
+        self.entry_parameters = None
         self.carriage_return_checkbox = None
         self.checksum_checkbox = None
         self.start_bit_checkbox = None
         self.signal_distributor = signal_distributor
         self.main_layout = QVBoxLayout()
-        self.is_editing = False
 
         self.setup_dropdowns_and_parameters()
         self.setup_checkboxes()
         self.setup_display_line()
         self.setup_macro_display()
-
         self.setLayout(self.main_layout)
 
     @pyqtSlot(int)
@@ -138,11 +136,22 @@ class CommandView(QWidget):
 
     def setup_macro_display(self):
         self.macro_display_layout = QHBoxLayout()
-
         self.macro_sequence_display = QListWidget()
-        self.set_macro_sequence_display_style(editable=False)
+        self.macro_sequence_display.setStyleSheet("""
+            QListWidget {
+                font-weight: bold; 
+                background-color: #002456;
+                color: #F8F8F2;
+            }
+            QListWidget::item:selected {
+                font-weight: bold; 
+                background-color: #F8F8F2;
+                color: #002456;
+            }
+        """)
         self.macro_sequence_display.itemSelectionChanged.connect(self.emit_item_selected)
         self.macro_display_layout.addWidget(self.macro_sequence_display)
+        self.macro_sequence_display.setDisabled(True)
 
         # Create buttons layout
         buttons_layout = QVBoxLayout()
@@ -177,34 +186,6 @@ class CommandView(QWidget):
 
     def set_macro_running_false(self):
         self.signal_distributor.STATE_CHANGED_SIGNAL.emit("macro_running", False)
-
-    def set_macro_sequence_display_style(self, editable):
-        if editable:
-            self.macro_sequence_display.setStyleSheet("""
-                QListWidget {
-                    font-weight: bold;
-                    background-color: #000000;
-                    color: white;
-                }
-                QListWidget::item:selected {
-                    font-weight: bold; 
-                    background-color: #999999;
-                    color: black;
-                }
-            """)
-        else:
-            self.macro_sequence_display.setStyleSheet("""
-                QListWidget {
-                    font-weight: bold; 
-                    background-color: #002456;
-                    color: #F8F8F2;
-                }
-                QListWidget::item:selected {
-                    font-weight: bold; 
-                    background-color: #F8F8F2;
-                    color: #002456;
-                }
-            """)
 
     @pyqtSlot()
     def select_next_macro_item(self):
@@ -285,19 +266,6 @@ class CommandView(QWidget):
         self.set_code("")
         self.set_parameters("")
         self.signal_distributor.DEBUG_MESSAGE.emit("Fields have been cleared")
-
-    @pyqtSlot()
-    def reset_flags(self):
-        # self.signal_distributor.state_changed.emit('waiting_for_completion', False, 'update')
-        # self.signal_distributor.state_changed.emit('macro_running', False, 'update')
-        # self.signal_distributor.state_changed.emit('response_received', False, 'update')
-        # self.signal_distributor.state_changed.emit('completion_received', False, 'update')
-        self.signal_distributor.DEBUG_MESSAGE.emit("Flags have NOT been reset")
-
-    @pyqtSlot()
-    def reset_macro_fields_and_flags(self):
-        self.clear_fields()
-        self.reset_flags()
 
     @pyqtSlot(str, str, str)
     def set_command_details(self, command, unit, parameters):
