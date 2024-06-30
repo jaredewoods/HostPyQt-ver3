@@ -1,10 +1,11 @@
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QTextEdit, QHBoxLayout
-from PyQt6.QtCore import Qt, QTimer, pyqtSlot
-from PyQt6.QtGui import QColor
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QTextEdit, QHBoxLayout, QApplication, QMainWindow
+from PyQt6.QtCore import Qt, QTimer
 from datetime import datetime
 
 
 class StatusView(QWidget):
+    _LABEL_WIDTH = 100  # Class variable for label width
+
     def __init__(self):
         super().__init__()
 
@@ -38,7 +39,7 @@ class StatusView(QWidget):
                                        "padding: 5px; "
                                        "border: 3px solid grey; "
                                        "border-radius: 10px;")
-        # status_time_layout.addWidget(QLabel("Start:"))
+        self.start_label.setFixedWidth(self._LABEL_WIDTH)  # Set fixed width
         status_time_layout.addWidget(self.start_label)
 
         self.stop_label = QLabel("--:--:--")
@@ -48,7 +49,7 @@ class StatusView(QWidget):
                                       "padding: 5px; "
                                       "border: 3px solid grey; "
                                       "border-radius: 10px;")
-        # status_time_layout.addWidget(QLabel("Stop:"))
+        self.stop_label.setFixedWidth(self._LABEL_WIDTH)  # Set fixed width
         status_time_layout.addWidget(self.stop_label)
 
         self.run_label = QLabel("00:00:00")
@@ -58,7 +59,7 @@ class StatusView(QWidget):
                                      "padding: 5px; "
                                      "border: 3px solid grey; "
                                      "border-radius: 10px;")
-        # status_time_layout.addWidget(QLabel("Run:"))
+        self.run_label.setFixedWidth(self._LABEL_WIDTH)  # Set fixed width
         status_time_layout.addWidget(self.run_label)
 
         self.main_layout.addLayout(status_time_layout)
@@ -73,6 +74,7 @@ class StatusView(QWidget):
                                                "padding: 5px; "
                                                "border: 3px solid grey; "
                                                "border-radius: 10px;")
+        self.serial_status_label.setFixedWidth(self._LABEL_WIDTH)  # Set fixed width
         status_connection_layout.addWidget(self.serial_status_label)
 
         self.tcp_status_label = QLabel(" TCP / IP ")
@@ -82,6 +84,7 @@ class StatusView(QWidget):
                                             "padding: 5px; "
                                             "border: 3px solid grey; "
                                             "border-radius: 10px;")
+        self.tcp_status_label.setFixedWidth(self._LABEL_WIDTH)  # Set fixed width
         status_connection_layout.addWidget(self.tcp_status_label)
 
         self.macro_status_label = QLabel("MACRO")
@@ -91,20 +94,41 @@ class StatusView(QWidget):
                                               "padding: 5px; "
                                               "border: 3px solid grey; "
                                               "border-radius: 10px;")
+        self.macro_status_label.setFixedWidth(self._LABEL_WIDTH)  # Set fixed width
         status_connection_layout.addWidget(self.macro_status_label)
 
         self.main_layout.addLayout(status_connection_layout)
 
     def update_start_time(self):
         self.start_label.setText(datetime.now().strftime("%H:%M:%S"))
+        self.start_label.setStyleSheet("background-color: white; "
+                                       "color: darkGreen; "
+                                       "padding: 5px; "
+                                       "border: 3px solid grey; "
+                                       "border-radius: 10px;")
+        self.run_label.setStyleSheet("background-color: white; "
+                                     "color: #002456; "
+                                     "padding: 5px; "
+                                     "border: 3px solid grey; "
+                                     "border-radius: 10px;")
         self.run_time_timer.start(1000)  # Update every second
 
     def update_stop_time(self):
         self.stop_label.setText(datetime.now().strftime("%H:%M:%S"))
+        self.stop_label.setStyleSheet("background-color: white; "
+                                      "color: darkRed; "
+                                      "padding: 5px; "
+                                      "border: 3px solid grey; "
+                                      "border-radius: 10px;")
         self.run_time_timer.stop()
         self.update_run_time()
 
     def update_run_time(self):
+        self.run_label.setStyleSheet("background-color: white; "
+                                     "color: #002456; "
+                                     "padding: 5px; "
+                                     "border: 3px solid grey; "
+                                     "border-radius: 10px;")
         self.elapsed_seconds += 1
         hours, remainder = divmod(self.elapsed_seconds, 3600)
         minutes, seconds = divmod(remainder, 60)
@@ -122,7 +146,7 @@ class StatusView(QWidget):
             label.setStyleSheet("background-color: pink; "
                                 "color: darkRed; "
                                 "padding: 5px; "
-                                "border: 3px solid darkRed;"
+                                "border: 3px solid darkRed; "
                                 "border-radius: 10px;")
 
     def update_serial_status(self, value):

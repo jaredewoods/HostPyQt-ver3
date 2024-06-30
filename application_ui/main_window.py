@@ -166,9 +166,30 @@ class MainWindow(QMainWindow):
         self.macro_view.update_completed_cycles("0")
         self.command_view.macro_sequence_display.setCurrentRow(0)
         self.signal_distributor.DEBUG_MESSAGE.emit("resetting macro")
+
         self.status_view.start_label.setText("--:--:--")
+        self.status_view.start_label.setStyleSheet("background-color: #CCCCCC; "
+                                       "color: #666666; "
+                                       "padding: 5px; "
+                                       "border: 3px solid grey; "
+                                       "border-radius: 10px;")
         self.status_view.stop_label.setText("--:--:--")
+        self.status_view.stop_label.setStyleSheet("background-color: #CCCCCC; "
+                                       "color: #666666; "
+                                       "padding: 5px; "
+                                       "border: 3px solid grey; "
+                                       "border-radius: 10px;")
         self.status_view.run_label.setText("--:--:--")
+        self.status_view.run_label.setStyleSheet("background-color: #CCCCCC; "
+                                       "color: #666666; "
+                                       "padding: 5px; "
+                                       "border: 3px solid grey; "
+                                       "border-radius: 10px;")
+        self.status_view.macro_status_label.setStyleSheet("background-color: #CCCCCC; "
+                                       "color: #666666; "
+                                       "padding: 5px; "
+                                       "border: 3px solid grey; "
+                                       "border-radius: 10px;")
 
     @pyqtSlot()
     def provide_total_cycles(self):
