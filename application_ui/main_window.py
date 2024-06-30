@@ -40,28 +40,41 @@ class MainWindow(QMainWindow):
 
         self.message_display_frame = QTabWidget()
         self.message_display_frame.setFixedWidth(400)
+
+        # Container for log_display with padding
+        log_display_container = QWidget()
+        log_display_layout = QVBoxLayout(log_display_container)
+        log_display_layout.setContentsMargins(10, 10, 10, 10)  # Set padding
         self.log_display = QTextEdit()
         self.log_display.setStyleSheet("""
             QTextEdit {
                 font-weight: bold;
                 background-color: #002456;
-                color: #F8F8F2; 
+                color: #F8F8F2;
                 padding: 4px; 
             }
         """)
         self.log_display.setReadOnly(True)
+        log_display_layout.addWidget(self.log_display)
+
+        # Container for debug_display with padding
+        debug_display_container = QWidget()
+        debug_display_layout = QVBoxLayout(debug_display_container)
+        debug_display_layout.setContentsMargins(10, 10, 10, 10)  # Set padding
         self._debug_display = QTextEdit()
         self._debug_display.setReadOnly(True)
         self._debug_display.setStyleSheet("""
             QTextEdit {
                 font-weight: bold;
                 background-color: #000000;
-                color: #FFFFFF; 
+                color: #FFFFFF;
                 padding: 4px; 
             }
         """)
-        self.message_display_frame.addTab(self.log_display, "Log")
-        self.message_display_frame.addTab(self._debug_display, "Debug")
+        debug_display_layout.addWidget(self._debug_display)
+
+        self.message_display_frame.addTab(log_display_container, "Log")
+        self.message_display_frame.addTab(debug_display_container, "Debug")
         self.message_display_frame.currentChanged.connect(self.on_tab_changed)
 
         self.serial_model = SerialModel(self.signal_distributor, self.flag_state_manager)
