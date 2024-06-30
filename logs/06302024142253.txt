@@ -1,0 +1,74 @@
+Connected to /dev/cu.usbserial-FTDPFU8A at 9600 baudrate
+Error connecting to 192.168.0.10:8500 - timed out
+Connected to 127.0.0.1:8500
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  Sequence Started: 06/30/2024 14:11:17
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  (sent)  $2MTRSG100ALDD
+        (received)  @2300000000015
+        (received)  $23200000000MTRS5D
+  (sent)  $2MALN1009000B4
+        (received)  @2100000000013
+        (received)  $24200000000MALN0019017467
+  (host) WAIT3000, wait for 3.0secs
+        (host) 3.0 secs wait completed
+  (sent/tcp) T1
+        (system) Data Acquired
+  completed: 1  |  cycle: 6.953 s  |  elapsed: 6.953 s
+
+  (sent)  $2MTRSG100ALDD
+        (received)  @2300000000015
+        (received)  $23200000000MTRS5D
+  (sent)  $2MALN1009000B4
+        (received)  @2100000000013
+        (received)  $24200000000MALN0019004728
+  (host) WAIT3000, wait for 3.0secs
+        (host) 3.0 secs wait completed
+  (sent/tcp) T1
+        (system) Data Acquired
+  completed: 2  |  cycle: 6.93 s  |  elapsed: 13.884 s
+
+  (sent)  $2MTRSG100ALDD
+        (received)  @2300000000015
+        (received)  $23200000000MTRS5D
+  (sent)  $2MALN1009000B4
+        (received)  @2100000000013
+        (received)  $24200000000MALN0015-11273
+  (host) WAIT3000, wait for 3.0secs
+        (host) 3.0 secs wait completed
+  (sent/tcp) T1
+        (system) Data Acquired
+  completed: 3  |  cycle: 7.005 s  |  elapsed: 20.891 s
+
+  (sent)  $2MTRSG100ALDD
+        (received)  @2300000000015
+        (received)  $23200000000MTRS5D
+  (sent)  $2MALN1009000B4
+        (received)  @2100000000013
+        (received)  $24200000000MALN0046000966
+  (host) WAIT3000, wait for 3.0secs
+        (host) 3.0 secs wait completed
+  (sent/tcp) T1
+        (system) Data Acquired
+  completed: 4  |  cycle: 6.619 s  |  elapsed: 27.512 s
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  Completed Sequence: 06/30/2024 14:11:44
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  Total Cycles: 4  |  Runtime: 27.513 seconds
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+
+
+
+
+
+
+
+
+Operation failed after maximum retries: Response timeout

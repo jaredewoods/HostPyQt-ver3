@@ -316,6 +316,7 @@ class MainWindow(QMainWindow):
         else:
             self.log_display.append('')  # Move to the next line after the typewriter message
             self.current_typewriter_message = ""
+            self.log_display.verticalScrollBar().setValue(self.log_display.verticalScrollBar().maximum())
             if not self.pending_log_messages:
                 self.typewriter_timer.stop()
 
