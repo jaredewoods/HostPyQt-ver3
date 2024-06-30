@@ -128,5 +128,3 @@ class MacroController(QObject):
         else:
             self.signal_distributor.DEBUG_MESSAGE.emit("No item selected")
             return None
-
-
