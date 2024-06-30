@@ -26,6 +26,7 @@ class StatusView(QWidget):
         self.create_status_time_layout()
         self.create_status_connection_layout()
         self.setLayout(self.main_layout)
+        self.main_layout.setContentsMargins(0, 0, 0, 0)  # Remove margins
 
     def create_status_time_layout(self):
         status_time_layout = QHBoxLayout()

@@ -30,10 +30,10 @@ class CommandView(QWidget):
         self.signal_distributor = signal_distributor
         self.main_layout = QVBoxLayout()
 
+        self.setup_macro_display()
+        self.setup_display_line()
         self.setup_dropdowns_and_parameters()
         self.setup_checkboxes()
-        self.setup_display_line()
-        self.setup_macro_display()
         self.setLayout(self.main_layout)
 
     @pyqtSlot(int)
@@ -49,9 +49,15 @@ class CommandView(QWidget):
         self.start_bit_checkbox = QCheckBox("Start Bit")
         self.checksum_checkbox = QCheckBox("Checksum")
         self.carriage_return_checkbox = QCheckBox("<CR>")
+
         self.start_bit_checkbox.setChecked(True)
         self.checksum_checkbox.setChecked(True)
         self.carriage_return_checkbox.setChecked(True)
+
+        self.start_bit_checkbox.hide()
+        self.checksum_checkbox.hide()
+        self.carriage_return_checkbox.hide()
+
         checkboxes_layout.addWidget(self.start_bit_checkbox)
         checkboxes_layout.addWidget(self.checksum_checkbox)
         checkboxes_layout.addWidget(self.carriage_return_checkbox)
@@ -100,14 +106,12 @@ class CommandView(QWidget):
             }
         """)
         dropdowns_layout.addWidget(self.dropdown_unit_no)
-        dropdowns_layout.addWidget(QLabel("UNo"))
 
         self.dropdown_code.addItem("")
         for command in commands.keys():
             self.dropdown_code.addItem(command)
 
         dropdowns_layout.addWidget(self.dropdown_code)
-        dropdowns_layout.addWidget(QLabel("CMND"))
 
         self.entry_parameters = QLineEdit()
         self.entry_parameters.setFixedWidth(90)
@@ -121,6 +125,10 @@ class CommandView(QWidget):
         """)
         dropdowns_layout.addWidget(self.entry_parameters)
         self.main_layout.addLayout(dropdowns_layout)
+
+        self.dropdown_unit_no.hide()
+        self.dropdown_code.hide()
+        self.entry_parameters.hide()
 
     def setup_display_line(self):
         display_layout = QHBoxLayout()
@@ -287,3 +295,20 @@ class CommandView(QWidget):
         selected_item = self.macro_sequence_display.currentItem()
         if selected_item:
             self.signal_distributor.CURRENT_ITEM_SIGNAL.emit(selected_item.text())
+
+    @pyqtSlot(bool)
+    def debug_display_update(self, value):
+        if value:
+            self.dropdown_unit_no.show()
+            self.dropdown_code.show()
+            self.entry_parameters.show()
+            self.start_bit_checkbox.show()
+            self.checksum_checkbox.show()
+            self.carriage_return_checkbox.show()
+        else:
+            self.dropdown_unit_no.hide()
+            self.dropdown_code.hide()
+            self.entry_parameters.hide()
+            self.start_bit_checkbox.hide()
+            self.checksum_checkbox.hide()
+            self.carriage_return_checkbox.hide()

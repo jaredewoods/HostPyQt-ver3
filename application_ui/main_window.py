@@ -75,8 +75,8 @@ class MainWindow(QMainWindow):
         self.tab_widget.addTab(self.tcp_view, "TCP / IP")
         self.tab_widget.addTab(self.macro_view, "Macro")
         self.control_layout.addWidget(self.tab_widget)
-        self.control_layout.addWidget(self.command_view)
         self.control_layout.addWidget(self.status_view)
+        self.control_layout.addWidget(self.command_view)
 
         self.main_layout.addWidget(self.control_frame)
         self.main_layout.addWidget(self.message_display_frame)
@@ -235,6 +235,7 @@ class MainWindow(QMainWindow):
     @pyqtSlot(bool)
     def handle_debug_mode(self, value):
         self._debug_display.append(f"Debug mode status: {value}")
+        self.command_view.debug_display_update(value)
 
     @pyqtSlot(bool)
     def handle_display_timestamp(self, value):
