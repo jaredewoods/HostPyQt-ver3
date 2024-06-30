@@ -95,7 +95,7 @@ class MainWindow(QMainWindow):
         self.command_controller = CommandController(self.command_model, self.command_view, self.signal_distributor)
         self.status_view = StatusView()
         self.tab_widget = QTabWidget()
-
+        self.tab_widget.setFixedSize(300, 140)  # Set the desired fixed size for the tab widget
         self.tab_widget.addTab(self.serial_view, "Serial")
         self.tab_widget.addTab(self.tcp_view, "TCP / IP")
         self.tab_widget.addTab(self.macro_view, "Macro")
@@ -120,7 +120,7 @@ class MainWindow(QMainWindow):
         self.pending_log_messages = []
         self.typewriter_timer = QTimer()
         self.typewriter_timer.timeout.connect(self.process_typewriter_log_message)
-        self.typewriter_interval = 2  # Adjust for typewriter effect speed
+        self.typewriter_interval = 3  # Adjust for typewriter effect speed
         self.current_typewriter_message = ""
         self.current_typewriter_index = 0
 
@@ -135,12 +135,10 @@ class MainWindow(QMainWindow):
         self.signal_distributor.ITEM_SELECTED_SIGNAL.connect(self.macro_controller.load_macro_sequence_line)
         self.signal_distributor.LOAD_COMMAND_INTO_VIEW.connect(self.command_view.set_command_details)
         self.signal_distributor.LOG_MESSAGE.connect(self.update_log_display)
-        # self.signal_distribut.MACRO_COMPLETED_SIGNAL.connect(self.handle_macro_completed)
         self.signal_distributor.MACRO_TRIGGER_SEQ00_SIGNAL.connect(self.macro_executor.seq00_start_cycle)
         self.signal_distributor.MACRO_TRIGGER_SEQ01_SIGNAL.connect(self.macro_executor.seq01_start_command)
         self.signal_distributor.MACRO_TRIGGER_SEQ02_SIGNAL.connect(self.macro_executor.seq02_waiting_for_completion)
-        self.signal_distributor.MACRO_TRIGGER_SEQ03_SIGNAL.connect(
-            self.macro_executor.seq03_handling_command_completion)
+        self.signal_distributor.MACRO_TRIGGER_SEQ03_SIGNAL.connect(self.macro_executor.seq03_handling_command_completion)
         self.signal_distributor.MACRO_TRIGGER_SEQ04_SIGNAL.connect(self.macro_executor.seq04_handling_cycle_completion)
         self.signal_distributor.NEXT_CYCLE_ITEM_SIGNAL.connect(self.command_view.select_next_macro_item)
         self.signal_distributor.REQUEST_CURRENT_ITEM_SIGNAL.connect(self.command_view.send_current_item)
