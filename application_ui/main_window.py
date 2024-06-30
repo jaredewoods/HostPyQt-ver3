@@ -29,21 +29,16 @@ class MainWindow(QMainWindow):
         self.flag_state_manager = FlagStateManager(self.signal_distributor)
         self.macro_executor = MacroExecutor(self.signal_distributor, self.flag_state_manager)
 
-        # Central widget
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
         self.main_layout = QHBoxLayout()
         central_widget.setLayout(self.main_layout)
-
         self.control_frame = QFrame()
-        self.control_frame.setMaximumWidth(400)
-        # set Max Width 300 for PC, 400 for Mac
-
+        self.control_frame.setMaximumWidth(400)  # set Max Width 300 for PC, 400 for Mac
         self.control_layout = QVBoxLayout(self.control_frame)
 
         self.message_display_frame = QTabWidget()
         self.message_display_frame.setFixedWidth(400)
-
         self.log_display = QTextEdit()
         self.log_display.setStyleSheet("""
             QTextEdit {
