@@ -67,6 +67,7 @@ class CommandView(QWidget):
                 color: #F8F8F2;
                 font-weight: bold;
                 padding: 4px;
+                text-align: center;
             }
             QComboBox::drop-down {
                 border: none;
@@ -74,9 +75,30 @@ class CommandView(QWidget):
             QComboBox::down-arrow {
                 image: url(noarrow.png);  /* Optional: You can set an image for the dropdown arrow */
             }
+            QComboBox QAbstractItemView::item {
+                text-align: center;
+            }
         """)
         self.dropdown_code = QComboBox()
         self.dropdown_code.setEditable(True)
+        self.dropdown_code.setStyleSheet("""
+            QComboBox {
+                background-color: #002456;
+                color: #F8F8F2;
+                font-weight: bold;
+                padding: 4px;
+                text-align: center;
+            }
+            QComboBox::drop-down {
+                border: none;
+            }
+            QComboBox::down-arrow {
+                image: url(noarrow.png);  /* Optional: You can set an image for the dropdown arrow */
+            }
+            QComboBox QAbstractItemView::item {
+                text-align: center;
+            }
+        """)
         dropdowns_layout.addWidget(self.dropdown_unit_no)
         dropdowns_layout.addWidget(QLabel("UNo"))
 
@@ -100,18 +122,17 @@ class CommandView(QWidget):
         dropdowns_layout.addWidget(self.entry_parameters)
         self.main_layout.addLayout(dropdowns_layout)
 
-    def setup_parameters_line(self):
-        parameters_layout = QHBoxLayout()
-        self.entry_parameters = QLineEdit()
-        self.entry_parameters.setMaxLength(11)
-        parameters_layout.addWidget(QLabel("Parameters"))
-        parameters_layout.addWidget(self.entry_parameters)
-        self.main_layout.addLayout(parameters_layout)
-
+    """    def setup_parameters_line(self):
+            parameters_layout = QHBoxLayout()
+            self.entry_parameters = QLineEdit()
+            self.entry_parameters.setMaxLength(11)
+            parameters_layout.addWidget(QLabel("Parameters"))
+            parameters_layout.addWidget(self.entry_parameters)
+            self.main_layout.addLayout(parameters_layout)
+    """
     def setup_display_line(self):
         display_layout = QHBoxLayout()
         self.display_command = QLabel()
-        self.display_command.setStyleSheet("background-color: #000040; color: yellow;")
         self.display_command.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.display_command.setStyleSheet("""background-color: #002456; 
                                           color: #F8F8F2;
