@@ -1,9 +1,11 @@
 import os
 from PyQt6.QtCore import pyqtSignal, pyqtSlot
-from PyQt6.QtWidgets import QWidget, QListWidget, QVBoxLayout, QHBoxLayout, QCheckBox, QComboBox, QLineEdit, QLabel, QPushButton, QListWidgetItem
+from PyQt6.QtWidgets import QWidget, QListWidget, QVBoxLayout, QHBoxLayout, QCheckBox, QComboBox, QLineEdit, QLabel, \
+    QPushButton, QListWidgetItem
 from PyQt6.QtCore import Qt
 from resources.command_dictionary import commands
 import sys
+
 
 class CommandView(QWidget):
 
@@ -124,13 +126,15 @@ class CommandView(QWidget):
         display_layout = QHBoxLayout()
         self.display_command = QLabel()
         self.display_command.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.display_command.setStyleSheet("""background-color: #002456; 
-                                          color: #F8F8F2;
+        self.display_command.setStyleSheet("""background-color: white; 
+                                          color: #002456;
                                           font-size: 18px;
-                                          padding: 8px;
+                                          font-weight: bold; 
+                                          padding: 5px;
+                                          border-width: 4px;
                                           border-style: solid;
-                                          border-width: 0px;
-                                          border-color: black;""")
+                                          border-color: #002456;                                          
+                                          border-radius: 10px;""")
         display_layout.addWidget(self.display_command)
         self.main_layout.addLayout(display_layout)
 
@@ -197,7 +201,8 @@ class CommandView(QWidget):
             self.signal_distributor.DEBUG_MESSAGE.emit(f"Current Index: {current_index}")
             next_index = current_index + 1
             self.signal_distributor.DEBUG_MESSAGE.emit(f"Next Index: {next_index}")
-            self.signal_distributor.DEBUG_MESSAGE.emit(f"Macro Sequence Display Count: {self.macro_sequence_display.count()}")
+            self.signal_distributor.DEBUG_MESSAGE.emit(
+                f"Macro Sequence Display Count: {self.macro_sequence_display.count()}")
             if next_index < self.macro_sequence_display.count():
                 self.macro_sequence_display.setCurrentRow(next_index)
                 self.signal_distributor.MACRO_TRIGGER_SEQ01_SIGNAL.emit()
@@ -269,7 +274,8 @@ class CommandView(QWidget):
 
     @pyqtSlot(str, str, str)
     def set_command_details(self, command, unit, parameters):
-        self.signal_distributor.DEBUG_MESSAGE.emit(f"Setting command details: command={command}, unit={unit}, parameters={parameters}")
+        self.signal_distributor.DEBUG_MESSAGE.emit(
+            f"Setting command details: command={command}, unit={unit}, parameters={parameters}")
         self.set_command(command)
         self.set_unit_number(unit)
         self.set_parameters(parameters)
