@@ -1,9 +1,9 @@
-# main_window.py
-from PyQt6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QHBoxLayout, QWidget, QTabWidget, QFrame, QTextEdit
+from PyQt6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QHBoxLayout, QWidget, QTabWidget, QFrame, QTextEdit, QMessageBox, QPushButton
 from PyQt6.QtCore import pyqtSlot, QTimer
 import sys
 import os
 from datetime import datetime
+
 from serial_service.serial_model import SerialModel
 from serial_service.serial_view import SerialView
 from serial_service.serial_controller import SerialController
@@ -84,7 +84,6 @@ class MainWindow(QMainWindow):
         self.signal_distributor.DEBUG_MESSAGE.emit("MainWindow initialization complete")
         self.flag_state_view = FlagStateView(self.flag_state_manager)
         self.signal_distributor.DEBUG_MESSAGE.emit("FlagStateView initialization complete")
-        # self.flag_state_view.show()
         self.flag_state_view.hide()
 
         self.xgx_command = None
@@ -149,6 +148,14 @@ class MainWindow(QMainWindow):
             log_file.write(log_text)
 
         self.signal_distributor.DEBUG_MESSAGE.emit(f"Log exported to {log_filepath}")
+
+        # Show confirmation dialog
+        msg_box = QMessageBox()
+        msg_box.setIcon(QMessageBox.Icon.Information)
+        msg_box.setWindowTitle("Log Exported")
+        msg_box.setText(f"Log has been exported to {log_filename}.")
+        msg_box.setStandardButtons(QMessageBox.StandardButton.Close)
+        msg_box.exec()
 
     @pyqtSlot()
     def clear_log(self):

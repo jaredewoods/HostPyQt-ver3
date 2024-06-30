@@ -1,0 +1,8 @@
+Error connecting to 192.168.0.10:80 - timed out
+Connected to /dev/cu.usbserial-FTDPFU8A at 9600 baudrate
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  Sequence Started: 06/29/2024 21:27:23
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  (sent)  $2MALN1018000B4
