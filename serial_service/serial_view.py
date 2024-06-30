@@ -2,18 +2,6 @@
 from PyQt6.QtWidgets import QWidget, QGridLayout, QLabel, QComboBox, QPushButton
 
 class SerialView(QWidget):
-    """
-
-    Attributes:
-        - serial_port_cbx: A QComboBox object representing the serial port selection combo box.
-        - baud_combo: A QComboBox object representing the baud rate selection combo box.
-        - serial_connect_btn: A QPushButton object representing the connect button.
-        - serial_close_btn: A QPushButton object representing the close button.
-    Methods:
-        - __init__(): Initializes the SerialView widget.
-        - _check_selections(): Checks the selected values of the serial port and baud rate combo boxes.
-        - _set_ports(ports): Sets the list of serial ports in the serial port combo box.
-    """
 
     def __init__(self):
         super().__init__()

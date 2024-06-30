@@ -24,7 +24,6 @@ class StatusView(QWidget):
 
         self.create_status_time_layout()
         self.create_status_connection_layout()
-
         self.setLayout(self.main_layout)
 
     def create_status_time_layout(self):
