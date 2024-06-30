@@ -61,6 +61,20 @@ class CommandView(QWidget):
         dropdowns_layout = QHBoxLayout()
         self.dropdown_unit_no = QComboBox()
         self.dropdown_unit_no.addItems(["", "1", "2"])
+        self.dropdown_unit_no.setStyleSheet("""
+            QComboBox {
+                background-color: #002456;
+                color: #F8F8F2;
+                font-weight: bold;
+                padding: 4px;
+            }
+            QComboBox::drop-down {
+                border: none;
+            }
+            QComboBox::down-arrow {
+                image: url(noarrow.png);  /* Optional: You can set an image for the dropdown arrow */
+            }
+        """)
         self.dropdown_code = QComboBox()
         self.dropdown_code.setEditable(True)
         dropdowns_layout.addWidget(self.dropdown_unit_no)
@@ -75,6 +89,14 @@ class CommandView(QWidget):
 
         self.entry_parameters = QLineEdit()
         self.entry_parameters.setFixedWidth(90)
+        self.entry_parameters.setStyleSheet("""
+            QLineEdit {
+                background-color: #002456;
+                color: #F8F8F2;
+                font-weight: bold;
+                padding: 4px;
+            }
+        """)
         dropdowns_layout.addWidget(self.entry_parameters)
         self.main_layout.addLayout(dropdowns_layout)
 
