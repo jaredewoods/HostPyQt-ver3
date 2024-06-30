@@ -13,9 +13,9 @@ class CommandView(QWidget):
         self.start_sequence_btn = None
         self.export_btn = None
         self.entry_parameters = None
-        self.clear_btn = None
-        self.edit_btn = None
-        self.reset_btn = None
+        self.clear_log_btn = None
+        self.next_step_btn = None
+        self.reset_sequence_btn = None
         self.single_shot_btn = None
         self.macro_sequence_display = None
         self.macro_display_layout = None
@@ -154,30 +154,30 @@ class CommandView(QWidget):
 
         # Create buttons layout
         buttons_layout = QVBoxLayout()
-        self.single_shot_btn = QPushButton("Single Shot")
-        self.reset_btn = QPushButton("Reset Sequence")
-        self.edit_btn = QPushButton("Select Step")
-        self.clear_btn = QPushButton("Clear Log")
-        self.export_btn = QPushButton("Export Log")
         self.start_sequence_btn = QPushButton("Start Sequence")
         self.stop_sequence_btn = QPushButton("Stop Sequence")
+        self.reset_sequence_btn = QPushButton("Reset Sequence")
+        self.single_shot_btn = QPushButton("Single Shot")
+        self.next_step_btn = QPushButton("Next Step")
+        self.clear_log_btn = QPushButton("Clear Log")
+        self.export_btn = QPushButton("Export Log")
 
         # Add buttons to layout
-        buttons_layout.addWidget(self.single_shot_btn)
-        self.single_shot_btn.clicked.connect(self.signal_distributor.SINGLE_SHOT_BUTTON_CLICKED)
-        buttons_layout.addWidget(self.reset_btn)
-        self.reset_btn.clicked.connect(self.signal_distributor.RESET_BUTTON_CLICKED)
-        buttons_layout.addWidget(self.edit_btn)
-        self.edit_btn.clicked.connect(self.edit_macro_sequence)
-        buttons_layout.addWidget(self.clear_btn)
-        self.clear_btn.clicked.connect(self.signal_distributor.CLEAR_LOG_SIGNAL)
-        buttons_layout.addWidget(self.export_btn)
-        self.export_btn.clicked.connect(self.signal_distributor.EXPORT_LOG_BUTTON_SIGNAL.emit)
         buttons_layout.addWidget(self.start_sequence_btn)
         self.start_sequence_btn.clicked.connect(self.set_macro_running_true)
         buttons_layout.addWidget(self.stop_sequence_btn)
         self.stop_sequence_btn.clicked.connect(self.set_macro_running_false)
-        self.macro_display_layout.addLayout(buttons_layout)  # Add buttons layout to the right of macro display
+        buttons_layout.addWidget(self.reset_sequence_btn)
+        self.reset_sequence_btn.clicked.connect(self.signal_distributor.RESET_BUTTON_CLICKED)
+        buttons_layout.addWidget(self.single_shot_btn)
+        self.single_shot_btn.clicked.connect(self.signal_distributor.SINGLE_SHOT_BUTTON_CLICKED)
+        buttons_layout.addWidget(self.next_step_btn)
+        self.next_step_btn.clicked.connect(self.next_sequence_step)
+        buttons_layout.addWidget(self.clear_log_btn)
+        self.clear_log_btn.clicked.connect(self.signal_distributor.CLEAR_LOG_SIGNAL)
+        buttons_layout.addWidget(self.export_btn)
+        self.export_btn.clicked.connect(self.signal_distributor.EXPORT_LOG_BUTTON_SIGNAL.emit)
+        self.macro_display_layout.addLayout(buttons_layout)
         self.main_layout.addLayout(self.macro_display_layout)
 
     def set_macro_running_true(self):
@@ -252,12 +252,14 @@ class CommandView(QWidget):
             self.macro_sequence_display.addItem(QListWidgetItem(item))
 
     @pyqtSlot()
-    def edit_macro_sequence(self):
-        self.is_editing = not self.is_editing
-        self.macro_sequence_display.setDisabled(not self.is_editing)
-        self.edit_btn.setText("Commit" if self.is_editing else "Select Step")
-        self.set_macro_sequence_display_style(editable=self.is_editing)
-
+    def next_sequence_step(self):
+        self.signal_distributor.DEBUG_MESSAGE.emit("selecting next macro item in CommandView")
+        selected_items = self.macro_sequence_display.selectedItems()
+        if selected_items:
+            current_index = self.macro_sequence_display.row(selected_items[0])
+            self.signal_distributor.DEBUG_MESSAGE.emit(f"Current Index: {current_index}")
+            next_index = (current_index + 1) % self.macro_sequence_display.count()  # Wrap around to the top
+            self.macro_sequence_display.setCurrentRow(next_index)
     @pyqtSlot(str)
     def set_command(self, command):
         self.signal_distributor.DEBUG_MESSAGE.emit(f"Command set: {command}")
