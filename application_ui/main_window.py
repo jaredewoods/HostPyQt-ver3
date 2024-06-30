@@ -95,7 +95,7 @@ class MainWindow(QMainWindow):
         self.command_controller = CommandController(self.command_model, self.command_view, self.signal_distributor)
         self.status_view = StatusView()
         self.tab_widget = QTabWidget()
-        self.tab_widget.setFixedSize(300, 140)  # Set the desired fixed size for the tab widget
+        self.tab_widget.setFixedSize(280, 120)  # Set the desired fixed size for the tab widget
         self.tab_widget.addTab(self.serial_view, "Serial")
         self.tab_widget.addTab(self.tcp_view, "TCP / IP")
         self.tab_widget.addTab(self.macro_view, "Macro")
