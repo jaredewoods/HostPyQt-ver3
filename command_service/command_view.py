@@ -122,14 +122,6 @@ class CommandView(QWidget):
         dropdowns_layout.addWidget(self.entry_parameters)
         self.main_layout.addLayout(dropdowns_layout)
 
-    """    def setup_parameters_line(self):
-            parameters_layout = QHBoxLayout()
-            self.entry_parameters = QLineEdit()
-            self.entry_parameters.setMaxLength(11)
-            parameters_layout.addWidget(QLabel("Parameters"))
-            parameters_layout.addWidget(self.entry_parameters)
-            self.main_layout.addLayout(parameters_layout)
-    """
     def setup_display_line(self):
         display_layout = QHBoxLayout()
         self.display_command = QLabel()
@@ -258,8 +250,9 @@ class CommandView(QWidget):
         if selected_items:
             current_index = self.macro_sequence_display.row(selected_items[0])
             self.signal_distributor.DEBUG_MESSAGE.emit(f"Current Index: {current_index}")
-            next_index = (current_index + 1) % self.macro_sequence_display.count()  # Wrap around to the top
+            next_index = (current_index + 1) % self.macro_sequence_display.count()
             self.macro_sequence_display.setCurrentRow(next_index)
+
     @pyqtSlot(str)
     def set_command(self, command):
         self.signal_distributor.DEBUG_MESSAGE.emit(f"Command set: {command}")
