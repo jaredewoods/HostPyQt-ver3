@@ -238,8 +238,7 @@ class MacroExecutor(QObject):
                 f"  Total Cycles: {self._CYCLES_COMPLETED}  |  Runtime: {sequence_time / 1000} seconds\n"
                 f"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n\n\n\n\n\n\n\n\n\n"
             )
-            # self.response_timer.stop()
-            # self.completion_timeout_timer.stop()
+
         else:
             self.signal_distributor.DEBUG_MESSAGE.emit(f"Flag violation 05: {self._FLAGS}")
 

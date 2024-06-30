@@ -1,4 +1,5 @@
-from PyQt6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QHBoxLayout, QWidget, QTabWidget, QFrame, QTextEdit, QMessageBox, QPushButton
+from PyQt6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QHBoxLayout, QWidget, QTabWidget, QFrame, QTextEdit, \
+    QMessageBox, QPushButton
 from PyQt6.QtCore import pyqtSlot, QTimer
 import sys
 import os
@@ -22,6 +23,7 @@ from status_service.status_view import StatusView
 from status_service.signal_distributor import SignalDistributor
 from status_service.flag_state_manager import FlagStateManager, FlagStateView
 
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -39,7 +41,7 @@ class MainWindow(QMainWindow):
         self.control_layout = QVBoxLayout(self.control_frame)
 
         self.message_display_frame = QTabWidget()
-        self.message_display_frame.setFixedWidth(400)
+        self.message_display_frame.setFixedWidth(404)
 
         # Container for log_display with padding
         log_display_container = QWidget()
@@ -79,18 +81,21 @@ class MainWindow(QMainWindow):
 
         self.serial_model = SerialModel(self.signal_distributor, self.flag_state_manager)
         self.serial_view = SerialView()
-        self.serial_controller = SerialController(self.serial_model, self.serial_view, self.signal_distributor, self.flag_state_manager)
+        self.serial_controller = SerialController(self.serial_model, self.serial_view, self.signal_distributor,
+                                                  self.flag_state_manager)
         self.tcp_model = TCPModel(self.signal_distributor)
         self.tcp_view = TCPView()
         self.tcp_controller = TCPController(self.tcp_model, self.tcp_view, self.signal_distributor)
         self.macro_model = MacroModel()
         self.macro_view = MacroView()
-        self.macro_controller = MacroController(self.macro_model, self.macro_view, self.signal_distributor, self.flag_state_manager)
+        self.macro_controller = MacroController(self.macro_model, self.macro_view, self.signal_distributor,
+                                                self.flag_state_manager)
         self.command_view = CommandView(self.signal_distributor)
         self.command_model = CommandModel()
         self.command_controller = CommandController(self.command_model, self.command_view, self.signal_distributor)
         self.status_view = StatusView()
         self.tab_widget = QTabWidget()
+
         self.tab_widget.addTab(self.serial_view, "Serial")
         self.tab_widget.addTab(self.tcp_view, "TCP / IP")
         self.tab_widget.addTab(self.macro_view, "Macro")
@@ -102,6 +107,7 @@ class MainWindow(QMainWindow):
         self.main_layout.addWidget(self.message_display_frame)
         self.setWindowTitle("Main Window")
         self.signal_distributor.DEBUG_MESSAGE.emit("MainWindow initialization complete")
+
         self.flag_state_view = FlagStateView(self.flag_state_manager)
         self.signal_distributor.DEBUG_MESSAGE.emit("FlagStateView initialization complete")
         self.flag_state_view.hide()
@@ -129,10 +135,12 @@ class MainWindow(QMainWindow):
         self.signal_distributor.ITEM_SELECTED_SIGNAL.connect(self.macro_controller.load_macro_sequence_line)
         self.signal_distributor.LOAD_COMMAND_INTO_VIEW.connect(self.command_view.set_command_details)
         self.signal_distributor.LOG_MESSAGE.connect(self.update_log_display)
+        # self.signal_distribut.MACRO_COMPLETED_SIGNAL.connect(self.handle_macro_completed)
         self.signal_distributor.MACRO_TRIGGER_SEQ00_SIGNAL.connect(self.macro_executor.seq00_start_cycle)
         self.signal_distributor.MACRO_TRIGGER_SEQ01_SIGNAL.connect(self.macro_executor.seq01_start_command)
         self.signal_distributor.MACRO_TRIGGER_SEQ02_SIGNAL.connect(self.macro_executor.seq02_waiting_for_completion)
-        self.signal_distributor.MACRO_TRIGGER_SEQ03_SIGNAL.connect(self.macro_executor.seq03_handling_command_completion)
+        self.signal_distributor.MACRO_TRIGGER_SEQ03_SIGNAL.connect(
+            self.macro_executor.seq03_handling_command_completion)
         self.signal_distributor.MACRO_TRIGGER_SEQ04_SIGNAL.connect(self.macro_executor.seq04_handling_cycle_completion)
         self.signal_distributor.NEXT_CYCLE_ITEM_SIGNAL.connect(self.command_view.select_next_macro_item)
         self.signal_distributor.REQUEST_CURRENT_ITEM_SIGNAL.connect(self.command_view.send_current_item)
@@ -157,13 +165,10 @@ class MainWindow(QMainWindow):
         logs_dir = os.path.join(os.getcwd(), 'LOGS')
         if not os.path.exists(logs_dir):
             os.makedirs(logs_dir)
-
         current_time = datetime.now().strftime('%m%d%Y%H%M%S')
         log_filename = f'{current_time}.txt'
         log_filepath = os.path.join(logs_dir, log_filename)
-
         log_text = self.log_display.toPlainText()
-
         with open(log_filepath, 'w') as log_file:
             log_file.write(log_text)
 
@@ -189,27 +194,27 @@ class MainWindow(QMainWindow):
 
         self.status_view.start_label.setText("--:--:--")
         self.status_view.start_label.setStyleSheet("background-color: #CCCCCC; "
-                                       "color: #666666; "
-                                       "padding: 5px; "
-                                       "border: 3px solid grey; "
-                                       "border-radius: 10px;")
+                                                   "color: #666666; "
+                                                   "padding: 5px; "
+                                                   "border: 3px solid grey; "
+                                                   "border-radius: 10px;")
         self.status_view.stop_label.setText("--:--:--")
         self.status_view.stop_label.setStyleSheet("background-color: #CCCCCC; "
-                                       "color: #666666; "
-                                       "padding: 5px; "
-                                       "border: 3px solid grey; "
-                                       "border-radius: 10px;")
+                                                  "color: #666666; "
+                                                  "padding: 5px; "
+                                                  "border: 3px solid grey; "
+                                                  "border-radius: 10px;")
         self.status_view.run_label.setText("--:--:--")
         self.status_view.run_label.setStyleSheet("background-color: #CCCCCC; "
-                                       "color: #666666; "
-                                       "padding: 5px; "
-                                       "border: 3px solid grey; "
-                                       "border-radius: 10px;")
+                                                 "color: #666666; "
+                                                 "padding: 5px; "
+                                                 "border: 3px solid grey; "
+                                                 "border-radius: 10px;")
         self.status_view.macro_status_label.setStyleSheet("background-color: #CCCCCC; "
-                                       "color: #666666; "
-                                       "padding: 5px; "
-                                       "border: 3px solid grey; "
-                                       "border-radius: 10px;")
+                                                          "color: #666666; "
+                                                          "padding: 5px; "
+                                                          "border: 3px solid grey; "
+                                                          "border-radius: 10px;")
 
     @pyqtSlot()
     def provide_total_cycles(self):
@@ -256,6 +261,21 @@ class MainWindow(QMainWindow):
     @pyqtSlot(bool)
     def handle_macro_completed(self, value):
         self._debug_display.append(f"Macro completed status: {value}")
+        # runs again to flush out incomplete processes
+
+        def update_status_label():
+            self.macro_executor.response_timer.stop()
+            self.macro_executor.completion_timeout_timer.stop()
+            self.status_view.macro_status_label.setStyleSheet("background-color: lightGreen; "
+                                                              "color: darkGreen; "
+                                                              "padding: 5px; "
+                                                              "border: 2px solid darkGreen; "
+                                                              "border-radius: 10px;")
+            # Wait for 500 milliseconds and then call handle_macro_completed again
+            QTimer.singleShot(500, lambda: self.handle_macro_completed(value))
+
+        # Set a delay of 500 milliseconds before updating the status label
+        QTimer.singleShot(500, update_status_label)
 
     @pyqtSlot(bool)
     def handle_waiting_for_response(self, value):
