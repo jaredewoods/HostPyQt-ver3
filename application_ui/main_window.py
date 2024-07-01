@@ -88,7 +88,7 @@ class MainWindow(QMainWindow):
         self.tcp_controller = TCPController(self.tcp_model, self.tcp_view, self.signal_distributor)
         self.macro_model = MacroModel()
         self.macro_view = MacroView()
-        self.macro_controller = MacroController(self.macro_model, self.macro_view, self.signal_distributor,self.flag_state_manager)
+        self.macro_controller = MacroController(self.macro_model, self.macro_view, self.signal_distributor, self.flag_state_manager)
         self.command_view = CommandView(self.signal_distributor)
         self.command_model = CommandModel()
         self.command_controller = CommandController(self.command_model, self.command_view, self.signal_distributor)
@@ -268,10 +268,7 @@ class MainWindow(QMainWindow):
                                                               "padding: 5px; "
                                                               "border: 2px solid darkGreen; "
                                                               "border-radius: 10px;")
-            # Wait for 500 milliseconds and then call handle_macro_completed again
-            QTimer.singleShot(500, lambda: self.handle_macro_completed(value))
 
-        # Set a delay of 500 milliseconds before updating the status label
         QTimer.singleShot(500, update_status_label)
 
     @pyqtSlot(bool)
