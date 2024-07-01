@@ -104,12 +104,12 @@ class StatusView(QWidget):
         self.start_label.setStyleSheet("background-color: white; "
                                        "color: darkGreen; "
                                        "padding: 5px; "
-                                       "border: 2px solid grey; "
+                                       "border: 2px solid #002456; "
                                        "border-radius: 10px;")
         self.run_label.setStyleSheet("background-color: white; "
                                      "color: #002456; "
                                      "padding: 5px; "
-                                     "border: 2px solid grey; "
+                                     "border: 2px solid #002456; "
                                      "border-radius: 10px;")
         self.run_time_timer.start(1000)  # Update every second
 
@@ -118,7 +118,7 @@ class StatusView(QWidget):
         self.stop_label.setStyleSheet("background-color: white; "
                                       "color: #3B0000; "
                                       "padding: 5px; "
-                                      "border: 2px solid grey; "
+                                      "border: 2px solid #002456; "
                                       "border-radius: 10px;")
         self.run_time_timer.stop()
         self.update_run_time()
@@ -127,7 +127,7 @@ class StatusView(QWidget):
         self.run_label.setStyleSheet("background-color: white; "
                                      "color: #002456; "
                                      "padding: 5px; "
-                                     "border: 2px solid grey; "
+                                     "border: 2px solid #002456; "
                                      "border-radius: 10px;")
         self.elapsed_seconds += 1
         hours, remainder = divmod(self.elapsed_seconds, 3600)
@@ -160,7 +160,7 @@ class StatusView(QWidget):
             self.macro_status_label.setStyleSheet("background-color: white; "
                                                   "color: #002456; "
                                                   "padding: 5px; "
-                                                  "border: 2px solid grey; "
+                                                  "border: 2px solid #002456; "
                                                   "border-radius: 10px;")
         else:
             self.macro_status_label.setStyleSheet("background-color: #FFCCCC; "

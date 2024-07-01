@@ -152,6 +152,7 @@ class CommandView(QWidget):
         self.macro_sequence_display.setStyleSheet("""
             QListWidget {
                 font-weight: bold; 
+                font-size: 12px;
                 background-color: #002456;
                 color: #F8F8F2;
             }
