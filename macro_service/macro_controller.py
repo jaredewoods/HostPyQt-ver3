@@ -51,13 +51,19 @@ class MacroController(QObject):
 
     def update_macro_ready_state(self):
         serial_connected = self.flag_state_manager.get_flag_status('serial_connected')
-        macro_ready = serial_connected
-        self.signal_distributor.STATE_CHANGED_SIGNAL.emit('macro_ready_to_run', macro_ready)
+        self.view.macro_start_btn.setEnabled(serial_connected)
+        self.signal_distributor.STATE_CHANGED_SIGNAL.emit('macro_ready_to_run', serial_connected)
+        if not serial_connected:
+            self.populate_macro_combobox()
+            self.view.update_total_cycles("0")
+            self.signal_distributor.CLEAR_FIELDS_SIGNAL.emit()
+            self.signal_distributor.LOG_MESSAGE.emit("Warning: There is an issue with the serial connection.")
+            self.signal_distributor.DEBUG_MESSAGE.emit("Debug Info: Macro loaded, but failed to establish a serial connection.")
+            self.signal_distributor.STATE_CHANGED_SIGNAL.emit("serial_connected", False)
 
     def handle_macro_file_selection(self, selected_file):
         macro_sequence_file_path = os.path.join(self.get_macro_directory(), selected_file)
         self.load_macro_file(macro_sequence_file_path)
-        self.view.macro_start_btn.setEnabled(True)
         self.update_macro_ready_state()
         self.load_macro_sequence_line()  # Initialize the first command without arguments
 

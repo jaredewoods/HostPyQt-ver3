@@ -278,6 +278,7 @@ class CommandView(QWidget):
         self.set_unit_number("")
         self.set_code("")
         self.set_parameters("")
+        # self.macro_sequence_display.clear()
         self.signal_distributor.DEBUG_MESSAGE.emit("Fields have been cleared")
 
     @pyqtSlot(str, str, str)

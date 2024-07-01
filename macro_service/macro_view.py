@@ -27,7 +27,7 @@ class MacroView(QWidget):
         """)
         layout.addWidget(self.macro_total_cycles_lbl, 1, 2, 1, 1)
 
-        layout.addWidget(QLabel("Completed"), 0, 3, 1, 1)
+        layout.addWidget(QLabel("Done"), 0, 3, 1, 1)
         self.macro_completed_cycles_lbl = QLineEdit("")
         self.macro_completed_cycles_lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.macro_completed_cycles_lbl.setStyleSheet("""
