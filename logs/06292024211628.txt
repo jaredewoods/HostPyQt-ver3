@@ -1,9 +1,0 @@
-Connected to /dev/cu.usbserial-FTDPFU8A at 9600 baudrate
-Connected to 192.168.1.1:80
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  Sequence Started: 06/29/2024 21:16:09
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-  (sent)  $2MTRSG100ALDD
-Operation failed after maximum retries: Response timeout

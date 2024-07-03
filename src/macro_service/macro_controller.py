@@ -32,9 +32,11 @@ class MacroController(QObject):
     @staticmethod
     def get_macro_directory():
         current_dir = os.path.dirname(os.path.abspath(__file__))
-        src_dir = os.path.dirname(current_dir)
-        main_dir = os.path.dirname(src_dir)
+        main_dir = os.path.abspath(os.path.join(current_dir, '..', '..'))
         return os.path.join(main_dir, 'macro_sequences')
+
+    # Example usage
+    print(get_macro_directory())
 
     def populate_macro_combobox(self):
         macro_directory = self.get_macro_directory()
