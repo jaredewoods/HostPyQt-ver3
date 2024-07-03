@@ -37,9 +37,9 @@ class TCPModel(QObject):
         return False
 
     def send_tcp_command(self, command):
-        self.filtered_command = command
+        self.filtered_command = command + '\r'
         self.signal_distributor.DEBUG_MESSAGE.emit(f"Filtered Command: {self.filtered_command}")
-        self.signal_distributor.LOG_MESSAGE.emit(f"  (sent/tcp) {self.filtered_command}")
+        self.signal_distributor.LOG_MESSAGE.emit(f"  (sent/tcp) {command}")
         try:
             self.tcp_socket.sendall(self.filtered_command.encode())
             self.receive_tcp_data()
@@ -68,7 +68,7 @@ class TCPModel(QObject):
             return None
 
     def validate_response(self):
-        if self.filtered_command == self.decoded_data:
+        if self.filtered_command.strip() == self.decoded_data.strip():
             self.signal_distributor.LOG_MESSAGE.emit("        (system) Data Acquired")
             self.signal_distributor.MACRO_TRIGGER_SEQ03_SIGNAL.emit()
         else:
