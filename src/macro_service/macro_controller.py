@@ -35,9 +35,6 @@ class MacroController(QObject):
         main_dir = os.path.abspath(os.path.join(current_dir, '..', '..'))
         return os.path.join(main_dir, 'macro_sequences')
 
-    # Example usage
-    print(get_macro_directory())
-
     def populate_macro_combobox(self):
         macro_directory = self.get_macro_directory()
         macro_files = self.model.get_macro_filenames(macro_directory)

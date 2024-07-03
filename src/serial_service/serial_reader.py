@@ -26,7 +26,8 @@ class SerialReader(QThread):
                     data = self.serial_port.read(self.serial_port.in_waiting)
                     self.buffer += data.decode('utf-8', errors='ignore')
                     self.signal_distributor.DEBUG_MESSAGE.emit(f"Raw buffer data received: {data}")
-                    self.signal_distributor.DEBUG_MESSAGE.emit(f"Current buffer: {self.buffer.replace('\r', '<CR>')}")
+                    buffer_str = self.buffer.replace('\r', '<CR>')
+                    self.signal_distributor.DEBUG_MESSAGE.emit(f"Current buffer: {buffer_str}")
 
                     # Check for complete messages (ending with a newline or carriage return)
                     while '\r' in self.buffer or '\n' in self.buffer:
