@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import QMessageBox
-from resources.alarm_dict import alarm_dict
+from src.resources.alarm_dict import alarm_dict
 
 
 class AlarmMessageBox:

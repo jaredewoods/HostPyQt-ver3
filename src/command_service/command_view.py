@@ -1,10 +1,8 @@
-import os
-from PyQt6.QtCore import pyqtSignal, pyqtSlot
+from PyQt6.QtCore import pyqtSlot
 from PyQt6.QtWidgets import QWidget, QListWidget, QVBoxLayout, QHBoxLayout, QCheckBox, QComboBox, QLineEdit, QLabel, \
     QPushButton, QListWidgetItem
 from PyQt6.QtCore import Qt
-from resources.command_dictionary import commands
-import sys
+from src.resources.command_dict import commands
 
 
 class CommandView(QWidget):

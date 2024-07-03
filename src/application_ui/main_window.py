@@ -1,27 +1,26 @@
-from PyQt6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QHBoxLayout, QWidget, QTabWidget, QFrame, QTextEdit, \
-    QMessageBox, QPushButton
+from PyQt6.QtWidgets import QMainWindow, QVBoxLayout, QHBoxLayout, QWidget, QTabWidget, QFrame, QTextEdit, \
+    QMessageBox
 from PyQt6.QtCore import pyqtSlot, QTimer
-import sys
 import os
 from datetime import datetime
 
-from serial_service.serial_model import SerialModel
-from serial_service.serial_view import SerialView
-from serial_service.serial_controller import SerialController
-from tcp_service.tcp_model import TCPModel
-from tcp_service.tcp_view import TCPView
-from tcp_service.tcp_controller import TCPController
-from macro_service.macro_model import MacroModel
-from macro_service.macro_view import MacroView
-from macro_service.macro_controller import MacroController
-from macro_service.macro_executor import MacroExecutor
-from command_service.command_model import CommandModel
-from command_service.command_view import CommandView
-from command_service.command_controller import CommandController
+from src.serial_service.serial_model import SerialModel
+from src.serial_service.serial_view import SerialView
+from src.serial_service.serial_controller import SerialController
+from src.tcp_service.tcp_model import TCPModel
+from src.tcp_service.tcp_view import TCPView
+from src.tcp_service.tcp_controller import TCPController
+from src.macro_service.macro_model import MacroModel
+from src.macro_service.macro_view import MacroView
+from src.macro_service.macro_controller import MacroController
+from src.macro_service.macro_executor import MacroExecutor
+from src.command_service.command_model import CommandModel
+from src.command_service.command_view import CommandView
+from src.command_service.command_controller import CommandController
 
-from status_service.status_view import StatusView
-from status_service.signal_distributor import SignalDistributor
-from status_service.flag_state_manager import FlagStateManager, FlagStateView
+from src.status_service.status_view import StatusView
+from src.status_service.signal_distributor import SignalDistributor
+from src.status_service.flag_state_manager import FlagStateManager, FlagStateView
 
 
 class MainWindow(QMainWindow):
@@ -336,7 +335,7 @@ class MainWindow(QMainWindow):
 
     @staticmethod
     def show_alarm_messagebox(alarm_code, subcode):
-        from application_ui.alarm_message_box import AlarmMessageBox
+        from src.application_ui.alarm_message_box import AlarmMessageBox
         AlarmMessageBox.show_alarm_messagebox(alarm_code, subcode)
 
     @pyqtSlot(int)

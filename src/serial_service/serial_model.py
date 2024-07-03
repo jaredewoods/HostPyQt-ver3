@@ -2,7 +2,7 @@
 import serial
 from serial.tools import list_ports
 from PyQt6.QtCore import QObject, pyqtSignal, pyqtSlot
-from serial_service.serial_reader import SerialReader
+from src.serial_service.serial_reader import SerialReader
 
 class SerialModel(QObject):
 
