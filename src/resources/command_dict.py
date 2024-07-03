@@ -1,4 +1,4 @@
-# command_dictionary.py
+# command_dict.py
 
 # noinspection SpellCheckingInspection
 commands = {
